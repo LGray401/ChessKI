@@ -30,10 +30,16 @@ public class Player {
 
 
         // return all possible moves of the figure
+
         return null;
     }
 
     List<Figure> removeIllegalMoves(List<Figure> moves) {
+
+        // prüft, ob auf dem Weg zum Zielfeld alle Felder frei sind (außer beim Pferd)
+        // prüft, ob Zielfeld leer ist oder gegnerischer Spieler drauf ist
+        // prüft, ob man nach dem Move im Schach steht
+        //prüft, ob man nach dem Move immer noch im Schach steht
 
         return null;
     }
