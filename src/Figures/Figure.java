@@ -2,9 +2,9 @@ package Figures;
 
 import java.util.ArrayList;
 
-public class Figure {
+public abstract class Figure {
 
-    int value;
+    public int value;
     boolean isBlack;
     int position;
     int nextmove;
