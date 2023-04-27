@@ -2,7 +2,7 @@ package Figures;
 
 import java.util.ArrayList;
 
-public class Figure {
+public abstract class Figure {
 
     int value;
     boolean isBlack;
