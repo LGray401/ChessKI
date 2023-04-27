@@ -5,10 +5,10 @@ import java.util.Arrays;
 
 public class Pawn extends Figure {
 
-    public Pawn(boolean isblack, int position) {
+    public Pawn(boolean isblack, int position, ArrayList<Integer> possiblemoves) {
         this.value = 10;
         this.isBlack = isblack;
         this.position = position;
-        this.possibleMoves = new ArrayList<>(Arrays.asList(7, 8, 9)); // am Anfang 16?
+        this.possibleMoves = possiblemoves; // am Anfang 16?
     }
 }
