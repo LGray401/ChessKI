@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public abstract class Figure {
 
     public int value;
-    boolean isBlack;
+    public boolean isBlack;
     int position;
     int nextmove;
 
