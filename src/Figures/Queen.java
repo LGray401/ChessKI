@@ -4,13 +4,7 @@ package Figures;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Queen  {
-
-    int value;
-    boolean isBlack;
-    int position;
-
-    public ArrayList<Integer> possibleMoves;
+public class Queen  extends Figure{
 
     public Queen(boolean isblack, int position) {
         this.value = 90;
