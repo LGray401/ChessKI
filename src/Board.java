@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class Board {
 
-    Figure[] board = new Figure[63];
+    static Figure[] board = new Figure[63];
 
 
     Figure[] intialize() {
