@@ -2,11 +2,39 @@ import Figures.EmptyField;
 import Figures.Figure;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Player {
+
     boolean isBlack;
-    List<Figure> legalMoves;
+    List<Figure> legalMoves; //nicht eher figureList?
+    boolean playerInCheck;
+
+    public boolean isBlack() {
+        return isBlack;
+    }
+
+    public void setBlack(boolean black) {
+        isBlack = black;
+    }
+
+    public List<Figure> getLegalMoves() {
+        return legalMoves;
+    }
+
+    public void setLegalMoves(List<Figure> legalMoves) {
+        this.legalMoves = legalMoves;
+    }
+
+    public boolean isPlayerInCheck() {
+        return playerInCheck;
+    }
+
+    public void setPlayerInCheck(boolean playerInCheck) {
+        this.playerInCheck = playerInCheck;
+    }
 
     Player(boolean isblack) {
         isBlack = isblack;
@@ -22,7 +50,7 @@ public class Player {
                 possibleMovesFigure = calculatePossibleMoves(figure);
                 possibleMoves.addAll(possibleMovesFigure);
             }
-        legalMoves = removeIllegalMoves(possibleMoves);
+        legalMoves = removeIllegalMoves(board, possibleMoves);
 
         return legalMoves.get(0);
     }
@@ -35,27 +63,30 @@ public class Player {
         return null;
     }
 
-    List<Figure> removeIllegalMoves(List<Figure> moves) {
+    List<Figure> removeIllegalMoves(Board board, List<Figure> moves) {
 
-        // prüft, ob auf dem Weg zum Zielfeld alle Felder frei sind (außer beim Pferd) Linh
-        // prüft, ob Zielfeld leer ist oder gegnerischer Spieler drauf ist Ely
-        // prüft, ob man nach dem Move im Schach steht Rudi
-        //prüft, ob man nach dem Move immer noch im Schach steht Rudi
+        // prüft, ob auf dem Weg zum Zielfeld alle Felder frei sind (außer beim Pferd) -> Linh
+        // prüft, ob Zielfeld leer ist oder gegnerischer Spieler drauf ist -> Ely
+        // prüft, ob man im Schach steht -> Rudi
+        // prüft, ob man nach dem Move im Schach steht -> Rudi
+        // prüft, ob man nach dem Move immer noch im Schach steht -> Rudi
+        // König schlägt König filtern -> Rudi
 
-        testEly(moves); // last method to call
+
+        testEly(board, moves); // last method to call
 
         return moves;
     }
 
-    List<Figure> testEly(List<Figure> moves) {
+    List<Figure> testEly(Board board, List<Figure> moves) {
 
         List<Figure> newList = new ArrayList<>();
 
         for (Figure figure: moves) {
             for(int i = 0; i < figure.getPossibleMoves().size(); i++) {
                 int newPosition = figure.getPosition() + i;
-                Figure player1 = Board.board[figure.getPosition()];
-                Figure player2 = Board.board[newPosition];
+                Figure player1 = board.board[figure.getPosition()];
+                Figure player2 = board.board[newPosition];
 
                 // checks if target field is empty or occupied by enemy
                 if(player2 == EmptyField.getEmptyField()|| player1.isBlack != player2.isBlack) {
@@ -64,5 +95,38 @@ public class Player {
             }
         }
         return newList;
+        //statt return newList, einfach instanzvariable legalMoves bzw. figureList mit setter Methode verändern? Oder einfach immer das Board returnen?
+    }
+
+    Board filterKingBeatsKing(Board board, Player otherPlayer){
+        Figure kingOfOpponent = (Figure) otherPlayer.legalMoves.stream().filter(Figures.King.class::isInstance);
+        Figure kingOfNotOpponent = (Figure) this.legalMoves.stream().filter(Figures.King.class::isInstance);
+
+        if (kingOfNotOpponent.getPossibleMoves().contains(kingOfOpponent.getPosition())){
+            board.board[kingOfNotOpponent.getPosition()].getPossibleMoves().remove(kingOfOpponent.getPosition());
+        }
+        return board;
+    }
+
+    boolean isCheckTrue(Board board, Player otherPlayer){
+
+        Figure kingOfPlayer = (Figure) this.legalMoves.stream().filter(Figures.King.class::isInstance);
+
+        for (Figure figure: otherPlayer.legalMoves) {
+            for (int possibleMove : figure.getPossibleMoves()) {
+                if ((possibleMove == kingOfPlayer.getPosition())){
+                    this.setPlayerInCheck(true);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    Board afterMoveStillCheck(Board board){
+        //TODO:
+
+
+        return board;
     }
 }
