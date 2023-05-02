@@ -13,7 +13,7 @@ public class King extends Figure {
         this.value = 900;
         this.isBlack = isblack;
         this.position = position;
-        this.nextMove = nextmove;
+        this.nextPosition = nextmove;
         this.possibleMoves = new ArrayList<>(Arrays.asList(1,-1,8,-8));
     }
 
@@ -24,10 +24,10 @@ public class King extends Figure {
 
         for (int move: possibleMoves) {
             if (board.getBoard()[position + move].getClass().getName() == EmptyField.class.getName()) {
-                nextPossibleMoves.addMove(new King(isBlack, position, position + nextMove));
+                nextPossibleMoves.addMove(new King(isBlack, position, position + nextPosition));
             }
-        }
 
+        }
         return nextPossibleMoves;
     }
 }
