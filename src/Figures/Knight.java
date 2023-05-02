@@ -14,7 +14,7 @@ public class Knight extends Figure{
         this.value = 30;
         this.isBlack = isblack;
         this.position = position;
-        this.nextMove = nextmove;
+        this.nextPosition = nextmove;
         this.possibleMoves = new ArrayList<>(Arrays.asList(6, 10, 15, 17, 19, -6, -10, -15, -17 - 19));
     }
 
@@ -24,7 +24,7 @@ public class Knight extends Figure{
 
         for (int move: possibleMoves) {
             if (board.getBoard()[position + move].getClass().getName() == EmptyField.class.getName()) {
-                nextPossibleMoves.addMove(new King(isBlack, position, position + nextMove));
+                nextPossibleMoves.addMove(new King(isBlack, position, position + nextPosition));
             }
         }
 

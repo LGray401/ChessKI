@@ -15,7 +15,7 @@ public class Pawn extends Figure {
         this.isBlack = isblack;
         this.position = position;
         this.hasMoved = hasmoved;
-        this.nextMove = nextmove;
+        this.nextPosition = nextmove;
         this.possibleMoves = possiblemoves;
 
     }

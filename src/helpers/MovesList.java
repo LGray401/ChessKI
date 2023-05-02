@@ -13,7 +13,7 @@ public class MovesList extends ArrayList<Figure> {
 
     public boolean addMove(Figure figure) {
 
-        if(figure.nextMove >= 0 && figure.nextMove < 64) {
+        if(figure.nextPosition >= 0 && figure.nextPosition < 64) {
             this.add(figure);
             return true;
         }

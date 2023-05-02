@@ -17,7 +17,7 @@ public class Bishop extends Figure {
         this.value = 30;
         this.isBlack = isblack;
         this.position = position;
-        this.nextMove = nextmove;
+        this.nextPosition = nextmove;
         this.possibleMoves =new ArrayList<>(Arrays.asList(9, 18, 27, 36, 45, 54, 63, -9, -18, -27, -36, -45, - 54, -63, 7, 14, 21, 28, 35, 42, 49, -7, -14, -21, -28, -35, -42, -49));
     }
 
