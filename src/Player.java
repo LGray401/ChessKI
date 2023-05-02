@@ -1,4 +1,5 @@
 import Figures.Figure;
+import helpers.MovesList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,22 +18,14 @@ public class Player {
 
         for (Figure figure : board.board)
             if (figure.isBlack == this.isBlack) {
-                List<Figure> possibleMovesFigure;
-                possibleMovesFigure = calculatePossibleMoves(figure);
-                possibleMoves.addAll(possibleMovesFigure);
+                possibleMoves.addAll(figure.calculatePossibleMoves());
             }
         legalMoves = removeIllegalMoves(possibleMoves);
 
         return legalMoves.get(0);
     }
 
-    List<Figure> calculatePossibleMoves(Figure figure) {
 
-
-        // return all possible moves of the figure
-
-        return null;
-    }
 
     List<Figure> removeIllegalMoves(List<Figure> moves) {
 
