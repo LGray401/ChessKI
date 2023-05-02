@@ -1,10 +1,9 @@
+package Main;
+
 import Figures.EmptyField;
 import Figures.Figure;
-import helpers.MovesList;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Player {
@@ -47,7 +46,7 @@ public class Player {
 
         for (Figure figure : board.board)
             if (figure.isBlack == this.isBlack) {
-                possibleMoves.addAll(figure.calculatePossibleMoves());
+                possibleMoves.addAll(figure.calculatePossibleMoves(board));
             }
         legalMoves = removeIllegalMoves(board, possibleMoves);
 

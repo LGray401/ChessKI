@@ -1,5 +1,6 @@
 package Figures;
 
+import Main.Board;
 import helpers.MovesList;
 
 import java.util.ArrayList;
@@ -20,15 +21,18 @@ public class Pawn extends Figure {
     }
 
     @Override
-    public List<Figure> calculatePossibleMoves() {
+    public List<Figure> calculatePossibleMoves(Board board) {
         MovesList nextPossibleMoves = new MovesList();
 
         if (!hasMoved) {
-            nextPossibleMoves.addMove(isBlack ? new Pawn(isBlack, position, hasMoved, position -16, possibleMoves) : new Pawn(isBlack, position, hasMoved, position +16, possibleMoves));
+            possibleMoves.add(isBlack ? -16 : 16);
         }
 
         for (int move: possibleMoves) {
-            nextPossibleMoves.addMove(new Pawn(isBlack, position, hasMoved, position + move, possibleMoves));
+            if(board.getBoard()[position + move].getClass().getName() == EmptyField.class.getName()) {
+
+                nextPossibleMoves.addMove(new Pawn(isBlack, position, true, position + move, possibleMoves));
+            }
         }
 
 

@@ -1,3 +1,4 @@
+package Main;
 
 import Figures.Figure;
 import Figures.*;

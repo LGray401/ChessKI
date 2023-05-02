@@ -2,6 +2,7 @@ package Figures;
 
 import java.util.ArrayList;
 import java.util.List;
+import Main.Board;
 
 public abstract class Figure {
 
@@ -21,7 +22,7 @@ public abstract class Figure {
 
     public ArrayList<Integer> possibleMoves;
 
-    public abstract List<Figure> calculatePossibleMoves();
+    public abstract List<Figure> calculatePossibleMoves(Board board);
 
     public ArrayList<Integer> getPossibleMoves() {
         return possibleMoves;

@@ -1,5 +1,6 @@
 package Figures;
 
+import Main.Board;
 import helpers.MovesList;
 
 import java.util.ArrayList;
@@ -17,11 +18,14 @@ public class King extends Figure {
     }
 
     @Override
-    public List<Figure> calculatePossibleMoves() {
+    public List<Figure> calculatePossibleMoves(Board board) {
+
         MovesList nextPossibleMoves = new MovesList();
 
-        for(int move: possibleMoves){
-            nextPossibleMoves.addMove(new King(isBlack, position, position + nextMove));
+        for (int move: possibleMoves) {
+            if (board.getBoard()[position + move].getClass().getName() == EmptyField.class.getName()) {
+                nextPossibleMoves.addMove(new King(isBlack, position, position + nextMove));
+            }
         }
 
         return nextPossibleMoves;
