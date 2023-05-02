@@ -17,7 +17,7 @@ public abstract class Figure {
     }
 
     int position;
-    public int nextMove;
+    public int nextPosition;
 
     public ArrayList<Integer> possibleMoves;
 

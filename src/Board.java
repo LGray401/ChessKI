@@ -120,4 +120,12 @@ public class Board {
             // check if game is finished
         }
          */
+
+    void changeBoard(Figure figure) {
+
+        board[figure.getPosition()] = new EmptyField();
+        int helper = figure.nextPosition;
+        board[helper] = figure;
+        figure.setPosition(helper);
+    }
 }

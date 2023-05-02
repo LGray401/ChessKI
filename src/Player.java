@@ -116,7 +116,7 @@ public class Player {
 
         for (Figure figure: otherPlayer.legalMoves) {
             for (Figure possibleMove : figure.calculatePossibleMoves()) {
-                if ((possibleMove.nextMove == kingOfPlayer.getPosition())){
+                if ((possibleMove.nextPosition == kingOfPlayer.getPosition())){
                     this.setPlayerInCheck(true);
                     return true;
                 }
@@ -131,4 +131,5 @@ public class Player {
 
         return board;
     }
+
 }
