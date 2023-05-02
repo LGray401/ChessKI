@@ -8,9 +8,14 @@ import java.util.List;
 
 public class Player {
 
-    boolean isBlack;
-    List<Figure> legalMoves; //nicht eher figureList?
-    boolean playerInCheck;
+    private boolean isBlack;
+    private List<Figure> figureList;
+    private boolean playerInCheck;
+    private Figure nextFigureMove;
+
+    public Player(boolean isBlack) {
+        this.isBlack = isBlack;
+    }
 
     public boolean isBlack() {
         return isBlack;
@@ -20,12 +25,12 @@ public class Player {
         isBlack = black;
     }
 
-    public List<Figure> getLegalMoves() {
-        return legalMoves;
+    public List<Figure> getFigureList() {
+        return figureList;
     }
 
-    public void setLegalMoves(List<Figure> legalMoves) {
-        this.legalMoves = legalMoves;
+    public void setFigureList(List<Figure> figureList) {
+        this.figureList = figureList;
     }
 
     public boolean isPlayerInCheck() {
@@ -36,99 +41,33 @@ public class Player {
         this.playerInCheck = playerInCheck;
     }
 
-    Player(boolean isblack) {
-        isBlack = isblack;
+    public Figure getNextFigureMove() {
+        return nextFigureMove;
     }
 
-    Figure calculateMove(Board board) {
-
-        List<Figure> possibleMoves = new ArrayList<>();
-
-        for (Figure figure : board.board)
-            if (figure.isBlack == this.isBlack) {
-                possibleMoves.addAll(figure.calculatePossibleMoves(board));
-            }
-        legalMoves = removeIllegalMoves(board, possibleMoves);
-
-        return legalMoves.get(0);
+    public void setNextFigureMove(Figure nextFigureMove) {
+        this.nextFigureMove = nextFigureMove;
     }
 
+    public void generateAllMoves(Board board){
 
-
-
-    List<Figure> removeIllegalMoves(List<Figure> moves) {
-
-        // return all possible moves of the figure
-
-        return null;
+        for (Figure figure: this.getFigureList()) {
+            figure.calculatePossibleMoves(board);
+        }
     }
 
-    List<Figure> removeIllegalMoves(Board board, List<Figure> moves) {
+    void playerGetFigureList(Board board){
 
+        List<Figure> figureList = new ArrayList<>();
 
-        // prüft, ob auf dem Weg zum Zielfeld alle Felder frei sind (außer beim Pferd) -> Linh
-        // prüft, ob Zielfeld leer ist oder gegnerischer Spieler drauf ist -> Ely
-        // prüft, ob man im Schach steht -> Rudi
-        // prüft, ob man nach dem Move im Schach steht -> Rudi
-        // prüft, ob man nach dem Move immer noch im Schach steht -> Rudi
-        // König schlägt König filtern -> Rudi
-
-
-        testEly(board, moves); // last method to call
-
-        return moves;
-    }
-
-    List<Figure> testEly(Board board, List<Figure> moves) {
-
-        List<Figure> newList = new ArrayList<>();
-
-        for (Figure figure: moves) {
-            for(int i = 0; i < figure.getPossibleMoves().size(); i++) {
-                int newPosition = figure.getPosition() + i;
-                Figure player1 = board.board[figure.getPosition()];
-                Figure player2 = board.board[newPosition];
-
-                // checks if target field is empty or occupied by enemy
-                if(player2 == EmptyField.getEmptyField()|| player1.isBlack != player2.isBlack) {
-                    newList.add(figure);
-                }
+        for (Figure figure: board.getBoard()) {
+            if (figure.getClass().getName() == "Figures.EmptyField") continue;
+            if (this.isBlack() && figure.isBlack()){
+                figureList.add(figure);
+            } else if (!this.isBlack && !figure.isBlack()){
+                figureList.add(figure);
             }
         }
-        return newList;
-        //statt return newList, einfach instanzvariable legalMoves bzw. figureList mit setter Methode verändern? Oder einfach immer das Board returnen?
+        this.setFigureList(figureList);
     }
-
-    Board filterKingBeatsKing(Board board, Player otherPlayer){
-        Figure kingOfOpponent = (Figure) otherPlayer.legalMoves.stream().filter(Figures.King.class::isInstance);
-        Figure kingOfNotOpponent = (Figure) this.legalMoves.stream().filter(Figures.King.class::isInstance);
-
-        if (kingOfNotOpponent.calculatePossibleMoves().contains(kingOfOpponent.getPosition())){
-            board.board[kingOfNotOpponent.getPosition()].calculatePossibleMoves().remove(kingOfOpponent.getPosition());
-        }
-        return board;
-    }
-
-    boolean isCheckTrue(Board board, Player otherPlayer){
-
-        Figure kingOfPlayer = (Figure) this.legalMoves.stream().filter(Figures.King.class::isInstance);
-
-        for (Figure figure: otherPlayer.legalMoves) {
-            for (Figure possibleMove : figure.calculatePossibleMoves()) {
-                if ((possibleMove.nextPosition == kingOfPlayer.getPosition())){
-                    this.setPlayerInCheck(true);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    Board afterMoveStillCheck(Board board){
-        //TODO:
-
-
-        return board;
-    }
-
 }

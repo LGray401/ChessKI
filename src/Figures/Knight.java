@@ -13,6 +13,6 @@ public class Knight extends Figure{
         this.setValue(30);
         this.setBlack(isblack);
         this.setPosition(position);
-        this.setMoveSummandList(new ArrayList<>(Arrays.asList(6, 10, 15, 17, 19, -6, -10, -15, -17 - 19)));
+        this.setMoveSummandList(new ArrayList<>(Arrays.asList(10, 6, 15, 17, -6, -15, -17, -10)));
     }
 }

@@ -67,10 +67,11 @@ public abstract class Figure {
         ArrayList<Integer> list = new ArrayList<>();
 
         for (int moveSummand: this.getMoveSummandList()) {
-            if (board.getBoard()[this.getPosition() + moveSummand].getClass().getName() == EmptyField.class.getName()) {
+            if ((this.getPosition() + moveSummand < 64) && (this.getPosition() + moveSummand >= 0)) {
                 list.add(this.getPosition() + moveSummand);
             }
         }
         this.setPossibleMoveList(list);
     }
+
 }
