@@ -10,6 +10,7 @@ import java.util.List;
 public class Knight extends Figure{
 
     public Knight(boolean isblack, int position) {
+        this.setEmptyField(false);
         this.setValue(30);
         this.setBlack(isblack);
         this.setPosition(position);

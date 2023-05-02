@@ -9,6 +9,7 @@ import java.util.List;
 public class Rook extends Figure {
 
     public Rook (boolean isblack, int position) {
+        this.setEmptyField(false);
         this.setValue(50);
         this.setBlack(isblack);
         this.setPosition(position);

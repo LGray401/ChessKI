@@ -10,6 +10,7 @@ import java.util.List;
 public class Queen  extends Figure {
 
     public Queen(boolean isblack, int position) {
+        this.setEmptyField(false);
         this.setValue(90);
         this.setBlack(isblack);
         this.setPosition(position);

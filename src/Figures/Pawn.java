@@ -11,7 +11,7 @@ public class Pawn extends Figure {
     boolean hasMoved = false;
 
     public Pawn(boolean isBlack, int position) {
-
+        this.setEmptyField(false);
         this.setValue(10);
         this.setBlack(isBlack);
         this.setPosition(position);

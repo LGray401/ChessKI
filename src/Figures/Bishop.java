@@ -1,14 +1,12 @@
 package Figures;
 
-import Main.Board;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Bishop extends Figure {
 
     public Bishop(boolean isblack, int position) {
+        this.setEmptyField(false);
         this.setValue(30);
         this.setBlack(isblack);
         this.setPosition(position);

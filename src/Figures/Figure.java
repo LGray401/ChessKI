@@ -1,12 +1,12 @@
 package Figures;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 import Main.Board;
 
 public abstract class Figure {
 
+    private boolean isEmptyField;
     private int value;
     private boolean isBlack;
     private int position;
@@ -20,6 +20,14 @@ public abstract class Figure {
 
     public void setPossibleMoveList(ArrayList<Integer> possibleMoveList) {
         this.possibleMoveList = possibleMoveList;
+    }
+
+    public boolean isEmptyField() {
+        return isEmptyField;
+    }
+
+    public void setEmptyField(boolean emptyField) {
+        isEmptyField = emptyField;
     }
 
     public int getValue() {
@@ -73,5 +81,4 @@ public abstract class Figure {
         }
         this.setPossibleMoveList(list);
     }
-
 }

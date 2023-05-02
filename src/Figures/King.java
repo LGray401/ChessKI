@@ -9,6 +9,7 @@ import java.util.List;
 public class King extends Figure {
 
     public King(boolean isblack, int position) {
+        this.setEmptyField(false);
         this.setValue(900);
         this.setBlack(isblack);
         this.setPosition(position);
