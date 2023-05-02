@@ -21,7 +21,7 @@ public class King extends Figure {
         MovesList nextPossibleMoves = new MovesList();
 
         for(int move: possibleMoves){
-            nextPossibleMoves.addMove(new King(isBlack, position, position + nextMove));
+            nextPossibleMoves.addMove(new King(isBlack, position, position + move));
         }
 
         return nextPossibleMoves;
