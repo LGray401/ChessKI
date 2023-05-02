@@ -6,15 +6,31 @@ import Figures.*;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Board {
 
-    Figure[] board = new Figure[63];
+    Figure[] board = new Figure[64]; //nicht static weil wir ja in Zukunft mehrere Boards erstellen wa? Um z.B. 3 Züge nach vorne zu schauen
 
 
-    Figure[] intialize() {
+    public Figure[] getBoard() {
+        return board;
+    }
 
-        Figure[] board = new Figure[63];
+    public void setBoard(Figure[] board) {
+        this.board = board;
+    }
+
+    public static void main(String[] args) {
+
+        Figure[] initBoard = intialize();
+
+    }
+
+
+    static Figure[] intialize() {
+
+        Figure[] board = new Figure[64];
 
         // add white pawns
         for (int i = 8; i <= 15; i++) {
@@ -48,7 +64,6 @@ public class Board {
         board[62] = new Knight(true, 62, -1);
         board[63] = new Rook(true, 63, -1);
 
-
         // add empty fields
 
         for (int i = 16; i <= 55; i++) {
@@ -56,10 +71,35 @@ public class Board {
         }
 
         return board;
-
     }
 
-        /*
+    public String boardStringRepresentation(){
+
+        //TODO:
+        //      Fallunterscheidung black/white
+        //      Überprüfen warum eine Pawn Zeile fehlt
+
+        String result = "";
+        for (int i = 0; i < board.length; i++) {
+
+            if (i % (8) == 0) {
+                result += "\n";
+            }
+
+            switch (board[i].getClass().toString()){
+                case "class Figures.Pawn": result += "P"; break;
+                case "class Figures.Bishop": result += "B"; break;
+                case "class Figures.Knight": result += "N"; break;
+                case "class Figures.Rook": result += "R"; break;
+                case "class Figures.Queen": result += "Q"; break;
+                case "class Figures.King": result += "K"; break;
+                case "class Figures.EmptyField": result += " "; break;
+            }
+        }
+        return result;
+    }
+
+    /*
         public boolean notOver() {
 
             for (int i = 0; i< 64;i++)
@@ -79,20 +119,5 @@ public class Board {
             return true;
             // check if game is finished
         }
-
-        public boolean imSchach(Spieler spieler1, Spieler spieler2) {
-            boolean schach;
-
-            for (Figure figure: spieler.listeVonFigures){
-                for (int possibleMove : figure.possibleMoves) { //bzw legalMoves hier
-                    int posKingOfOpponent = ...
-                    if (posKingOfOpponent == possibleMove){
-                        schach = true;
-                    }
-                }
-            }
-        }
          */
-
-
 }
