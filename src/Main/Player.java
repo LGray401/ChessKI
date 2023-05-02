@@ -61,7 +61,7 @@ public class Player {
         List<Figure> figureList = new ArrayList<>();
 
         for (Figure figure: board.getBoard()) {
-            if (figure.getClass().getName() == "Figures.EmptyField") continue;
+            if (figure.isEmptyField()) continue;
             if (this.isBlack() && figure.isBlack()){
                 figureList.add(figure);
             } else if (!this.isBlack && !figure.isBlack()){

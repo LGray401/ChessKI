@@ -60,8 +60,8 @@ public class Board {
 
         // add empty fields
 
-        for (int i = 16; i <= 55; i++) {
-            board[i] = new EmptyField();
+        for (int i = 16; i <= 47; i++) {
+            board[i] = new EmptyField(i);
         }
 
         return board;
@@ -69,7 +69,7 @@ public class Board {
 
     void changeBoard(Figure figure) {
 
-        board[figure.getPosition()] = new EmptyField();
+        board[figure.getPosition()] = new EmptyField(figure.getPosition());
         int helper = figure.getNextPosition();
         board[helper] = figure;
         figure.setPosition(helper);
