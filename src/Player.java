@@ -104,8 +104,8 @@ public class Player {
         Figure kingOfOpponent = (Figure) otherPlayer.legalMoves.stream().filter(Figures.King.class::isInstance);
         Figure kingOfNotOpponent = (Figure) this.legalMoves.stream().filter(Figures.King.class::isInstance);
 
-        if (kingOfNotOpponent.getPossibleMoves().contains(kingOfOpponent.getPosition())){
-            board.board[kingOfNotOpponent.getPosition()].getPossibleMoves().remove(kingOfOpponent.getPosition());
+        if (kingOfNotOpponent.calculatePossibleMoves().contains(kingOfOpponent.getPosition())){
+            board.board[kingOfNotOpponent.getPosition()].calculatePossibleMoves().remove(kingOfOpponent.getPosition());
         }
         return board;
     }
@@ -115,8 +115,8 @@ public class Player {
         Figure kingOfPlayer = (Figure) this.legalMoves.stream().filter(Figures.King.class::isInstance);
 
         for (Figure figure: otherPlayer.legalMoves) {
-            for (int possibleMove : figure.getPossibleMoves()) {
-                if ((possibleMove == kingOfPlayer.getPosition())){
+            for (Figure possibleMove : figure.calculatePossibleMoves()) {
+                if ((possibleMove.nextMove == kingOfPlayer.getPosition())){
                     this.setPlayerInCheck(true);
                     return true;
                 }
