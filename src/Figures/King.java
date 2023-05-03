@@ -15,4 +15,20 @@ public class King extends Figure {
         this.setPosition(position);
         this.setMoveSummandList(new ArrayList<>(Arrays.asList(1, -1, 8, -8)));
     }
+
+    public void calculatePossibleMoves(Board board) {
+
+        ArrayList<Integer> list = new ArrayList<>();
+
+        list.addAll(this.movingSN(board));
+        list.addAll(this.movingNS(board));
+        list.addAll(this.movingEAST(board));
+        list.addAll(this.movingWEST(board));
+        list.addAll(this.movingSE(board));
+        list.addAll(this.movingSW(board));
+        list.addAll(this.movingNE(board));
+        list.addAll(this.movingNW(board));
+
+        this.setPossibleMoveList(list);
+    }
 }

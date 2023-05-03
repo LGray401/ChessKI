@@ -153,8 +153,10 @@ public abstract class Figure {
 
     public ArrayList<Integer> movingSN(Board board) {
 
+        int multiplier = (this instanceof King) ? 1 : 7;
+
         ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < 7; i ++){
+        for (int i = 0; i < multiplier; i ++){
             int newPos = this.getPosition() + i*8;
             if (newPos == this.getPosition()) continue;
             if (withInPossibleRange(newPos)){
@@ -173,8 +175,10 @@ public abstract class Figure {
 
     public List<Integer> movingNS(Board board) {
 
+        int multiplier = (this instanceof King) ? 1 : 7;
+
         ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < 7; i ++){
+        for (int i = 0; i < multiplier; i ++){
             int newPos = this.getPosition() - i*8;
             if (newPos == this.getPosition()) continue;
             if (withInPossibleRange(newPos)){
@@ -193,8 +197,10 @@ public abstract class Figure {
 
     public ArrayList<Integer> movingNE(Board board) {
 
+        int multiplier = (this instanceof King) ? 1 : 7;
+
         ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < 7; i ++){
+        for (int i = 0; i < multiplier; i ++){
             int newPos = this.getPosition() + i*9;
             if (getEastBarrier().contains(newPos) && newPos != this.getPosition()) {
                 list.add(newPos);
@@ -217,8 +223,10 @@ public abstract class Figure {
 
     public ArrayList<Integer> movingNW(Board board) {
 
+        int multiplier = (this instanceof King) ? 1 : 7;
+
         ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < 7; i ++){
+        for (int i = 0; i < multiplier; i ++){
             int newPos = this.getPosition() - i*7;
             if (getWestBarrier().contains(newPos) && newPos != this.getPosition()) {
                 list.add(newPos);
@@ -241,8 +249,10 @@ public abstract class Figure {
 
     public ArrayList<Integer> movingSE(Board board) {
 
+        int multiplier = (this instanceof King) ? 1 : 7;
+
         ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < 7; i ++){
+        for (int i = 0; i < multiplier; i ++){
             int newPos = this.getPosition() - i*7;
             if (getEastBarrier().contains(newPos) && newPos != this.getPosition()) {
                 list.add(newPos);
@@ -264,8 +274,11 @@ public abstract class Figure {
     }
 
     public List<Integer> movingSW(Board board) {
+
+        int multiplier = (this instanceof King) ? 1 : 7;
+
         ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < 7; i ++){
+        for (int i = 0; i < multiplier; i ++){
             int newPos = this.getPosition() - i*9;
             if (getWestBarrier().contains(newPos) && newPos != this.getPosition()) {
                 list.add(newPos);
