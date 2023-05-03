@@ -18,10 +18,19 @@ public class Queen  extends Figure {
                 9, 18, 27, 36, 45, 54, 63, -9, -18, -27, -36, -45, -54, -63, 7, 14, 21, 28, 35, 42, 49, -7, -14, -21, -28, -35, -42, -49))); // diagonal
     }
 
-    static int[] helperNS = {-8,8};
-    static int[] helperNwSw = {-9,7};
-    static int[] helperNoSo = {-7,9};
-    static int[] leftBorder = {0,8,16,24,32,40,48,56};
-    static int[] rightBorder = {7,15,23,31,39,47,55,63};
+    public void calculatePossibleMoves(Board board) {
 
+        ArrayList<Integer> list = new ArrayList<>();
+
+        list.addAll(this.movingSN(board));
+        list.addAll(this.movingNS(board));
+        list.addAll(this.movingEAST(board));
+        list.addAll(this.movingWEST(board));
+        list.addAll(this.movingSE(board));
+        list.addAll(this.movingSW(board));
+        list.addAll(this.movingNE(board));
+        list.addAll(this.movingNW(board));
+
+        this.setPossibleMoveList(list);
+    }
 }

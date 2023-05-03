@@ -2,6 +2,7 @@ package Figures;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import Main.Board;
 
@@ -100,5 +101,188 @@ public abstract class Figure {
     public boolean withInPossibleRange(int i){
         if (i >= 0 && i <= 63) return true;
         return false;
+    }
+
+    public ArrayList<Integer> movingEAST(Board board) {
+
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 0; i < 7; i ++){
+            int newPos = this.getPosition() + i;
+            if (getEastBarrier().contains(newPos) && newPos != this.getPosition()) {
+                list.add(newPos);
+                break;
+            }
+            if (newPos == this.getPosition()) continue;
+            if (withInPossibleRange(newPos)){
+                if (board.getBoard()[newPos].isEmptyField()) {
+                    list.add(newPos);
+                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+                    list.add(newPos);
+                    break;
+                } else if (board.getBoard()[newPos].isBlack() == this.isBlack()) {
+                    break;
+                }
+            }
+        }
+        return list;
+    }
+
+    public ArrayList<Integer> movingWEST(Board board) {
+
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 0; i < 7; i ++){
+            int newPos = this.getPosition() - i;
+            if (getWestBarrier().contains(newPos) && newPos != this.getPosition()) {
+                list.add(newPos);
+                break;
+            }
+            if (newPos == this.getPosition()) continue;
+            if (withInPossibleRange(newPos)){
+                if (board.getBoard()[newPos].isEmptyField()) {
+                    list.add(newPos);
+                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+                    list.add(newPos);
+                    break;
+                } else if (board.getBoard()[newPos].isBlack() == this.isBlack()) {
+                    break;
+                }
+            }
+        }
+        return list;
+    }
+
+    public ArrayList<Integer> movingSN(Board board) {
+
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 0; i < 7; i ++){
+            int newPos = this.getPosition() + i*8;
+            if (newPos == this.getPosition()) continue;
+            if (withInPossibleRange(newPos)){
+                if (board.getBoard()[newPos].isEmptyField()) {
+                    list.add(newPos);
+                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+                    list.add(newPos);
+                    break;
+                } else if (board.getBoard()[newPos].isBlack() == this.isBlack()) {
+                    break;
+                }
+            }
+        }
+        return list;
+    }
+
+    public List<Integer> movingNS(Board board) {
+
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 0; i < 7; i ++){
+            int newPos = this.getPosition() - i*8;
+            if (newPos == this.getPosition()) continue;
+            if (withInPossibleRange(newPos)){
+                if (board.getBoard()[newPos].isEmptyField()) {
+                    list.add(newPos);
+                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+                    list.add(newPos);
+                    break;
+                } else if (board.getBoard()[newPos].isBlack() == this.isBlack()) {
+                    break;
+                }
+            }
+        }
+        return list;
+    }
+
+    public ArrayList<Integer> movingNE(Board board) {
+
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 0; i < 7; i ++){
+            int newPos = this.getPosition() + i*9;
+            if (getEastBarrier().contains(newPos) && newPos != this.getPosition()) {
+                list.add(newPos);
+                break;
+            }
+            if (newPos == this.getPosition()) continue;
+            if (withInPossibleRange(newPos)){
+                if (board.getBoard()[newPos].isEmptyField()) {
+                    list.add(newPos);
+                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+                    list.add(newPos);
+                    break;
+                } else if (board.getBoard()[newPos].isBlack() == this.isBlack()) {
+                    break;
+                }
+            }
+        }
+        return list;
+    }
+
+    public ArrayList<Integer> movingNW(Board board) {
+
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 0; i < 7; i ++){
+            int newPos = this.getPosition() - i*7;
+            if (getWestBarrier().contains(newPos) && newPos != this.getPosition()) {
+                list.add(newPos);
+                break;
+            }
+            if (newPos == this.getPosition()) continue;
+            if (withInPossibleRange(newPos)){
+                if (board.getBoard()[newPos].isEmptyField()) {
+                    list.add(newPos);
+                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+                    list.add(newPos);
+                    break;
+                } else if (board.getBoard()[newPos].isBlack() == this.isBlack()) {
+                    break;
+                }
+            }
+        }
+        return list;
+    }
+
+    public ArrayList<Integer> movingSE(Board board) {
+
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 0; i < 7; i ++){
+            int newPos = this.getPosition() - i*7;
+            if (getEastBarrier().contains(newPos) && newPos != this.getPosition()) {
+                list.add(newPos);
+                break;
+            }
+            if (newPos == this.getPosition()) continue;
+            if (withInPossibleRange(newPos)){
+                if (board.getBoard()[newPos].isEmptyField()) {
+                    list.add(newPos);
+                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+                    list.add(newPos);
+                    break;
+                } else if (board.getBoard()[newPos].isBlack() == this.isBlack()) {
+                    break;
+                }
+            }
+        }
+        return list;
+    }
+
+    public List<Integer> movingSW(Board board) {
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 0; i < 7; i ++){
+            int newPos = this.getPosition() - i*9;
+            if (getWestBarrier().contains(newPos) && newPos != this.getPosition()) {
+                list.add(newPos);
+                break;
+            }
+            if (newPos == this.getPosition()) continue;
+            if (withInPossibleRange(newPos)){
+                if (board.getBoard()[newPos].isEmptyField()) {
+                    list.add(newPos);
+                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+                    list.add(newPos);
+                    break;
+                } else if (board.getBoard()[newPos].isBlack() == this.isBlack()) {
+                    break;
+                }
+            }
+        }
+        return list;
     }
 }

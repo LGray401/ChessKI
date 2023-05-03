@@ -2,6 +2,7 @@ package Main;
 
 import Figures.Bishop;
 import Figures.Figure;
+import Figures.Queen;
 import Figures.Rook;
 
 public class Main {
@@ -14,6 +15,7 @@ public class Main {
 
         board.getBoard()[25] = new Bishop(false, 25);
         board.getBoard()[24] = new Rook(false, 24);
+        board.getBoard()[28] = new Queen(false, 28);
 
 
         player1.playerGetFigureList(board);
