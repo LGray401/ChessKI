@@ -18,6 +18,8 @@ public class Main {
         board.getBoard()[28] = new Queen(false, 28);
 
 
+
+
         player1.playerGetFigureList(board);
         player1.generateAllMoves(board);
         player2.playerGetFigureList(board);
