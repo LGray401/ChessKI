@@ -1,6 +1,5 @@
 package Main;
 
-import Figures.EmptyField;
 import Figures.Figure;
 
 import java.util.ArrayList;
@@ -60,9 +59,14 @@ public class Player {
 
     public void generateAllMoves(Board board){
 
+        ArrayList<String> list = new ArrayList<>();
+
         for (Figure figure: this.getFigureList()) {
             figure.calculatePossibleMoves(board);
+            figure.convertAllMovesInFENNotation();
+            list.addAll(figure.getAllMovesInFenNotation());
         }
+        this.setAllMovesInFenNotation(list);
     }
 
     void playerGetFigureList(Board board){

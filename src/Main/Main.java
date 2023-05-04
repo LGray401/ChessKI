@@ -25,8 +25,11 @@ public class Main {
         player2.playerGetFigureList(board);
         player2.generateAllMoves(board);
 
-        for (Figure figure: player1.getFigureList()) {System.out.println("Possible Moves of " + figure.getClass().getName() + ": " + figure.getPossibleMoveList());}
-        for (Figure figure: player2.getFigureList()) {System.out.println("Possible Moves of " + figure.getClass().getName() + ": " + figure.getPossibleMoveList());}
+        //for (Figure figure: player1.getFigureList()) {System.out.println("Possible Moves of " + figure.getClass().getName() + ": " + figure.getPossibleMoveList());}
+        //for (Figure figure: player2.getFigureList()) {System.out.println("Possible Moves of " + figure.getClass().getName() + ": " + figure.getPossibleMoveList());}
+
+        System.out.println("All legal moves for player1: " + player1.getAllMovesInFenNotation());
+        //for (Figure figure: player2.getFigureList()) {System.out.println("Possible Moves of " + figure.getClass().getName() + ": " + figure.getPossibleMoveList());}
 
     }
 }

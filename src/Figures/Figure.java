@@ -3,6 +3,7 @@ package Figures;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import Main.Board;
 
@@ -127,14 +128,6 @@ public abstract class Figure {
 
     public void calculatePossibleMoves(Board board) {
 
-        ArrayList<Integer> list = new ArrayList<>();
-
-        for (int moveSummand: this.getMoveSummandList()) {
-            if ((this.getPosition() + moveSummand < 64) && (this.getPosition() + moveSummand >= 0)) {
-                //list.add(this.getPosition() + moveSummand);
-            }
-        }
-        this.setPossibleMoveList(list);
     }
 
     public boolean withInPossibleRange(int i){
@@ -316,33 +309,104 @@ public abstract class Figure {
 
         int multiplier = (this instanceof King) ? 1 : 7;
 
-
-
-        ArrayList<Integer> list = new ArrayList<>();
+        ArrayList<Integer> southWestMoveList = new ArrayList<>();
 
         for (int i = 0; i < multiplier; i ++){
             int newPos = this.getPosition() - i*9;
             if (getWestBarrier().contains(newPos) && newPos != this.getPosition()) {
-                list.add(newPos);
-                setAllMovesInFenNotation(this.getAllMovesInFenNotation().add());
+                southWestMoveList.add(newPos);
                 break;
             }
             if (newPos == this.getPosition()) continue;
             if (withInPossibleRange(newPos)){
                 if (board.getBoard()[newPos].isEmptyField()) {
-                    list.add(newPos);
+                    southWestMoveList.add(newPos);
                 } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
-                    list.add(newPos);
+                    southWestMoveList.add(newPos);
                     break;
                 } else if (board.getBoard()[newPos].isBlack() == this.isBlack()) {
                     break;
                 }
             }
         }
-        return list;
+        return southWestMoveList;
     }
 
-    String convertFigureAndNewPosToFEN(Figure myFigure, int newPos){
-        return null;
+    public String convertFigureToFEN(Figure myFigure){
+        String result = "";
+        switch (myFigure.getClass().getSimpleName()){
+            case("King"): result += "k"; break;
+            case("Queen"): result += "q"; break;
+            case("Bishop"): result += "b"; break;
+            case("Knight"): result += "n"; break;
+            case("Pawn"): result += "p"; break;
+            case("Rook"): result += "r"; break;
+        }
+        if (myFigure.isBlack()){
+            result = result.toUpperCase(Locale.ROOT);
+        }
+        return result;
+    }
+
+    public String convertPosToRow(int newPos){
+        String result = "";
+
+        if ((newPos % 8 - 0) == 0|| newPos == 0) result += "a";
+        if ((newPos % 8 - 1) == 0|| newPos == 1) result += "b";
+        if ((newPos % 8 - 2) == 0|| newPos == 2) result += "c";
+        if ((newPos % 8 - 3) == 0|| newPos == 3) result += "d";
+        if ((newPos % 8 - 4) == 0|| newPos == 4) result += "e";
+        if ((newPos % 8 - 5) == 0|| newPos == 5) result += "f";
+        if ((newPos % 8 - 6) == 0|| newPos == 6) result += "g";
+        if ((newPos % 8 - 7) == 0|| newPos == 7) result += "h";
+
+
+        return result;
+    }
+
+    public String convertPosToLine(int newPos){
+        String result = "";
+
+        if (newPos >= 56) {
+            result += "8";
+        } else if (newPos >= 48) {
+            result += "7";
+        } else if (newPos >= 40) {
+            result += "6";
+        } else if (newPos >= 32) {
+            result += "5";
+        } else if (newPos >= 24) {
+            result += "4";
+        } else if (newPos >= 16) {
+            result += "3";
+        } else if (newPos >= 8) {
+            result += "2";
+        } else if (newPos >= 0) {
+            result += "1";
+        }
+
+
+        return result;
+    }
+
+    public String convertMoveToFEN(Figure myFigure, int newPos){
+
+        String result = "";
+        result += this.convertFigureToFEN(myFigure);
+        result += this.convertPosToRow(newPos);
+        result += this.convertPosToLine(newPos);
+
+        return result;
+    }
+
+    public void convertAllMovesInFENNotation(){
+
+        ArrayList<String> list = new ArrayList<>();
+
+        for (Integer newPos: this.getPossibleMoveList()) {
+            list.add(convertMoveToFEN(this, newPos));
+        }
+
+        this.setAllMovesInFenNotation(list);
     }
 }

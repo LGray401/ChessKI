@@ -27,12 +27,15 @@ public class Pawn extends Figure {
 
         ArrayList<Integer> list = new ArrayList<>();
 
+        /*
         list.addAll(this.movingNorth(board));
         list.addAll(this.movingSouth(board));
+
         list.addAll(this.movingSE(board));
         list.addAll(this.movingSW(board));
         list.addAll(this.movingNE(board));
         list.addAll(this.movingNW(board));
+         */
         this.setPossibleMoveList(list);
     }
 
