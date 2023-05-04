@@ -344,8 +344,8 @@ public abstract class Figure {
         }
         String result2 = result1.toUpperCase();
         if (myFigure.isBlack()){
-            return result2;
-        } else return result1;
+            return result1;
+        } else return result2;
     }
 
     public String convertPosToRow(int newPos){
