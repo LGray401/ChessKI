@@ -74,4 +74,82 @@ public class Board {
         board[helper] = figure;
         figure.setPosition(helper);
     }
+
+    Figure[] createBoardFromFEN(String fen) {
+
+        // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+        // white uppercase black lower case
+
+        Figure[] brd = new Figure[64];
+
+        char[] helper = fen.toCharArray(); // equals {"r","n","b","q"...}
+        int position = 53; // starting position in an array
+
+        for(int i = 0; i < helper.length - 1; i++) {
+
+            switch (i) {
+                case 'r': brd[position] = new Rook(false, position); break;
+                case 'n': brd[position] = new Knight(false, position); break;
+                case 'b': brd[position] = new Bishop(false, position); break;
+                case 'q': brd[position] = new Queen(false, position); break;
+                case 'k': brd[position] = new King(false, position); break;
+                case 'p': brd[position] = new Pawn(false,position); break;
+                case 'R': brd[position] = new Rook(true, position); break;
+                case 'N': brd[position] = new Knight(true, position); break;
+                case 'B': brd[position] = new Bishop(true, position); break;
+                case 'Q': brd[position] = new Queen(true, position); break;
+                case 'K': brd[position] = new King(true, position); break;
+                case 'P': brd[position] = new Pawn(true,position); break;
+                case '/': break; // skip
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                    brd[position]= new EmptyField(position);
+                    break; // create for every number an emptyField
+            }
+
+            // increase position correctly according to positions in array
+            if(position == 63){
+                position = 48;
+            }
+            else if(position == 55){
+                position = 40;
+            }
+            else if(position == 47){
+                position = 32;
+            }
+            else if(position == 39){
+                position = 24;
+            }
+            else if(position == 31){
+                position = 16;
+            }
+            else if(position == 23){
+                position = 8;
+            }
+            else if(position == 15){
+                position = 0;
+            }
+            else {
+            position++;} // To Do: case 7?
+        }
+
+        /*int index = 0;
+        for (char c : parts[0].toCharArray()) {
+            if (c == '/') {
+                continue;
+            } else if (Character.isDigit(c)) {
+                index += Character.getNumericValue(c);
+            } else {
+                board[index] = c;
+                index++;
+            }}*/
+
+        return board;
+    }
 }
