@@ -13,6 +13,11 @@ public class Board {
 
     Figure[] board = new Figure[64]; //nicht static weil wir ja in Zukunft mehrere Boards erstellen wa? Um z.B. 3 Züge nach vorne zu schauen
 
+    public Board(){}
+    public Board(Board oldBoard) {
+        this.board = oldBoard.board.clone();
+
+    }
 
     public Figure[] getBoard() {
         return board;
@@ -29,7 +34,7 @@ public class Board {
     }
 
 
-    static Figure[] intialize() {
+    public static Figure[] intialize() {
 
         Figure[] board = new Figure[64];
 

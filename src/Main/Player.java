@@ -2,6 +2,7 @@ package Main;
 
 import Figures.EmptyField;
 import Figures.Figure;
+import Figures.King;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class Player {
         this.playerInCheck = playerInCheck;
     }
 
-    Player(boolean isblack) {
+    public Player(boolean isblack) {
         isBlack = isblack;
     }
 
@@ -44,7 +45,7 @@ public class Player {
 
         List<Figure> possibleMoves = new ArrayList<>();
 
-        for (Figure figure : board.board)
+        for (Figure figure : board.getBoard())
             if (figure.isBlack == this.isBlack) {
                 possibleMoves.addAll(figure.calculatePossibleMoves(board));
             }
@@ -65,6 +66,11 @@ public class Player {
 
     List<Figure> removeIllegalMoves(Board board, List<Figure> moves) {
 
+        playerInCheck = isCheckTrue(board);
+
+        for(Figure move: moves){
+            Board newBoard = new Board(board);
+        }
 
         // prüft, ob auf dem Weg zum Zielfeld alle Felder frei sind (außer beim Pferd) -> Linh
         // prüft, ob Zielfeld leer ist oder gegnerischer Spieler drauf ist -> Ely
@@ -109,16 +115,29 @@ public class Player {
         return board;
     }
 
-    boolean isCheckTrue(Board board, Player otherPlayer){
+    boolean isCheckTrue(Board board){
 
-        Figure kingOfPlayer = (Figure) this.legalMoves.stream().filter(Figures.King.class::isInstance);
-
-        for (Figure figure: otherPlayer.legalMoves) {
-            for (Figure possibleMove : figure.calculatePossibleMoves()) {
-                if ((possibleMove.nextPosition == kingOfPlayer.getPosition())){
-                    this.setPlayerInCheck(true);
-                    return true;
+        King myKing = null;
+        List<Figure> opponentsPossibleMoves = new ArrayList<>();
+        List<Figure> opponentslegalMoves = new ArrayList<>();
+        ArrayList<Figure> opponentsFigures = new ArrayList<Figure>();
+        for(Figure figure: board.getBoard()){
+            if (figure.isBlack == this.isBlack) {
+                if (figure.getClass().getName() == King.class.getName()) {
+                    myKing = (King) figure;
                 }
+            }
+        }
+
+        for (Figure figure : board.getBoard())
+            if (figure.isBlack == this.isBlack) {
+                opponentsPossibleMoves.addAll(figure.calculatePossibleMoves(board));
+            }
+        opponentslegalMoves = removeIllegalMoves(board, opponentsPossibleMoves);
+
+        for(Figure move: opponentslegalMoves) {
+            if(myKing.nextPosition == move.nextPosition){
+                return true;
             }
         }
         return false;
