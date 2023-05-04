@@ -19,6 +19,10 @@ public abstract class Figure {
     private static final ArrayList<Integer> westBarrier = new ArrayList<>(Arrays.asList(0, 8, 16, 24, 32, 40, 48, 56));
     private static final ArrayList<Integer> northBarrier = new ArrayList<>(Arrays.asList(56, 57, 58, 59, 60, 61, 62, 63));
     private static final ArrayList<Integer> southBarrier = new ArrayList<>(Arrays.asList(8, 9, 10, 11, 12, 13, 14, 15));
+    private static final ArrayList<Integer> westWestBarrier = new ArrayList<>(Arrays.asList(1, 9, 17, 25, 33, 41, 49, 57));
+    private static final ArrayList<Integer> eastEastBarrier = new ArrayList<>(Arrays.asList(6, 14, 22, 30, 38, 46, 54, 62));
+    private static final ArrayList<Integer> northNorthBarrier = new ArrayList<>(Arrays.asList(48, 49, 50, 51, 52, 53, 54, 55));
+    private static final ArrayList<Integer> southSouthBarrier = new ArrayList<>(Arrays.asList(8, 9, 10, 11, 12, 13, 14, 15));
 
     public static ArrayList<Integer> getEastBarrier() {
         return eastBarrier;
@@ -26,6 +30,30 @@ public abstract class Figure {
 
     public static ArrayList<Integer> getWestBarrier() {
         return westBarrier;
+    }
+
+    public static ArrayList<Integer> getNorthBarrier(){
+        return northBarrier;
+    }
+
+    public static ArrayList<Integer> getSouthBarrier(){
+        return southBarrier;
+    }
+
+    public static ArrayList<Integer> getEastEastBarrierBarrier() {
+        return eastEastBarrier;
+    }
+
+    public static ArrayList<Integer> getWestWestBarrier(){
+        return westWestBarrier;
+    }
+
+    public static ArrayList<Integer> getNorthNorthBarrier(){
+        return northNorthBarrier;
+    }
+
+    public static ArrayList<Integer> getSouthSouthBarrier(){
+        return southSouthBarrier;
     }
 
     public ArrayList<Integer> getPossibleMoveList() {
