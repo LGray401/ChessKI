@@ -12,6 +12,15 @@ public class Player {
     private List<Figure> figureList;
     private boolean playerInCheck;
     private Figure nextFigureMove;
+    private ArrayList<String> allMovesInFenNotation;
+
+    public ArrayList<String> getAllMovesInFenNotation() {
+        return allMovesInFenNotation;
+    }
+
+    public void setAllMovesInFenNotation(ArrayList<String> allMovesInFenNotation) {
+        this.allMovesInFenNotation = allMovesInFenNotation;
+    }
 
     public Player(boolean isBlack) {
         this.isBlack = isBlack;

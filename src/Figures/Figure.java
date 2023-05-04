@@ -15,6 +15,7 @@ public abstract class Figure {
     private int nextPosition;
     private ArrayList<Integer> moveSummandList;
     private ArrayList<Integer> possibleMoveList;
+    private ArrayList<String> allMovesInFenNotation;
     private static final ArrayList<Integer> eastBarrier = new ArrayList<>(Arrays.asList(7, 15, 23, 31, 39, 47, 55, 63));
     private static final ArrayList<Integer> westBarrier = new ArrayList<>(Arrays.asList(0, 8, 16, 24, 32, 40, 48, 56));
     private static final ArrayList<Integer> northBarrier = new ArrayList<>(Arrays.asList(56, 57, 58, 59, 60, 61, 62, 63));
@@ -23,6 +24,14 @@ public abstract class Figure {
     private static final ArrayList<Integer> eastEastBarrier = new ArrayList<>(Arrays.asList(6, 14, 22, 30, 38, 46, 54, 62));
     private static final ArrayList<Integer> northNorthBarrier = new ArrayList<>(Arrays.asList(48, 49, 50, 51, 52, 53, 54, 55));
     private static final ArrayList<Integer> southSouthBarrier = new ArrayList<>(Arrays.asList(8, 9, 10, 11, 12, 13, 14, 15));
+
+    public ArrayList<String> getAllMovesInFenNotation() {
+        return allMovesInFenNotation;
+    }
+
+    public void setAllMovesInFenNotation(ArrayList<String> allMovesInFenNotation) {
+        this.allMovesInFenNotation = allMovesInFenNotation;
+    }
 
     public static ArrayList<Integer> getEastBarrier() {
         return eastBarrier;
@@ -308,10 +317,12 @@ public abstract class Figure {
         int multiplier = (this instanceof King) ? 1 : 7;
 
         ArrayList<Integer> list = new ArrayList<>();
+
         for (int i = 0; i < multiplier; i ++){
             int newPos = this.getPosition() - i*9;
             if (getWestBarrier().contains(newPos) && newPos != this.getPosition()) {
                 list.add(newPos);
+                setAllMovesInFenNotation(this.getAllMovesInFenNotation().add());
                 break;
             }
             if (newPos == this.getPosition()) continue;
@@ -327,5 +338,9 @@ public abstract class Figure {
             }
         }
         return list;
+    }
+
+    String convertFigureAndNewPosToFEN(Figure myFigure, int newPos){
+        return null;
     }
 }
