@@ -333,19 +333,19 @@ public abstract class Figure {
     }
 
     public String convertFigureToFEN(Figure myFigure){
-        String result = "";
+        String result1 = "";
         switch (myFigure.getClass().getSimpleName()){
-            case("King"): result += "k"; break;
-            case("Queen"): result += "q"; break;
-            case("Bishop"): result += "b"; break;
-            case("Knight"): result += "n"; break;
-            case("Pawn"): result += "p"; break;
-            case("Rook"): result += "r"; break;
+            case("King"): result1 += "k"; break;
+            case("Queen"): result1 += "q"; break;
+            case("Bishop"): result1 += "b"; break;
+            case("Knight"): result1 += "n"; break;
+            case("Pawn"): result1 += "p"; break;
+            case("Rook"): result1 += "r"; break;
         }
+        String result2 = result1.toUpperCase();
         if (myFigure.isBlack()){
-            result = result.toUpperCase(Locale.ROOT);
-        }
-        return result;
+            return result2;
+        } else return result1;
     }
 
     public String convertPosToRow(int newPos){

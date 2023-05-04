@@ -19,7 +19,7 @@ public class Main {
         player2.generateAllMoves(board);
 
         System.out.println("All legal moves for player1: " + player1.getAllMovesInFenNotation());
-        System.out.println("All legal moves for player1: " + player1.getAllMovesInFenNotation());
+        System.out.println("All legal moves for player2: " + player2.getAllMovesInFenNotation());
 
     }
 }
