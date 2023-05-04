@@ -6,14 +6,11 @@ import Main.Board;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Knight extends Figure{
 
-    private static final ArrayList<Integer> eastEastBarrier = new ArrayList<>(Arrays.asList(1, 9, 17, 25, 33, 41, 49, 57));
-    private static final ArrayList<Integer> westWestBarrier = new ArrayList<>(Arrays.asList(6, 14, 22, 30, 38, 46, 54, 62));
-    private static final ArrayList<Integer> northNorthBarrier = new ArrayList<>(Arrays.asList(48, 49, 50, 51, 52, 53, 54, 55));
-    private static final ArrayList<Integer> southSouthBarrier = new ArrayList<>(Arrays.asList(8, 9, 10, 11, 12, 13, 14, 15));
     private static final ArrayList<Integer> knightMovingAdd = new ArrayList<>(Arrays.asList(10, 6, 15, 17, -6, -15, -17, -10));
 
     public Knight(boolean isblack, int position) {
@@ -27,72 +24,161 @@ public class Knight extends Figure{
 
     public void calculatePossibleMoves(Board board) {
 
-        ArrayList<Integer> list = new ArrayList<>();
-        list.addAll(moving1Uhr(board));
-        list.addAll(moving2Uhr(board));
-        list.addAll(moving4Uhr(board));
-        list.addAll(moving5Uhr(board));
-        list.addAll(moving7Uhr(board));
-        list.addAll(moving8Uhr(board));
-        list.addAll(moving10Uhr(board));
-        list.addAll(moving11Uhr(board));
-        //list.remove(this.getPosition());
+        ArrayList<Integer> list = new ArrayList<>((Arrays.asList(this.moving1Uhr(board), this.moving2Uhr(board), this.moving4Uhr(board), this.moving5Uhr(board), this.moving7Uhr(board), this.moving8Uhr(board), this.moving10Uhr(board), this.moving11Uhr(board))));
+        list.removeIf(Objects::isNull);
         this.setPossibleMoveList(list);
     }
 
-    public List<Integer> moving1Uhr(Board board) {
+    public Integer moving1Uhr(Board board) {
 
-        ArrayList<Integer> list = new ArrayList<>();
+        int newPos = this.getPosition() + 17;
 
-        return list;
+        if (getEastBarrier().contains(this.getPosition()) || getNorthBarrier().contains(this.getPosition()) || getNorthNorthBarrier().contains(this.getPosition()) || newPos == this.getPosition() || !withInPossibleRange(newPos)) {
+            return null;
+        }
+
+        if (board.getBoard()[newPos].isEmptyField()) {
+            return newPos;
+        } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+            return newPos;
+        }
+        /*
+        else if (board.getBoard()[newPos].isBlack() == this.isBlack()) { return null; }
+         */
+        return null;
+
     }
 
-    public List<Integer> moving2Uhr(Board board) {
+    public Integer moving2Uhr(Board board) {
 
-        ArrayList<Integer> list = new ArrayList<>();
+        int newPos = this.getPosition() + 10;
 
-        return list;
+        if (getEastBarrier().contains(this.getPosition()) || getNorthBarrier().contains(this.getPosition()) || getEastEastBarrierBarrier().contains(this.getPosition()) || newPos == this.getPosition() || !withInPossibleRange(newPos)) {
+            return null;
+        }
+
+        if (board.getBoard()[newPos].isEmptyField()) {
+            return newPos;
+        } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+            return newPos;
+        }
+        /*
+        else if (board.getBoard()[newPos].isBlack() == this.isBlack()) { return null; }
+         */
+        return null;
     }
 
-    public List<Integer> moving4Uhr(Board board) {
+    public Integer moving4Uhr(Board board) {
 
-        ArrayList<Integer> list = new ArrayList<>();
+        int newPos = this.getPosition() - 6;
 
-        return list;
+        if (getEastBarrier().contains(this.getPosition()) || getSouthBarrier().contains(this.getPosition()) || getEastEastBarrierBarrier().contains(this.getPosition()) || newPos == this.getPosition() || !withInPossibleRange(newPos)) {
+            return null;
+        }
+
+        if (board.getBoard()[newPos].isEmptyField()) {
+            return newPos;
+        } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+            return newPos;
+        }
+        /*
+        else if (board.getBoard()[newPos].isBlack() == this.isBlack()) { return null; }
+         */
+        return null;
     }
 
-    public List<Integer> moving5Uhr(Board board) {
+    public Integer moving5Uhr(Board board) {
 
-        ArrayList<Integer> list = new ArrayList<>();
+        int newPos = this.getPosition() - 15;
 
-        return list;
+        if (getEastBarrier().contains(this.getPosition()) || getSouthBarrier().contains(this.getPosition()) || getSouthSouthBarrier().contains(this.getPosition()) || newPos == this.getPosition() || !withInPossibleRange(newPos)) {
+            return null;
+        }
+
+        if (board.getBoard()[newPos].isEmptyField()) {
+            return newPos;
+        } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+            return newPos;
+        }
+        /*
+        else if (board.getBoard()[newPos].isBlack() == this.isBlack()) { return null; }
+         */
+        return null;
     }
 
-    public List<Integer> moving7Uhr(Board board) {
+    public Integer moving7Uhr(Board board) {
 
-        ArrayList<Integer> list = new ArrayList<>();
+        int newPos = this.getPosition() - 17;
 
-        return list;
+        if (getWestBarrier().contains(this.getPosition()) || getSouthBarrier().contains(this.getPosition()) || getSouthSouthBarrier().contains(this.getPosition()) || newPos == this.getPosition() || !withInPossibleRange(newPos)) {
+            return null;
+        }
+
+        if (board.getBoard()[newPos].isEmptyField()) {
+            return newPos;
+        } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+            return newPos;
+        }
+        /*
+        else if (board.getBoard()[newPos].isBlack() == this.isBlack()) { return null; }
+         */
+        return null;
     }
 
-    public List<Integer> moving8Uhr(Board board) {
+    public Integer moving8Uhr(Board board) {
 
-        ArrayList<Integer> list = new ArrayList<>();
+        int newPos = this.getPosition() - 10;
 
-        return list;
+        if (getWestBarrier().contains(this.getPosition()) || getSouthBarrier().contains(this.getPosition()) || getWestWestBarrier().contains(this.getPosition()) || newPos == this.getPosition() || !withInPossibleRange(newPos)) {
+            return null;
+        }
+
+        if (board.getBoard()[newPos].isEmptyField()) {
+            return newPos;
+        } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+            return newPos;
+        }
+        /*
+        else if (board.getBoard()[newPos].isBlack() == this.isBlack()) { return null; }
+         */
+        return null;
     }
 
-    public List<Integer> moving10Uhr(Board board) {
+    public Integer moving10Uhr(Board board) {
 
-        ArrayList<Integer> list = new ArrayList<>();
+        int newPos = this.getPosition() + 6;
 
-        return list;
+        if (getWestBarrier().contains(this.getPosition()) || getNorthBarrier().contains(this.getPosition()) || getWestWestBarrier().contains(this.getPosition()) || newPos == this.getPosition() || !withInPossibleRange(newPos)) {
+            return null;
+        }
+
+        if (board.getBoard()[newPos].isEmptyField()) {
+            return newPos;
+        } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+            return newPos;
+        }
+        /*
+        else if (board.getBoard()[newPos].isBlack() == this.isBlack()) { return null; }
+         */
+        return null;
     }
 
-    public List<Integer> moving11Uhr(Board board) {
+    public Integer moving11Uhr(Board board) {
 
-        ArrayList<Integer> list = new ArrayList<>();
+        int newPos = this.getPosition() + 15;
 
-        return list;
+        if (getWestBarrier().contains(this.getPosition()) || getNorthBarrier().contains(this.getPosition()) || getNorthNorthBarrier().contains(this.getPosition()) || newPos == this.getPosition() || !withInPossibleRange(newPos)) {
+            return null;
+        }
+
+        if (board.getBoard()[newPos].isEmptyField()) {
+            return newPos;
+        } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+            return newPos;
+        }
+        /*
+        else if (board.getBoard()[newPos].isBlack() == this.isBlack()) { return null; }
+         */
+        return null;
     }
 }
