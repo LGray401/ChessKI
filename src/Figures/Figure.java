@@ -279,6 +279,8 @@ public abstract class Figure {
 
         int multiplier = (this instanceof King) ? 1 : 7;
 
+
+
         ArrayList<Integer> list = new ArrayList<>();
         for (int i = 0; i < multiplier; i ++){
             int newPos = this.getPosition() - i*9;
