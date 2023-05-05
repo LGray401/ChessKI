@@ -1,9 +1,8 @@
 package Main;
 
-import Figures.Bishop;
-import Figures.Figure;
-import Figures.Queen;
-import Figures.Rook;
+import Figures.*;
+
+import java.util.Arrays;
 
 public class Main {
 
@@ -12,6 +11,7 @@ public class Main {
         board.setBoard(Board.intialize());
         Player player1 = new Player(false);
         Player player2 = new Player(true);
+
 
         Figure nextMove = player1.makeMove(board);
         nextMove.setNextPosition(nextMove.getPossibleMoveList().get((int) (Math.random() * nextMove.getPossibleMoveList().size())));
@@ -23,9 +23,11 @@ public class Main {
         System.out.println("Player2 moved: " + nextMove.getNextPosition());
 
 
-
         System.out.println("All legal moves for player1: " + player1.getAllMovesInFenNotation());
         System.out.println("All legal moves for player2: " + player2.getAllMovesInFenNotation());
+
+        //Figure[] testBoard = Board.createBoardFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+
 
     }
 }
