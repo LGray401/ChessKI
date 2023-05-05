@@ -229,6 +229,50 @@ public class Board {
 
 
 
+    public Figure[][] to2DArrayAndDisplay(Figure[] board) {
+        Figure[][] board2D = new Figure[8][8];
+
+        for (int i = 0; i < 64; i++) {
+            int row = i / 8;
+            int col = i % 8;
+            board2D[row][col] = board[i];
+        }
+
+        displayBoard(board2D);
+        return board2D;
+    }
+
+    static void displayBoard(Figure[][] board) {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Figure figure = board[row][col];
+                char pieceChar;
+                if (figure instanceof EmptyField) {
+                    pieceChar = '.';
+                } else if (figure instanceof Pawn) {
+                    pieceChar = 'P';
+                } else if (figure instanceof Rook) {
+                    pieceChar = 'R';
+                } else if (figure instanceof Knight) {
+                    pieceChar = 'N';
+                } else if (figure instanceof Bishop) {
+                    pieceChar = 'B';
+                } else if (figure instanceof Queen) {
+                    pieceChar = 'Q';
+                } else { // King
+                    pieceChar = 'K';
+                }
+
+                if (figure.isBlack()) {
+                    pieceChar = Character.toLowerCase(pieceChar);
+                }
+
+                System.out.print(pieceChar + " ");
+            }
+            System.out.println();
+        }
+    }
+
 
 
 }
