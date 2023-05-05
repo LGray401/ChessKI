@@ -128,8 +128,7 @@ public class Board {
         return false;
     }
 
-    Figure[] createBoardFromFEN(String fen) {
-
+    static Figure[] createBoardFromFEN(String fen) {
 
         // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
         // white uppercase black lower case
@@ -140,53 +139,74 @@ public class Board {
         int position = 56; // starting position in an array
         int counter = 0;
 
-        for(char c: helper) {
-
+        for (char c : helper) {
             switch (c) {
-                case 'r': brd[counter] = new Rook(false, position); break;
-                case 'n': brd[counter] = new Knight(false, position); break;
-                case 'b': brd[counter] = new Bishop(false, position); break;
-                case 'q': brd[counter] = new Queen(false, position); break;
-                case 'k': brd[counter] = new King(false, position); break;
-                case 'p': brd[counter] = new Pawn(false,position); break;
-                case 'R': brd[counter] = new Rook(true, position); break;
-                case 'N': brd[counter] = new Knight(true, position); break;
-                case 'B': brd[counter] = new Bishop(true, position); break;
-                case 'Q': brd[counter] = new Queen(true, position); break;
-                case 'K': brd[counter] = new King(true, position); break;
-                case 'P': brd[counter] = new Pawn(true,position); break;
-                case '/': break; // skip
-                // for every number n create n EmptyFields()
-                case 1: brd[counter] = new EmptyField(position);setPosition(position); break;
-                case 2: for(int i = 0; i < 2; i++) {
-                    brd[counter] = new EmptyField(position);
-                    counter++;setPosition(position); } break;
-                case 3: for(int i = 0; i < 3; i++) {
-                    brd[counter] = new EmptyField(position);
-                    counter++;setPosition(position); } break;
-                case 4: for(int i = 0; i < 4; i++) {
-                    brd[counter] = new EmptyField(position);
-                    counter++;setPosition(position); } break;
-                case 5: for(int i = 0; i < 5; i++) {
-                    brd[counter] = new EmptyField(position);
-                    counter++;setPosition(position); } break;
-                case 6: for(int i = 0; i < 6; i++) {
-                    brd[counter] = new EmptyField(position);
-                    counter++;setPosition(position); } break;
-                case 7: for(int i = 0; i < 7; i++) {
-                    brd[counter] = new EmptyField(position);
-                    counter++;setPosition(position); } break;
-                case 8: for(int i = 0; i < 8; i++) {
-                    brd[counter] = new EmptyField(position);
-                    counter++;setPosition(position); } break;
+                case 'r':
+                    brd[counter] = new Rook(false, position);
+                    counter++;
+                    break;
+                case 'n':
+                    brd[counter] = new Knight(false, position);
+                    counter++;
+                    break;
+                case 'b':
+                    brd[counter] = new Bishop(false, position);
+                    counter++;
+                    break;
+                case 'q':
+                    brd[counter] = new Queen(false, position);
+                    counter++;
+                    break;
+                case 'k':
+                    brd[counter] = new King(false, position);
+                    counter++;
+                    break;
+                case 'p':
+                    brd[counter] = new Pawn(false, position);
+                    counter++;
+                    break;
+                case 'R':
+                    brd[counter] = new Rook(true, position);
+                    counter++;
+                    break;
+                case 'N':
+                    brd[counter] = new Knight(true, position);
+                    counter++;
+                    break;
+                case 'B':
+                    brd[counter] = new Bishop(true, position);
+                    counter++;
+                    break;
+                case 'Q':
+                    brd[counter] = new Queen(true, position);
+                    counter++;
+                    break;
+                case 'K':
+                    brd[counter] = new King(true, position);
+                    counter++;
+                    break;
+                case 'P':
+                    brd[counter] = new Pawn(true, position);
+                    counter++;
+                    break;
+                case '/':
+                    break; // skip
+                default:
+                    if (Character.isDigit(c)) {
+                        int numIterations = Character.getNumericValue(c);
+                        for (int i = 0; i < numIterations; i++) {
+                            brd[counter] = new EmptyField(position);
+                            counter++;
+                            position = setPosition(position);
+                        }
+                    } else {
+                        // handle invalid input
+                    }
+                    break;
             }
-            counter++; // increase array index
-            position = setPosition(position); // increase position correctly according to positions in array in setPostion()
+            position = setPosition(position); // increase position correctly according to positions in array in setPosition()
         }
 
-
-// bugs: / creates null in array
-        // To Do: 8 = create null 8times
         return brd;
     }
 
@@ -220,87 +240,7 @@ public class Board {
         return newPosition;
     }
 
-    /*static Figure[] createBoardFromFEN(String fen) {
 
-        // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
-        // white uppercase black lower case
-
-        Figure[] brd = new Figure[64];
-
-        char[] helper = fen.toCharArray(); // equals {"r","n","b","q"...}
-        int position = 56; // starting position in an array
-
-        for(char c: helper) {
-
-            switch (c) {
-                case 'r': brd[position] = new Rook(false, position); break;
-                case 'n': brd[position] = new Knight(false, position); break;
-                case 'b': brd[position] = new Bishop(false, position); break;
-                case 'q': brd[position] = new Queen(false, position); break;
-                case 'k': brd[position] = new King(false, position); break;
-                case 'p': brd[position] = new Pawn(false,position); break;
-                case 'R': brd[position] = new Rook(true, position); break;
-                case 'N': brd[position] = new Knight(true, position); break;
-                case 'B': brd[position] = new Bishop(true, position); break;
-                case 'Q': brd[position] = new Queen(true, position); break;
-                case 'K': brd[position] = new King(true, position); break;
-                case 'P': brd[position] = new Pawn(true,position); break;
-                case '/': break; // skip
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                case 8:
-                    brd[position]= new EmptyField(position);
-                    break; // create for every number an emptyField
-            }
-
-            // increase position correctly according to positions in array
-            if(position == 63){
-                position = 48;
-            }
-            else if(position == 55){
-                position = 40;
-            }
-            else if(position == 47){
-                position = 32;
-            }
-            else if(position == 39){
-                position = 24;
-            }
-            else if(position == 31){
-                position = 16;
-            }
-            else if(position == 23){
-                position = 8;
-            }
-            else if(position == 15){
-                position = 0;
-            }
-            else {
-            position++;} // To Do: case 7?
-        }
-
-        /*int index = 0;
-        for (char c : parts[0].toCharArray()) {
-            if (c == '/') {
-                continue;
-            } else if (Character.isDigit(c)) {
-                index += Character.getNumericValue(c);
-            } else {
-                board[index] = c;
-                index++;
-            }}
-
-
-        return brd;
-    }*/
-
-        return board;
-    }
 
     //method to print out game is over and terminate program
     public void gameOver(boolean isBlack) {
@@ -326,7 +266,7 @@ public class Board {
 
 
 
-    public Figure[][] to2DArrayAndDisplay(Figure[] board) {
+    public static Figure[][] to2DArrayAndDisplay(Figure[] board) {
         Figure[][] board2D = new Figure[8][8];
 
         for (int i = 0; i < 64; i++) {
