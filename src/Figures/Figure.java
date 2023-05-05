@@ -1,5 +1,6 @@
 package Figures;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -72,6 +73,12 @@ public abstract class Figure {
 
     public void setPossibleMoveList(ArrayList<Integer> possibleMoveList) {
         this.possibleMoveList = possibleMoveList;
+    }
+
+
+    public Figure() {
+        this.setPossibleMoveList(new ArrayList<>());
+        this.setAllMovesInFenNotation(new ArrayList<>());
     }
 
     public void concatenatePossibleMoveList(ArrayList<Integer> possibleMoveList){
@@ -414,4 +421,52 @@ public abstract class Figure {
 
         this.setAllMovesInFenNotation(list);
     }
-}
+
+    public Figure copy() {
+        // Create a new instance of the same class as the current instance
+        Figure copiedFigure = null;
+        if(this instanceof EmptyField) {
+            try {
+                Constructor<? extends Figure> constructor = this.getClass().getConstructor(int.class);
+                copiedFigure = constructor.newInstance(this.getPosition());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                Constructor<? extends Figure> constructor = this.getClass().getConstructor(boolean.class, int.class);
+                copiedFigure = constructor.newInstance(this.isBlack(), this.getPosition());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // Assuming all properties have proper getter and setter methods
+            copiedFigure.setValue(this.getValue());
+            copiedFigure.setNextPosition(this.getNextPosition());
+            copiedFigure.setMoveSummandList(new ArrayList<>(this.getMoveSummandList()));
+            copiedFigure.setPossibleMoveList(new ArrayList<>(this.getPossibleMoveList()));
+            copiedFigure.setAllMovesInFenNotation(new ArrayList<>(this.getAllMovesInFenNotation()));
+        }
+
+        return copiedFigure;
+    }
+
+    public boolean canAttack(Figure target) {
+        return this.getPossibleMoveList().contains(target.getPosition());
+    }
+
+    public void removeIllegalMoves(Board board) {
+
+        ArrayList<Integer> legalMoves = new ArrayList<>();
+        for (Integer move : possibleMoveList) {
+            Board tempBoard = board.copy();
+            //tempBoard.to2DArrayAndDisplay(tempBoard.getBoard());
+            tempBoard.simulateMove(this.copy(), move);
+            if (!tempBoard.isPlayerInCheck(isBlack())) {
+                legalMoves.add(move);
+            }
+        }
+        possibleMoveList = legalMoves;
+    }
+    }
+

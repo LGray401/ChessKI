@@ -14,6 +14,16 @@ public class Board {
 
     private Figure[] board = new Figure[64];
 
+    public Board() {
+    }
+
+    public Board(Board originalBoard) {
+        this.board = new Figure[64];
+        for (int i = 0; i < 64; i++) {
+            this.board[i] = originalBoard.board[i].copy(); // Assuming there's a copy() method in the Figure class
+        }
+    }
+
     public Figure[] getBoard() {
         return board;
     }
@@ -67,15 +77,59 @@ public class Board {
         return board;
     }
 
+
+    public Board copy() {
+        return new Board(this);
+    }
+
+
+    public Figure findKing(boolean isBlack) {
+        for (Figure figure : board) {
+            if (figure instanceof King && figure.isBlack() == isBlack) {
+                return figure;
+            }
+        }
+        return null; // This should never happen in a valid game state
+    }
+
+    public List<Figure> getOpponentFigures(boolean isBlack) {
+        List<Figure> opponentFigures = new ArrayList<>();
+        for (Figure figure : board) {
+            if (!figure.isEmptyField() && figure.isBlack() != isBlack) {
+                opponentFigures.add(figure);
+            }
+        }
+        return opponentFigures;
+    }
+
+    public void simulateMove(Figure figure, int move) {
+        figure.setNextPosition(move);
+        changeBoard(figure);
+
+    }
+
     void changeBoard(Figure figure) {
 
         board[figure.getPosition()] = new EmptyField(figure.getPosition());
+        //this.to2DArrayAndDisplay(this.getBoard());
         int helper = figure.getNextPosition();
         board[helper] = figure;
         figure.setPosition(helper);
     }
 
-    static Figure[] createBoardFromFEN(String fen) {
+
+    public boolean isPlayerInCheck(boolean isBlack) {
+        Figure king = findKing(isBlack);
+        for (Figure opponentFigure : getOpponentFigures(isBlack)) {
+            if (opponentFigure.canAttack(king)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    Figure[] createBoardFromFEN(String fen) {
+
 
         // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
         // white uppercase black lower case
@@ -241,6 +295,81 @@ public class Board {
                 index++;
             }}
 
+
         return brd;
     }*/
+
+        return board;
+    }
+
+    //method to print out game is over and terminate program
+    public void gameOver(boolean isBlack) {
+        String winner = isBlack ? "Black" : "White";
+        System.out.println("Player " + winner + " wins!");
+        System.exit(0);
+    }
+
+    public boolean isKingOfTheHill(boolean isBlack) {
+
+        ArrayList<Integer> kingOfTheHill = new ArrayList<>(Arrays.asList(27, 28, 35, 36));
+        Figure king = findKing(isBlack);
+
+        if (kingOfTheHill.contains(king.getPosition())) {
+            System.out.println("King of the Hill");
+            this.gameOver(isBlack);
+            return true;
+        } else {
+            return false;
+
+        }
+    }
+
+
+
+    public Figure[][] to2DArrayAndDisplay(Figure[] board) {
+        Figure[][] board2D = new Figure[8][8];
+
+        for (int i = 0; i < 64; i++) {
+            int row = i / 8;
+            int col = i % 8;
+            board2D[row][col] = board[i];
+        }
+
+        displayBoard(board2D);
+        return board2D;
+    }
+
+    static void displayBoard(Figure[][] board) {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Figure figure = board[row][col];
+                char pieceChar;
+                if (figure instanceof EmptyField) {
+                    pieceChar = '.';
+                } else if (figure instanceof Pawn) {
+                    pieceChar = 'P';
+                } else if (figure instanceof Rook) {
+                    pieceChar = 'R';
+                } else if (figure instanceof Knight) {
+                    pieceChar = 'N';
+                } else if (figure instanceof Bishop) {
+                    pieceChar = 'B';
+                } else if (figure instanceof Queen) {
+                    pieceChar = 'Q';
+                } else { // King
+                    pieceChar = 'K';
+                }
+
+                if (figure.isBlack()) {
+                    pieceChar = Character.toLowerCase(pieceChar);
+                }
+
+                System.out.print(pieceChar + " ");
+            }
+            System.out.println();
+        }
+    }
+
+
+
 }
