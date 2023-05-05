@@ -455,8 +455,9 @@ public abstract class Figure {
         ArrayList<Integer> legalMoves = new ArrayList<>();
         for (Integer move : possibleMoveList) {
             Board tempBoard = board.copy();
-            tempBoard.simulateMove(this, move);
-            if (!tempBoard.isPlayerInCheck(isBlack)) {
+            //tempBoard.to2DArrayAndDisplay(tempBoard.getBoard());
+            tempBoard.simulateMove(this.copy(), move);
+            if (!tempBoard.isPlayerInCheck(isBlack())) {
                 legalMoves.add(move);
             }
         }

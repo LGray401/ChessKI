@@ -95,7 +95,7 @@ public class Player {
             do {
                  f = this.getFigureList().get((int) (Math.random() * this.getFigureList().size()));
             }
-            while (f.getAllMovesInFenNotation().size() == 0);
+            while (f.getPossibleMoveList().size() == 0);
             return f;
         }
 }
