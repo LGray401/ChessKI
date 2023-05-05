@@ -15,7 +15,7 @@ public class Main {
         Player player1 = new Player(false);
         Player player2 = new Player(true);
 
-        //getBoard()[23] = new Bishop(true, 23);
+        //board.getBoard()[23] = new Bishop(true, 23);
 
         player1.playerGetFigureList(board);
         player1.generateAllMoves(board);
