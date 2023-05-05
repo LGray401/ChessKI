@@ -84,6 +84,16 @@ public class Player {
         }
     }
 
+    ArrayList<Integer> getAllPossibleMovesPlayer(Board board) {
+
+            ArrayList<Integer> list = new ArrayList<>();
+
+            for (Figure figure: this.getFigureList()) {
+                list.addAll(figure.getPossibleMoveList());
+            }
+            return list;
+    }
+
         public Figure makeMove(Board board) {
 
             this.playerGetFigureList(board);
@@ -94,6 +104,9 @@ public class Player {
             Figure f;
             do {
                  f = this.getFigureList().get((int) (Math.random() * this.getFigureList().size()));
+                 if(this.getAllPossibleMovesPlayer(board).size() == 0) {
+                    board.gameOver(!isBlack());
+                 }
             }
             while (f.getPossibleMoveList().size() == 0);
             return f;

@@ -105,11 +105,13 @@ public class Board {
     public void simulateMove(Figure figure, int move) {
         figure.setNextPosition(move);
         changeBoard(figure);
+
     }
 
     void changeBoard(Figure figure) {
 
         board[figure.getPosition()] = new EmptyField(figure.getPosition());
+        //this.to2DArrayAndDisplay(this.getBoard());
         int helper = figure.getNextPosition();
         board[helper] = figure;
         figure.setPosition(helper);
@@ -202,6 +204,31 @@ public class Board {
 
         return board;
     }
+
+    //method to print out game is over and terminate program
+    public void gameOver(boolean isBlack) {
+        String winner = isBlack ? "Black" : "White";
+        System.out.println("Player " + winner + " wins!");
+        System.exit(0);
+    }
+
+    public boolean isKingOfTheHill(boolean isBlack) {
+
+        ArrayList<Integer> kingOfTheHill = new ArrayList<>(Arrays.asList(27, 28, 35, 36));
+        Figure king = findKing(isBlack);
+
+        if (kingOfTheHill.contains(king.getPosition())) {
+            System.out.println("King of the Hill");
+            this.gameOver(isBlack);
+            return true;
+        } else {
+            return false;
+
+        }
+    }
+
+
+
 
 
 }
