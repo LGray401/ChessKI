@@ -1,9 +1,6 @@
 package Main;
 
-import Figures.Bishop;
-import Figures.Figure;
-import Figures.Queen;
-import Figures.Rook;
+import Figures.*;
 
 import java.util.Arrays;
 
@@ -15,7 +12,7 @@ public class Main {
         Player player1 = new Player(false);
         Player player2 = new Player(true);
 
-        //board.getBoard()[23] = new Bishop(true, 23);
+        board.getBoard()[20] = new King(true, 20);
 
         player1.playerGetFigureList(board);
         player1.generateAllMoves(board);
