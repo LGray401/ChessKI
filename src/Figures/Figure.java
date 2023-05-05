@@ -139,6 +139,7 @@ public abstract class Figure {
 
         ArrayList<Integer> list = new ArrayList<>();
         for (int i = 0; i < 7; i ++){
+            if (getEastBarrier().contains(this.getPosition())) break;
             int newPos = this.getPosition() + i;
             if (getEastBarrier().contains(newPos) && newPos != this.getPosition()) {
                 list.add(newPos);
@@ -163,6 +164,7 @@ public abstract class Figure {
 
         ArrayList<Integer> list = new ArrayList<>();
         for (int i = 0; i < 7; i ++){
+            if (getWestBarrier().contains(this.getPosition())) break;
             int newPos = this.getPosition() - i;
             if (getWestBarrier().contains(newPos) && newPos != this.getPosition()) {
                 list.add(newPos);
@@ -233,6 +235,7 @@ public abstract class Figure {
 
         ArrayList<Integer> list = new ArrayList<>();
         for (int i = 0; i < multiplier; i ++){
+            if (getEastBarrier().contains(this.getPosition())) break;
             int newPos = this.getPosition() + i*9;
             if (getEastBarrier().contains(newPos) && newPos != this.getPosition()) {
                 list.add(newPos);
@@ -259,7 +262,8 @@ public abstract class Figure {
 
         ArrayList<Integer> list = new ArrayList<>();
         for (int i = 0; i < multiplier; i ++){
-            int newPos = this.getPosition() - i*7;
+            if (getWestBarrier().contains(this.getPosition())) break;
+            int newPos = this.getPosition() + i*7;
             if (getWestBarrier().contains(newPos) && newPos != this.getPosition()) {
                 list.add(newPos);
                 break;
@@ -285,6 +289,7 @@ public abstract class Figure {
 
         ArrayList<Integer> list = new ArrayList<>();
         for (int i = 0; i < multiplier; i ++){
+            if (getEastBarrier().contains(this.getPosition())) break;
             int newPos = this.getPosition() - i*7;
             if (getEastBarrier().contains(newPos) && newPos != this.getPosition()) {
                 list.add(newPos);
@@ -312,6 +317,7 @@ public abstract class Figure {
         ArrayList<Integer> southWestMoveList = new ArrayList<>();
 
         for (int i = 0; i < multiplier; i ++){
+            if (getWestBarrier().contains(this.getPosition())) break;
             int newPos = this.getPosition() - i*9;
             if (getWestBarrier().contains(newPos) && newPos != this.getPosition()) {
                 southWestMoveList.add(newPos);
