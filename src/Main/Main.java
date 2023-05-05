@@ -5,6 +5,8 @@ import Figures.Figure;
 import Figures.Queen;
 import Figures.Rook;
 
+import java.util.Arrays;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -20,6 +22,13 @@ public class Main {
 
         System.out.println("All legal moves for player1: " + player1.getAllMovesInFenNotation());
         System.out.println("All legal moves for player2: " + player2.getAllMovesInFenNotation());
+
+        Figure[] testBoard = Board.createBoardFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+
+        System.out.println(Arrays.toString(testBoard));
+        System.out.println(testBoard.length);
+
+
 
     }
 }
