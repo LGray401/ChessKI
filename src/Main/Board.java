@@ -14,6 +14,16 @@ public class Board {
 
     private Figure[] board = new Figure[64];
 
+    public Board() {
+    }
+
+    public Board(Board originalBoard) {
+        this.board = new Figure[64];
+        for (int i = 0; i < 64; i++) {
+            this.board[i] = originalBoard.board[i].copy(); // Assuming there's a copy() method in the Figure class
+        }
+    }
+
     public Figure[] getBoard() {
         return board;
     }
@@ -67,12 +77,52 @@ public class Board {
         return board;
     }
 
+
+    public Board copy() {
+        return new Board(this);
+    }
+
+
+    public Figure findKing(boolean isBlack) {
+        for (Figure figure : board) {
+            if (figure instanceof King && figure.isBlack() == isBlack) {
+                return figure;
+            }
+        }
+        return null; // This should never happen in a valid game state
+    }
+
+    public List<Figure> getOpponentFigures(boolean isBlack) {
+        List<Figure> opponentFigures = new ArrayList<>();
+        for (Figure figure : board) {
+            if (!figure.isEmptyField() && figure.isBlack() != isBlack) {
+                opponentFigures.add(figure);
+            }
+        }
+        return opponentFigures;
+    }
+
+    public void simulateMove(Figure figure, int move) {
+        figure.setNextPosition(move);
+        changeBoard(figure);
+    }
+
     void changeBoard(Figure figure) {
 
         board[figure.getPosition()] = new EmptyField(figure.getPosition());
         int helper = figure.getNextPosition();
         board[helper] = figure;
         figure.setPosition(helper);
+    }
+
+    public boolean isPlayerInCheck(boolean isBlack) {
+        Figure king = findKing(isBlack);
+        for (Figure opponentFigure : getOpponentFigures(isBlack)) {
+            if (opponentFigure.canAttack(king)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     Figure[] createBoardFromFEN(String fen) {
@@ -152,4 +202,6 @@ public class Board {
 
         return board;
     }
+
+
 }

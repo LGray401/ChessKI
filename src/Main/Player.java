@@ -1,6 +1,7 @@
 package Main;
 
 import Figures.Figure;
+import Figures.King;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,22 +66,36 @@ public class Player {
             figure.calculatePossibleMoves(board);
             figure.convertAllMovesInFENNotation();
             list.addAll(figure.getAllMovesInFenNotation());
+            //System.out.println(figure.getAllMovesInFenNotation());
         }
         this.setAllMovesInFenNotation(list);
     }
 
-    void playerGetFigureList(Board board){
+    void playerGetFigureList(Board board) {
 
         List<Figure> figureList = new ArrayList<>();
 
-        for (Figure figure: board.getBoard()) {
+        for (Figure figure : board.getBoard()) {
             if (figure.isEmptyField()) continue;
-            if (this.isBlack() && figure.isBlack()){
-                figureList.add(figure);
-            } else if (!this.isBlack && !figure.isBlack()){
+            if (this.isBlack() == figure.isBlack()) {
                 figureList.add(figure);
             }
+            this.setFigureList(figureList);
         }
-        this.setFigureList(figureList);
     }
+
+        public Figure makeMove(Board board) {
+
+            this.playerGetFigureList(board);
+            this.generateAllMoves(board);
+            for (Figure figure: this.getFigureList()) {
+                figure.removeIllegalMoves(board);
+            }
+            Figure f;
+            do {
+                 f = this.getFigureList().get((int) (Math.random() * this.getFigureList().size()));
+            }
+            while (f.getAllMovesInFenNotation().size() == 0);
+            return f;
+        }
 }
