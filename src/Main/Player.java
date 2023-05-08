@@ -105,7 +105,13 @@ public class Player {
             do {
                  f = this.getFigureList().get((int) (Math.random() * this.getFigureList().size()));
                  if(this.getAllPossibleMovesPlayer(board).size() == 0) {
-                    board.gameOver(!isBlack());
+                     if (board.isPlayerInCheck(this.isBlack())) {
+                         board.playerWon(!isBlack());
+                     }
+                     else {
+                         board.itsADraw("Stalemate");
+                     }
+
                  }
             }
             while (f.getPossibleMoveList().size() == 0);

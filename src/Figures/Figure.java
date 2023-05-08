@@ -241,7 +241,6 @@ public abstract class Figure {
     public ArrayList<Integer> movingNE(Board board) {
 
         int multiplier = (this instanceof King) ? 2 : 7;
-        System.out.println(multiplier);
 
         ArrayList<Integer> list = new ArrayList<>();
         for (int i = 1; i < multiplier; i ++){
@@ -460,8 +459,9 @@ public abstract class Figure {
         ArrayList<Integer> legalMoves = new ArrayList<>();
         for (Integer move : possibleMoveList) {
             Board tempBoard = board.copy();
-            //tempBoard.to2DArrayAndDisplay(tempBoard.getBoard());
+
             tempBoard.simulateMove(this.copy(), move);
+
             if (!tempBoard.isPlayerInCheck(isBlack())) {
                 legalMoves.add(move);
             }

@@ -14,6 +14,9 @@ public class Board {
 
     private Figure[] board = new Figure[64];
 
+    private List<String> previousBoardStates = new ArrayList<>();
+    private int halfMoveClock = 0;
+
     public Board() {
     }
 
@@ -109,18 +112,31 @@ public class Board {
     }
 
     void changeBoard(Figure figure) {
-
+        if(board[figure.getNextPosition()] instanceof King) {
+            System.out.println("King is moving from ");
+        }
+        if (figure instanceof Pawn || !(board[figure.getNextPosition()] instanceof EmptyField)) {
+            resetHalfMoveClock();
+        } else {
+            halfMoveClock++;
+        }
         board[figure.getPosition()] = new EmptyField(figure.getPosition());
-        //this.to2DArrayAndDisplay(this.getBoard());
+
         int helper = figure.getNextPosition();
         board[helper] = figure;
         figure.setPosition(helper);
+        String currentFEN = this.createFENFromBoard(this.getBoard());
+        previousBoardStates.add(currentFEN);
     }
 
 
     public boolean isPlayerInCheck(boolean isBlack) {
         Figure king = findKing(isBlack);
+        if(king == null) {
+            return true;
+        }
         for (Figure opponentFigure : getOpponentFigures(isBlack)) {
+            opponentFigure.calculatePossibleMoves(this);
             if (opponentFigure.canAttack(king)) {
                 return true;
             }
@@ -242,11 +258,48 @@ public class Board {
 
 
 
+
+    public boolean threefoldRepetition() {
+        String currentFEN = createFENFromBoard(board);
+        int occurrences = 0;
+
+        for (String previousFEN : previousBoardStates) {
+            if (currentFEN.equals(previousFEN)) {
+                occurrences++;
+                if (occurrences >= 2) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public void resetHalfMoveClock() {
+        halfMoveClock = 0;
+    }
+    public boolean fiftyMoveRule() {
+        return halfMoveClock >= 100;
+    }
+
+
+    public boolean isGameOver(boolean isBlack) {
+        if(isKingOfTheHill(isBlack)) return true;
+        if(fiftyMoveRule() || threefoldRepetition()){
+            this.itsADraw(fiftyMoveRule() ? "fifty move rule" : "threefold repetition");
+            return true;
+        };
+        return false;
+    }
+
+    public void itsADraw(String reason) {
+        exitGame(reason + " - it's a draw!");
+    }
+
     //method to print out game is over and terminate program
-    public void gameOver(boolean isBlack) {
-        String winner = isBlack ? "Black" : "White";
-        System.out.println("Player " + winner + " wins!");
-        System.exit(0);
+    public void playerWon (boolean isBlack) {
+        String msg = "Player " + (isBlack ? "Black" : "White") + " wins!";
+        exitGame(msg);
     }
 
     public boolean isKingOfTheHill(boolean isBlack) {
@@ -256,7 +309,7 @@ public class Board {
 
         if (kingOfTheHill.contains(king.getPosition())) {
             System.out.println("King of the Hill");
-            this.gameOver(isBlack);
+            this.playerWon(isBlack);
             return true;
         } else {
             return false;
@@ -264,9 +317,71 @@ public class Board {
         }
     }
 
+    public void exitGame(String message) {
+        System.out.println(message);
+        System.exit(0);
+    }
+
+
+
+
+    public String createFENFromBoard(Figure[] board) {
+        StringBuilder fen = new StringBuilder();
+        int emptyCount = 0;
+
+        for (int i = 0; i < 64; i++) {
+            if (i > 0 && i % 8 == 0) {
+                if (emptyCount > 0) {
+                    fen.append(emptyCount);
+                    emptyCount = 0;
+                }
+                fen.append("/");
+            }
+
+            Figure figure = board[i];
+            if (figure instanceof EmptyField) {
+                emptyCount++;
+            } else {
+                if (emptyCount > 0) {
+                    fen.append(emptyCount);
+                    emptyCount = 0;
+                }
+
+                char pieceChar;
+                if (figure instanceof Pawn) {
+                    pieceChar = 'p';
+                } else if (figure instanceof Rook) {
+                    pieceChar = 'r';
+                } else if (figure instanceof Knight) {
+                    pieceChar = 'n';
+                } else if (figure instanceof Bishop) {
+                    pieceChar = 'b';
+                } else if (figure instanceof Queen) {
+                    pieceChar = 'q';
+                } else { // King
+                    pieceChar = 'k';
+                }
+
+                if (!figure.isBlack()) {
+                    pieceChar = Character.toUpperCase(pieceChar);
+                }
+
+                fen.append(pieceChar);
+            }
+        }
+
+        if (emptyCount > 0) {
+            fen.append(emptyCount);
+        }
+
+        // Add other FEN parts if necessary (active color, castling availability, en passant target square, halfmove clock, and fullmove number).
+
+        return fen.toString();
+    }
 
 
     public static Figure[][] to2DArrayAndDisplay(Figure[] board) {
+
         Figure[][] board2D = new Figure[8][8];
 
         for (int i = 0; i < 64; i++) {
