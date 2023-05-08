@@ -14,6 +14,19 @@ public class Board {
 
     private Figure[] board = new Figure[64];
 
+    private List<String> previousBoardStates = new ArrayList<>();
+    private int halfMoveClock = 0;
+
+    public Board() {
+    }
+
+    public Board(Board originalBoard) {
+        this.board = new Figure[64];
+        for (int i = 0; i < 64; i++) {
+            this.board[i] = originalBoard.board[i].copy(); // Assuming there's a copy() method in the Figure class
+        }
+    }
+
     public Figure[] getBoard() {
         return board;
     }
@@ -67,15 +80,71 @@ public class Board {
         return board;
     }
 
-    void changeBoard(Figure figure) {
 
+    public Board copy() {
+        return new Board(this);
+    }
+
+
+    public Figure findKing(boolean isBlack) {
+        for (Figure figure : board) {
+            if (figure instanceof King && figure.isBlack() == isBlack) {
+                return figure;
+            }
+        }
+        return null; // This should never happen in a valid game state
+    }
+
+    public List<Figure> getOpponentFigures(boolean isBlack) {
+        List<Figure> opponentFigures = new ArrayList<>();
+        for (Figure figure : board) {
+            if (!figure.isEmptyField() && figure.isBlack() != isBlack) {
+                opponentFigures.add(figure);
+            }
+        }
+        return opponentFigures;
+    }
+
+    public void simulateMove(Figure figure, int move) {
+        figure.setNextPosition(move);
+        changeBoard(figure);
+
+    }
+
+    void changeBoard(Figure figure) {
+        if(board[figure.getNextPosition()] instanceof King) {
+            System.out.println("King is moving from ");
+        }
+        if (figure instanceof Pawn || !(board[figure.getNextPosition()] instanceof EmptyField)) {
+            resetHalfMoveClock();
+        } else {
+            halfMoveClock++;
+        }
         board[figure.getPosition()] = new EmptyField(figure.getPosition());
+
         int helper = figure.getNextPosition();
         board[helper] = figure;
         figure.setPosition(helper);
+        String currentFEN = this.createFENFromBoard(this.getBoard());
+        previousBoardStates.add(currentFEN);
     }
 
-    Figure[] createBoardFromFEN(String fen) {
+
+    public boolean isPlayerInCheck(boolean isBlack) {
+        Figure king = findKing(isBlack);
+        if(king == null) {
+            return true;
+        }
+        for (Figure opponentFigure : getOpponentFigures(isBlack)) {
+            opponentFigure.calculatePossibleMoves(this);
+            if (opponentFigure.canAttack(king)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static Figure[] createBoardFromFEN(String fen) {
 
         // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
         // white uppercase black lower case
@@ -83,73 +152,279 @@ public class Board {
         Figure[] brd = new Figure[64];
 
         char[] helper = fen.toCharArray(); // equals {"r","n","b","q"...}
-        int position = 53; // starting position in an array
+        int position = 56; // starting position in an array
+        int counter = 0;
 
-        for(int i = 0; i < helper.length - 1; i++) {
-
-            switch (i) {
-                case 'r': brd[position] = new Rook(false, position); break;
-                case 'n': brd[position] = new Knight(false, position); break;
-                case 'b': brd[position] = new Bishop(false, position); break;
-                case 'q': brd[position] = new Queen(false, position); break;
-                case 'k': brd[position] = new King(false, position); break;
-                case 'p': brd[position] = new Pawn(false,position); break;
-                case 'R': brd[position] = new Rook(true, position); break;
-                case 'N': brd[position] = new Knight(true, position); break;
-                case 'B': brd[position] = new Bishop(true, position); break;
-                case 'Q': brd[position] = new Queen(true, position); break;
-                case 'K': brd[position] = new King(true, position); break;
-                case 'P': brd[position] = new Pawn(true,position); break;
-                case '/': break; // skip
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                case 8:
-                    brd[position]= new EmptyField(position);
-                    break; // create for every number an emptyField
+        for (char c : helper) {
+            switch (c) {
+                case 'r':
+                    brd[counter] = new Rook(false, position);
+                    counter++;
+                    break;
+                case 'n':
+                    brd[counter] = new Knight(false, position);
+                    counter++;
+                    break;
+                case 'b':
+                    brd[counter] = new Bishop(false, position);
+                    counter++;
+                    break;
+                case 'q':
+                    brd[counter] = new Queen(false, position);
+                    counter++;
+                    break;
+                case 'k':
+                    brd[counter] = new King(false, position);
+                    counter++;
+                    break;
+                case 'p':
+                    brd[counter] = new Pawn(false, position);
+                    counter++;
+                    break;
+                case 'R':
+                    brd[counter] = new Rook(true, position);
+                    counter++;
+                    break;
+                case 'N':
+                    brd[counter] = new Knight(true, position);
+                    counter++;
+                    break;
+                case 'B':
+                    brd[counter] = new Bishop(true, position);
+                    counter++;
+                    break;
+                case 'Q':
+                    brd[counter] = new Queen(true, position);
+                    counter++;
+                    break;
+                case 'K':
+                    brd[counter] = new King(true, position);
+                    counter++;
+                    break;
+                case 'P':
+                    brd[counter] = new Pawn(true, position);
+                    counter++;
+                    break;
+                case '/':
+                    break; // skip
+                default:
+                    if (Character.isDigit(c)) {
+                        int numIterations = Character.getNumericValue(c);
+                        for (int i = 0; i < numIterations; i++) {
+                            brd[counter] = new EmptyField(position);
+                            counter++;
+                            position = setPosition(position);
+                        }
+                    } else {
+                        // handle invalid input
+                    }
+                    break;
             }
-
-            // increase position correctly according to positions in array
-            if(position == 63){
-                position = 48;
-            }
-            else if(position == 55){
-                position = 40;
-            }
-            else if(position == 47){
-                position = 32;
-            }
-            else if(position == 39){
-                position = 24;
-            }
-            else if(position == 31){
-                position = 16;
-            }
-            else if(position == 23){
-                position = 8;
-            }
-            else if(position == 15){
-                position = 0;
-            }
-            else {
-            position++;} // To Do: case 7?
+            position = setPosition(position); // increase position correctly according to positions in array in setPosition()
         }
 
-        /*int index = 0;
-        for (char c : parts[0].toCharArray()) {
-            if (c == '/') {
-                continue;
-            } else if (Character.isDigit(c)) {
-                index += Character.getNumericValue(c);
-            } else {
-                board[index] = c;
-                index++;
-            }}*/
-
-        return board;
+        return brd;
     }
+
+    static int setPosition(int previousPosition) {
+        int newPosition;
+
+        if(previousPosition == 63){
+            newPosition = 48;
+        }
+        else if(previousPosition == 55){
+            newPosition = 40;
+        }
+        else if(previousPosition == 47){
+            newPosition = 32;
+        }
+        else if(previousPosition == 39){
+            newPosition = 24;
+        }
+        else if(previousPosition == 31){
+            newPosition = 16;
+        }
+        else if(previousPosition == 23){
+            newPosition = 8;
+        }
+        else if(previousPosition == 15){
+            newPosition = 0;
+        }
+        else {
+            newPosition = previousPosition++;} // To Do: case 7?
+
+        return newPosition;
+    }
+
+
+
+
+    public boolean threefoldRepetition() {
+        String currentFEN = createFENFromBoard(board);
+        int occurrences = 0;
+
+        for (String previousFEN : previousBoardStates) {
+            if (currentFEN.equals(previousFEN)) {
+                occurrences++;
+                if (occurrences >= 2) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public void resetHalfMoveClock() {
+        halfMoveClock = 0;
+    }
+    public boolean fiftyMoveRule() {
+        return halfMoveClock >= 100;
+    }
+
+
+    public boolean isGameOver(boolean isBlack) {
+        if(isKingOfTheHill(isBlack)) return true;
+        if(fiftyMoveRule() || threefoldRepetition()){
+            this.itsADraw(fiftyMoveRule() ? "fifty move rule" : "threefold repetition");
+            return true;
+        };
+        return false;
+    }
+
+    public void itsADraw(String reason) {
+        exitGame(reason + " - it's a draw!");
+    }
+
+    //method to print out game is over and terminate program
+    public void playerWon (boolean isBlack) {
+        String msg = "Player " + (isBlack ? "Black" : "White") + " wins!";
+        exitGame(msg);
+    }
+
+    public boolean isKingOfTheHill(boolean isBlack) {
+
+        ArrayList<Integer> kingOfTheHill = new ArrayList<>(Arrays.asList(27, 28, 35, 36));
+        Figure king = findKing(isBlack);
+
+        if (kingOfTheHill.contains(king.getPosition())) {
+            System.out.println("King of the Hill");
+            this.playerWon(isBlack);
+            return true;
+        } else {
+            return false;
+
+        }
+    }
+
+    public void exitGame(String message) {
+        System.out.println(message);
+        System.exit(0);
+    }
+
+
+
+
+    public String createFENFromBoard(Figure[] board) {
+        StringBuilder fen = new StringBuilder();
+        int emptyCount = 0;
+
+        for (int i = 0; i < 64; i++) {
+            if (i > 0 && i % 8 == 0) {
+                if (emptyCount > 0) {
+                    fen.append(emptyCount);
+                    emptyCount = 0;
+                }
+                fen.append("/");
+            }
+
+            Figure figure = board[i];
+            if (figure instanceof EmptyField) {
+                emptyCount++;
+            } else {
+                if (emptyCount > 0) {
+                    fen.append(emptyCount);
+                    emptyCount = 0;
+                }
+
+                char pieceChar;
+                if (figure instanceof Pawn) {
+                    pieceChar = 'p';
+                } else if (figure instanceof Rook) {
+                    pieceChar = 'r';
+                } else if (figure instanceof Knight) {
+                    pieceChar = 'n';
+                } else if (figure instanceof Bishop) {
+                    pieceChar = 'b';
+                } else if (figure instanceof Queen) {
+                    pieceChar = 'q';
+                } else { // King
+                    pieceChar = 'k';
+                }
+
+                if (!figure.isBlack()) {
+                    pieceChar = Character.toUpperCase(pieceChar);
+                }
+
+                fen.append(pieceChar);
+            }
+        }
+
+        if (emptyCount > 0) {
+            fen.append(emptyCount);
+        }
+
+        // Add other FEN parts if necessary (active color, castling availability, en passant target square, halfmove clock, and fullmove number).
+
+        return fen.toString();
+    }
+
+
+    public static Figure[][] to2DArrayAndDisplay(Figure[] board) {
+
+        Figure[][] board2D = new Figure[8][8];
+
+        for (int i = 0; i < 64; i++) {
+            int row = i / 8;
+            int col = i % 8;
+            board2D[row][col] = board[i];
+        }
+
+        displayBoard(board2D);
+        return board2D;
+    }
+
+    static void displayBoard(Figure[][] board) {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Figure figure = board[row][col];
+                char pieceChar;
+                if (figure instanceof EmptyField) {
+                    pieceChar = '.';
+                } else if (figure instanceof Pawn) {
+                    pieceChar = 'P';
+                } else if (figure instanceof Rook) {
+                    pieceChar = 'R';
+                } else if (figure instanceof Knight) {
+                    pieceChar = 'N';
+                } else if (figure instanceof Bishop) {
+                    pieceChar = 'B';
+                } else if (figure instanceof Queen) {
+                    pieceChar = 'Q';
+                } else { // King
+                    pieceChar = 'K';
+                }
+
+                if (figure.isBlack()) {
+                    pieceChar = Character.toLowerCase(pieceChar);
+                }
+
+                System.out.print(pieceChar + " ");
+            }
+            System.out.println();
+        }
+    }
+
+
+
 }

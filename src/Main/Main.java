@@ -31,8 +31,5 @@ public class Main {
         }
 
 
-        //Figure[] testBoard = Board.createBoardFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
-
-
-    }
+   }
 }
