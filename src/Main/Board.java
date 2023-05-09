@@ -85,7 +85,7 @@ public class Board {
 
     private void promotePawn(Figure figure, int move) {
 
-            board[figure.getPosition()] = new Queen(figure.isBlack(), figure.getPosition());
+            board[figure.getNextPosition()] = new Queen(figure.isBlack(), figure.getNextPosition());
 
     }
 
@@ -134,7 +134,7 @@ public class Board {
         }
 
         board[figure.getPosition()] = new EmptyField(figure.getPosition());
-        if (figure instanceof Pawn && (figure.getPosition() < 8 || figure.getPosition() > 55)) {
+        if (figure instanceof Pawn && (figure.getNextPosition() < 8 || figure.getNextPosition() > 55)) {
             promotePawn(figure, figure.getNextPosition());
         } else {
             board[figure.getNextPosition()] = figure;
@@ -182,51 +182,51 @@ public class Board {
         for (char c : helper) {
             switch (c) {
                 case 'r':
-                    brd[counter] = new Rook(true, position);
+                    brd[counter] = new Rook(true, counter);
                     counter++;
                     break;
                 case 'n':
-                    brd[counter] = new Knight(true, position);
+                    brd[counter] = new Knight(true, counter);
                     counter++;
                     break;
                 case 'b':
-                    brd[counter] = new Bishop(true, position);
+                    brd[counter] = new Bishop(true, counter);
                     counter++;
                     break;
                 case 'q':
-                    brd[counter] = new Queen(true, position);
+                    brd[counter] = new Queen(true, counter);
                     counter++;
                     break;
                 case 'k':
-                    brd[counter] = new King(true, position);
+                    brd[counter] = new King(true, counter);
                     counter++;
                     break;
                 case 'p':
-                    brd[counter] = new Pawn(true, position);
+                    brd[counter] = new Pawn(true, counter);
                     counter++;
                     break;
                 case 'R':
-                    brd[counter] = new Rook(false, position);
+                    brd[counter] = new Rook(false, counter);
                     counter++;
                     break;
                 case 'N':
-                    brd[counter] = new Knight(false, position);
+                    brd[counter] = new Knight(false, counter);
                     counter++;
                     break;
                 case 'B':
-                    brd[counter] = new Bishop(false, position);
+                    brd[counter] = new Bishop(false, counter);
                     counter++;
                     break;
                 case 'Q':
-                    brd[counter] = new Queen(false, position);
+                    brd[counter] = new Queen(false, counter);
                     counter++;
                     break;
                 case 'K':
-                    brd[counter] = new King(false, position);
+                    brd[counter] = new King(false, counter);
                     counter++;
                     break;
                 case 'P':
-                    brd[counter] = new Pawn(false, position);
+                    brd[counter] = new Pawn(false, counter);
                     counter++;
                     break;
                 case '/':
@@ -410,8 +410,8 @@ public class Board {
 
         for (int i = 0; i < 64; i++) {
             int row = i / 8;
-            int col = i % 8;
-            board2D[row][col] = board[i];
+            int col = 7 - (i % 8);
+            board2D[row][col] = board[63-i];
         }
 
         displayBoard(board2D);

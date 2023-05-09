@@ -85,7 +85,7 @@ public class Player {
 
     public ArrayList<Integer> getAllPossibleMovesPlayer(Board board) {
 
-            this.setFigureAndMovesListForPlayerGivenBoard(board);
+            //this.setFigureAndMovesListForPlayerGivenBoard(board); this breaks the code because the all possible moves are generated again after illegal moves are removed
 
             ArrayList<Integer> list = new ArrayList<>();
 

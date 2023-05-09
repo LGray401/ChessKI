@@ -1,6 +1,6 @@
 package Main;
 
-import Figures.*;
+import Figures.Figure;
 
 public class Main {
 
@@ -11,11 +11,12 @@ public class Main {
         Player player2 = new Player(true);
 
         //board.setBoardFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"); //does not work
+        //board.setBoardFromFEN("7k/8/8/8/8/8/7P/K7"); //does not work
         board.to2DArrayAndDisplay(board.getBoard());
-        player1.printAllMovesAndAmountOfMovesGivenBoard(board);
+        //player1.printAllMovesAndAmountOfMovesGivenBoard(board);
 
-        /*
-        while (true ) {
+
+        while (true) {
             board.isGameOver(player2.isBlack());
             Figure nextMove = player1.makeMove(board);
             nextMove.setNextPosition(nextMove.getPossibleMoveList().get((int) (Math.random() * nextMove.getPossibleMoveList().size())));
@@ -31,6 +32,6 @@ public class Main {
             board.to2DArrayAndDisplay(board.getBoard());
             //System.out.println(board.createFENFromBoard(board.getBoard()));
         }
-         */
+
     }
 }
