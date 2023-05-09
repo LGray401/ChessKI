@@ -6,13 +6,12 @@ public class Main {
 
     public static void main(String[] args) {
         Board board = new Board();
-        board.setBoard(board.intialize());
+        board.setBoard(board.initialize());
         Player player1 = new Player(false);
         Player player2 = new Player(true);
 
 
         while (true ) {
-            board.setBoard(board.createBoardFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"));
             player1.printAllMovesAndAmountOfMovesGivenBoard(board);
             board.isGameOver(player2.isBlack());
             Figure nextMove = player1.makeMove(board);
