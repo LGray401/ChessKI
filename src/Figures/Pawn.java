@@ -43,7 +43,8 @@ public class Pawn extends Figure {
             int capturePos = this.getPosition() + direction * offset;
             if (withInPossibleRange(capturePos)) {
                 Figure targetFigure = board.getBoard()[capturePos];
-                if (!targetFigure.isEmptyField() && targetFigure.isBlack() != this.isBlack()) {
+                if (!targetFigure.isEmptyField() && targetFigure.isBlack() != this.isBlack() &&
+                    Math.abs(capturePos % 8 - this.getPosition() % 8) == 1) {
                     this.getPossibleMoveList().add(capturePos);
                     this.checkAndPromote(startPos, board);
                 }
