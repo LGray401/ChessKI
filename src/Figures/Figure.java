@@ -343,7 +343,7 @@ public abstract class Figure {
         return southWestMoveList;
     }
 
-    public String convertFigureToFEN(Figure myFigure){
+    private String convertFigureToFEN(Figure myFigure){
         String result1 = "";
         switch (myFigure.getClass().getSimpleName()){
             case("King"): result1 += "k"; break;
@@ -359,7 +359,7 @@ public abstract class Figure {
         } else return result2;
     }
 
-    public String convertPosToRow(int newPos){
+    private String convertPosToRow(int newPos){
         String result = "";
 
         if ((newPos % 8 - 0) == 0|| newPos == 0) result += "a";
@@ -375,7 +375,7 @@ public abstract class Figure {
         return result;
     }
 
-    public String convertPosToLine(int newPos){
+    private String convertPosToLine(int newPos){
         String result = "";
 
         if (newPos >= 56) {

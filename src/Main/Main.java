@@ -2,8 +2,6 @@ package Main;
 
 import Figures.*;
 
-import java.util.Arrays;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -14,6 +12,8 @@ public class Main {
 
 
         while (true ) {
+            board.setBoard(board.createBoardFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"));
+            player1.printAllMovesAndAmountOfMovesGivenBoard(board);
             board.isGameOver(player2.isBlack());
             Figure nextMove = player1.makeMove(board);
             nextMove.setNextPosition(nextMove.getPossibleMoveList().get((int) (Math.random() * nextMove.getPossibleMoveList().size())));

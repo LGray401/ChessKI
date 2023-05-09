@@ -1,7 +1,6 @@
 package Main;
 
 import Figures.Figure;
-import Figures.King;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +57,7 @@ public class Player {
         this.nextFigureMove = nextFigureMove;
     }
 
-    public void generateAllMoves(Board board){
+    private void generateAllMoves(Board board){
 
         ArrayList<String> list = new ArrayList<>();
 
@@ -71,7 +70,7 @@ public class Player {
         this.setAllMovesInFenNotation(list);
     }
 
-    void playerGetFigureList(Board board) {
+    private void createFigureListForPlayer(Board board) {
 
         List<Figure> figureList = new ArrayList<>();
 
@@ -84,7 +83,9 @@ public class Player {
         }
     }
 
-    ArrayList<Integer> getAllPossibleMovesPlayer(Board board) {
+    public ArrayList<Integer> getAllPossibleMovesPlayer(Board board) {
+
+            this.setFigureAndMovesListForPlayerGivenBoard(board);
 
             ArrayList<Integer> list = new ArrayList<>();
 
@@ -94,9 +95,38 @@ public class Player {
             return list;
     }
 
+    public void setFigureAndMovesListForPlayerGivenBoard(Board board){
+
+        this.createFigureListForPlayer(board);
+        this.generateAllMoves(board);
+    }
+
+    public Integer amountOfLegalMovesGivenBoard(Board board){
+
+        this.createFigureListForPlayer(board);
+        this.generateAllMoves(board);
+        return this.getAllPossibleMovesPlayer(board).size();
+
+    }
+
+    public ArrayList<String> getAllMovesInFENNotationGivenBoard(Board board){
+
+        this.createFigureListForPlayer(board);
+        this.generateAllMoves(board);
+        return this.getAllMovesInFenNotation();
+
+    }
+
+    public void printAllMovesAndAmountOfMovesGivenBoard(Board board){
+        String color = (this.isBlack()) ? "Black" : "White";
+
+        System.out.println(color + " has these moves: " + this.getAllMovesInFENNotationGivenBoard(board));
+        System.out.println(color + " has " + this.amountOfLegalMovesGivenBoard(board) + " legal moves.");
+    }
+
         public Figure makeMove(Board board) {
 
-            this.playerGetFigureList(board);
+            this.createFigureListForPlayer(board);
             this.generateAllMoves(board);
             for (Figure figure: this.getFigureList()) {
                 figure.removeIllegalMoves(board);
