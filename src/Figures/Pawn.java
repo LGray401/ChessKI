@@ -25,7 +25,6 @@ public class Pawn extends Figure {
         // Forward movement (without capturing)
         if (withInPossibleRange(startPos) && board.getBoard()[startPos].isEmptyField()) {
             this.getPossibleMoveList().add(startPos);
-            this.checkAndPromote(startPos, board);
 
             // Double forward movement for pawns at starting positions
             int doubleMovePos = this.getPosition() + direction * 16;
@@ -46,23 +45,11 @@ public class Pawn extends Figure {
                 if (!targetFigure.isEmptyField() && targetFigure.isBlack() != this.isBlack() &&
                     Math.abs(capturePos % 8 - this.getPosition() % 8) == 1) {
                     this.getPossibleMoveList().add(capturePos);
-                    this.checkAndPromote(startPos, board);
                 }
             }
         }
 
 
     }
-    private void checkAndPromote(int targetPosition, Board board) {
-        if (!this.isBlack() && targetPosition >= 56 && targetPosition <= 63
-                || this.isBlack() && targetPosition >= 0 && targetPosition <= 7) {
-            promote(board);
-        }
-    }
 
-    private void promote(Board board) {
-        Queen promotedQueen = new Queen(this.isBlack(), this.getPosition());
-        board.getBoard()[this.getPosition()] =  promotedQueen;
-    }
-    // (withInPossibleRange method from Figure class)
 }

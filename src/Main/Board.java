@@ -83,6 +83,12 @@ public class Board {
         return new Board(this);
     }
 
+    private void promotePawn(Figure figure, int move) {
+
+            board[figure.getPosition()] = new Queen(figure.isBlack(), figure.getPosition());
+
+    }
+
 
     public Figure findKing(boolean isBlack) {
         for (Figure figure : board) {
@@ -109,22 +115,31 @@ public class Board {
 
     }
 
-    void changeBoard(Figure figure) {
-        if(board[figure.getNextPosition()] instanceof King) {
-            System.out.println("King is moving from ");
-        }
+    public void makeMove(Figure figure) {
         if (figure instanceof Pawn || !(board[figure.getNextPosition()] instanceof EmptyField)) {
             resetHalfMoveClock();
         } else {
             halfMoveClock++;
         }
-        board[figure.getPosition()] = new EmptyField(figure.getPosition());
+        changeBoard(figure);
 
-        int helper = figure.getNextPosition();
-        board[helper] = figure;
-        figure.setPosition(helper);
         String currentFEN = this.createFENFromBoard(this.getBoard());
         previousBoardStates.add(currentFEN);
+    }
+
+    void changeBoard(Figure figure) {
+
+        if(board[figure.getNextPosition()] instanceof King) {
+            System.out.println("King is moving from ");
+        }
+
+        board[figure.getPosition()] = new EmptyField(figure.getPosition());
+        if (figure instanceof Pawn && (figure.getPosition() < 8 || figure.getPosition() > 55)) {
+            promotePawn(figure, figure.getNextPosition());
+        } else {
+            board[figure.getNextPosition()] = figure;
+            figure.setPosition(figure.getNextPosition());
+        }
     }
 
 
