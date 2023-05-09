@@ -4,11 +4,9 @@ import Figures.Figure;
 import Figures.*;
 
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class Board {
 
@@ -35,7 +33,7 @@ public class Board {
         this.board = board;
     }
 
-    static Figure[] intialize() {
+    public Figure[] initialize() {
 
         Figure[] board = new Figure[64];
 
@@ -144,7 +142,18 @@ public class Board {
         return false;
     }
 
-    static Figure[] createBoardFromFEN(String fen) {
+    public void setBoardFromFEN(String fen){
+
+        //TODO:
+        // Board board1 = new Board();
+        // board1.setBoardFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
+        // -> init board
+
+
+        this.setBoard(createBoardFromFEN(fen));
+    }
+
+    private Figure[] createBoardFromFEN(String fen) {
 
         // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
         // white uppercase black lower case
@@ -158,51 +167,51 @@ public class Board {
         for (char c : helper) {
             switch (c) {
                 case 'r':
-                    brd[counter] = new Rook(false, position);
-                    counter++;
-                    break;
-                case 'n':
-                    brd[counter] = new Knight(false, position);
-                    counter++;
-                    break;
-                case 'b':
-                    brd[counter] = new Bishop(false, position);
-                    counter++;
-                    break;
-                case 'q':
-                    brd[counter] = new Queen(false, position);
-                    counter++;
-                    break;
-                case 'k':
-                    brd[counter] = new King(false, position);
-                    counter++;
-                    break;
-                case 'p':
-                    brd[counter] = new Pawn(false, position);
-                    counter++;
-                    break;
-                case 'R':
                     brd[counter] = new Rook(true, position);
                     counter++;
                     break;
-                case 'N':
+                case 'n':
                     brd[counter] = new Knight(true, position);
                     counter++;
                     break;
-                case 'B':
+                case 'b':
                     brd[counter] = new Bishop(true, position);
                     counter++;
                     break;
-                case 'Q':
+                case 'q':
                     brd[counter] = new Queen(true, position);
                     counter++;
                     break;
-                case 'K':
+                case 'k':
                     brd[counter] = new King(true, position);
                     counter++;
                     break;
-                case 'P':
+                case 'p':
                     brd[counter] = new Pawn(true, position);
+                    counter++;
+                    break;
+                case 'R':
+                    brd[counter] = new Rook(false, position);
+                    counter++;
+                    break;
+                case 'N':
+                    brd[counter] = new Knight(false, position);
+                    counter++;
+                    break;
+                case 'B':
+                    brd[counter] = new Bishop(false, position);
+                    counter++;
+                    break;
+                case 'Q':
+                    brd[counter] = new Queen(false, position);
+                    counter++;
+                    break;
+                case 'K':
+                    brd[counter] = new King(false, position);
+                    counter++;
+                    break;
+                case 'P':
+                    brd[counter] = new Pawn(false, position);
                     counter++;
                     break;
                 case '/':
@@ -380,7 +389,7 @@ public class Board {
     }
 
 
-    public static Figure[][] to2DArrayAndDisplay(Figure[] board) {
+    public Figure[][] to2DArrayAndDisplay(Figure[] board) {
 
         Figure[][] board2D = new Figure[8][8];
 
@@ -424,7 +433,4 @@ public class Board {
             System.out.println();
         }
     }
-
-
-
 }
