@@ -124,27 +124,27 @@ public class Player {
         System.out.println(color + " has " + this.amountOfLegalMovesGivenBoard(board) + " legal moves.");
     }
 
-        public Figure makeMove(Board board) {
+    public Figure makeMove(Board board) {
 
-            this.createFigureListForPlayer(board);
-            this.generateAllMoves(board);
-            for (Figure figure: this.getFigureList()) {
-                figure.removeIllegalMoves(board);
-            }
-            Figure f;
-            do {
-                 f = this.getFigureList().get((int) (Math.random() * this.getFigureList().size()));
-                 if(this.getAllPossibleMovesPlayer(board).size() == 0) {
-                     if (board.isPlayerInCheck(this.isBlack())) {
-                         board.playerWon(!isBlack());
-                     }
-                     else {
-                         board.itsADraw("Stalemate");
-                     }
-
-                 }
-            }
-            while (f.getPossibleMoveList().size() == 0);
-            return f;
+        this.createFigureListForPlayer(board);
+        this.generateAllMoves(board);
+        for (Figure figure: this.getFigureList()) {
+            figure.removeIllegalMoves(board);
         }
+        Figure f;
+        do {
+             f = this.getFigureList().get((int) (Math.random() * this.getFigureList().size()));
+             if(this.getAllPossibleMovesPlayer(board).size() == 0) {
+                 if (board.isPlayerInCheck(this.isBlack())) {
+                     board.playerWon(!isBlack());
+                 }
+                 else {
+                     board.itsADraw("Stalemate");
+                 }
+
+             }
+        }
+        while (f.getPossibleMoveList().size() == 0);
+        return f;
+    }
 }

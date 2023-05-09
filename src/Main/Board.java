@@ -142,7 +142,18 @@ public class Board {
         return false;
     }
 
-    public Figure[] createBoardFromFEN(String fen) {
+    public void setBoardFromFEN(String fen){
+
+        //TODO: Wenn ich diese Methode ausführe mit
+        // Board board1 = new Board();
+        // board1.setBoardFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
+        // muss board1.getBoard();
+
+
+        this.setBoard(createBoardFromFEN(fen));
+    }
+
+    private Figure[] createBoardFromFEN(String fen) {
 
         // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
         // white uppercase black lower case
@@ -378,7 +389,7 @@ public class Board {
     }
 
 
-    public static Figure[][] to2DArrayAndDisplay(Figure[] board) {
+    public Figure[][] to2DArrayAndDisplay(Figure[] board) {
 
         Figure[][] board2D = new Figure[8][8];
 

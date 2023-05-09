@@ -13,7 +13,8 @@ public class MoveTests {
         Board board = new Board();
         Player player1 = new Player(false);
         Player player2 = new Player(true);
-        board.setBoard(board.createBoardFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"));
+        board.setBoardFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+        player1.setFigureAndMovesListForPlayerGivenBoard(board);
         Assertions.assertEquals(player1.amountOfLegalMovesGivenBoard(board), 20);
     }
 }
