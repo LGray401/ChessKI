@@ -33,7 +33,7 @@ public class Board {
         this.board = board;
     }
 
-    public static Figure[] initialize() {
+    public Figure[] initialize() {
 
         Figure[] board = new Figure[64];
 
@@ -144,10 +144,10 @@ public class Board {
 
     public void setBoardFromFEN(String fen){
 
-        //TODO: Wenn ich diese Methode ausführe mit
+        //TODO:
         // Board board1 = new Board();
         // board1.setBoardFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
-        // muss board1.getBoard();
+        // -> init board
 
 
         this.setBoard(createBoardFromFEN(fen));
