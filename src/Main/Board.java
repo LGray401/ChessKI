@@ -168,14 +168,20 @@ public class Board {
         this.setBoard(createBoardFromFEN(fen).getBoard());
     }
 
-    private Board createBoardFromFEN(String fen) {
+    Board createBoardFromFEN(String fen) {
 
         // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
         // white uppercase black lower case
 
         Figure[] brd = new Figure[64];
 
-        char[] helper = fen.toCharArray(); // equals {"r","n","b","q"...}
+        String[] strings = fen.split("/");
+
+        String myString = strings[7] + strings[6] + strings[5] + strings[4] + strings[3] + strings[2] + strings[1] + strings[0];
+
+        //String newFEN = new StringBuilder(fen).reverse().toString();
+
+        char[] helper = myString.toCharArray(); // equals {"r","n","b","q"...}
         int position = 56; // starting position in an array
         int counter = 0;
 

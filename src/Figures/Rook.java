@@ -9,6 +9,8 @@ import java.util.List;
 
 public class Rook extends Figure {
 
+
+
     public Rook (boolean isblack, int position) {
         this.setEmptyField(false);
         this.setValue(50);
@@ -27,7 +29,11 @@ public class Rook extends Figure {
         list.addAll(this.movingWEST(board));
 
         this.setPossibleMoveList(list);
+
+
     }
+
+
 
 
 }

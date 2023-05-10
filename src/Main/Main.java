@@ -10,11 +10,12 @@ public class Main {
         Player player1 = new Player(false);
         Player player2 = new Player(true);
 
-        //board.setBoardFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"); //does not work
-        board.setBoardFromFEN("7k/8/8/8/8/8/7P/K7"); //does not work
+        board.setBoardFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"); //does not work
+        board.setBoardFromFEN("r2qk2r/pp1bp1bp/2np1np1/2pP4/2P1P3/2N2N2/PP3PPP/R1BQKB1R"); //does not work
         board.to2DArrayAndDisplay(board.getBoard());
-        //player1.printAllMovesAndAmountOfMovesGivenBoard(board);
+        player1.printAllMovesAndAmountOfMovesGivenBoard(board);
 
+        // board.evaluate(player1.isBlack())
 
         while (true) {
             board.isGameOver(player2.isBlack());

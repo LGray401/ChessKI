@@ -29,6 +29,7 @@ public class King extends Figure {
         list.addAll(this.movingNE(board));
         list.addAll(this.movingNW(board));
 
+
         this.setPossibleMoveList(list);
     }
 }
