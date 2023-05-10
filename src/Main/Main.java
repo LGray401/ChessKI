@@ -5,14 +5,11 @@ import Figures.Figure;
 public class Main {
 
     public static void main(String[] args) {
-        Board board = new Board();
-        board.setBoard(board.initialize());
-        board.setBoardFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
         Player player1 = new Player(false);
         Player player2 = new Player(true);
         int amountOfMoves = 5;
 
-        Board.simulateGame(board, player1, player2, amountOfMoves);
+        Board.simulateGame("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", player1, player2, amountOfMoves);
 
     }
 }

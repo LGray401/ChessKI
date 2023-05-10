@@ -456,7 +456,10 @@ public class Board {
             System.out.println();
         }
     }
-    public static void simulateGame(Board board, Player player1, Player player2, int amountOfMoves) {
+    public static void simulateGame(String fenString, Player player1, Player player2, int amountOfMoves) {
+
+        Board board = new Board();
+        board.setBoardFromFEN(fenString);
 
         for (int i = 0; i < amountOfMoves; i++) {
             board.to2DArrayAndDisplay(board.getBoard());
