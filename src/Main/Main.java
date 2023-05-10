@@ -11,7 +11,7 @@ public class Main {
         Player player2 = new Player(true);
 
         //board.setBoardFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"); //does not work
-        //board.setBoardFromFEN("7k/8/8/8/8/8/7P/K7"); //does not work
+        board.setBoardFromFEN("7k/8/8/8/8/8/7P/K7"); //does not work
         board.to2DArrayAndDisplay(board.getBoard());
         //player1.printAllMovesAndAmountOfMovesGivenBoard(board);
 

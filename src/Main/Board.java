@@ -165,10 +165,10 @@ public class Board {
         // -> init board
 
 
-        this.setBoard(createBoardFromFEN(fen));
+        this.setBoard(createBoardFromFEN(fen).getBoard());
     }
 
-    private Figure[] createBoardFromFEN(String fen) {
+    private Board createBoardFromFEN(String fen) {
 
         // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
         // white uppercase black lower case
@@ -247,7 +247,9 @@ public class Board {
             position = setPosition(position); // increase position correctly according to positions in array in setPosition()
         }
 
-        return brd;
+        this.setBoard(brd);
+
+        return this;
     }
 
     static int setPosition(int previousPosition) {
