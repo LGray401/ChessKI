@@ -457,7 +457,7 @@ public abstract class Figure {
     public void removeIllegalMoves(Board board) {
 
         ArrayList<Integer> legalMoves = new ArrayList<>();
-        for (Integer move : possibleMoveList) {
+        for (Integer move : this.getPossibleMoveList()) {
             Board tempBoard = board.copy();
 
             tempBoard.simulateMove(this.copy(), move);
@@ -466,7 +466,7 @@ public abstract class Figure {
                 legalMoves.add(move);
             }
         }
-        possibleMoveList = legalMoves;
+        this.setPossibleMoveList(legalMoves);
     }
     }
 

@@ -7,9 +7,10 @@ public class Main {
     public static void main(String[] args) {
         Player player1 = new Player(false);
         Player player2 = new Player(true);
-        int amountOfMoves = 5;
+        int amountOfMoves = 1;
+        String fenString = "6r1/p5k1/3Q4/2N5/5P2/1p6/P5KP/4qR2";
 
-        Board.simulateGame("r2qk2r/pp1bp1bp/2np1np1/2pP4/2P1P3/2N2N2/PP3PPP/R1BQKB1R", player1, player2, amountOfMoves);
+        Board.simulateGame(fenString, player1, player2, amountOfMoves);
 
     }
 }
@@ -26,4 +27,3 @@ public class Main {
     "r3k2r/pp2qppp/1np2n2/2bPp1B1/B2P2Q1/2N2N2/PPP2PPP/2KR3R b" - 36 Züge
 
      */
-
