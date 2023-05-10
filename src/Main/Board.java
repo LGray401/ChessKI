@@ -456,4 +456,27 @@ public class Board {
             System.out.println();
         }
     }
+    public static void simulateGame(Board board, Player player1, Player player2, int amountOfMoves) {
+
+        for (int i = 0; i < amountOfMoves; i++) {
+            board.to2DArrayAndDisplay(board.getBoard());
+            player1.printAllMovesAndAmountOfMovesGivenBoard(board);
+            board.isGameOver(player2.isBlack());
+            Figure nextMove = player1.makeMove(board);
+            nextMove.setNextPosition(nextMove.getPossibleMoveList().get((int) (Math.random() * nextMove.getPossibleMoveList().size())));
+            System.out.println("Player1 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
+            board.changeBoard(nextMove);
+            System.out.println("Player1 moved to: " + nextMove.getNextPosition());
+            board.isGameOver(player1.isBlack());
+            board.to2DArrayAndDisplay(board.getBoard());
+            nextMove = player2.makeMove(board);
+            nextMove.setNextPosition(nextMove.getPossibleMoveList().get((int) (Math.random() * nextMove.getPossibleMoveList().size())));
+            System.out.println("Player2 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
+            board.changeBoard(nextMove);
+            System.out.println("Player2 moved to: " + nextMove.getNextPosition());
+            player2.printAllMovesAndAmountOfMovesGivenBoard(board);
+            //System.out.println(board.createFENFromBoard(board.getBoard()));
+
+        }
+    }
 }

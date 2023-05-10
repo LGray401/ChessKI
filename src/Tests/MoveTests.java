@@ -2,12 +2,12 @@ package Tests;
 
 import Main.Board;
 import Main.Player;
-//import org.junit.jupiter.api.Assertions;
-//import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class MoveTests {
 
-   /* @Test
+   @Test
     void opening(){
 
         Board board = new Board();
@@ -16,5 +16,5 @@ public class MoveTests {
         board.setBoardFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
         player1.setFigureAndMovesListForPlayerGivenBoard(board);
         Assertions.assertEquals(player1.amountOfLegalMovesGivenBoard(board), 20);
-    }*/
+    }
 }
