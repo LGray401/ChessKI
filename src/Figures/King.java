@@ -8,6 +8,16 @@ import java.util.List;
 
 public class King extends Figure {
 
+    boolean alreadyMoved = false;
+
+    public boolean isAlreadyMoved() {
+        return alreadyMoved;
+    }
+
+    public void setAlreadyMoved(boolean alreadyMoved) {
+        this.alreadyMoved = alreadyMoved;
+    }
+
     public King(boolean isblack, int position) {
         this.setEmptyField(false);
         this.setValue(900);
@@ -32,4 +42,7 @@ public class King extends Figure {
 
         this.setPossibleMoveList(list);
     }
+
+
+
 }
