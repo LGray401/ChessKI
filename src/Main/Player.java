@@ -85,6 +85,7 @@ public class Player {
 
         for (Figure figure: this.getFigureList()) {
             figure.calculatePossibleMoves(board);
+            figure.removeIllegalMoves(board);
             figure.convertAllMovesInFENNotation();
             list.addAll(figure.getAllMovesInFenNotation());
             //System.out.println(figure.getAllMovesInFenNotation());
@@ -167,11 +168,13 @@ public class Player {
              }
         } while (f.getPossibleMoveList().size() == 0);
 
+        /*
         if (f instanceof King){
             ((King) f).setAlreadyMoved(true);
         } else if (f instanceof Rook){
             ((King) f).setAlreadyMoved(true);
         }
+         */
         return f;
     }
 

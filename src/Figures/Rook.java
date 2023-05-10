@@ -2,10 +2,8 @@ package Figures;
 
 import Main.Board;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Rook extends Figure {
 
@@ -31,8 +29,8 @@ public class Rook extends Figure {
 
         ArrayList<Integer> list = new ArrayList<>();
 
-        list.addAll(this.movingSN(board));
-        list.addAll(this.movingNS(board));
+        list.addAll(this.movingNorth(board));
+        list.addAll(this.movingSouth(board));
         list.addAll(this.movingEAST(board));
         list.addAll(this.movingWEST(board));
 

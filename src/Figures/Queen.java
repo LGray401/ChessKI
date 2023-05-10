@@ -5,7 +5,6 @@ import Main.Board;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Queen  extends Figure {
 
@@ -22,8 +21,8 @@ public class Queen  extends Figure {
 
         ArrayList<Integer> list = new ArrayList<>();
 
-        list.addAll(this.movingSN(board));
-        list.addAll(this.movingNS(board));
+        list.addAll(this.movingNorth(board));
+        list.addAll(this.movingSouth(board));
         list.addAll(this.movingEAST(board));
         list.addAll(this.movingWEST(board));
         list.addAll(this.movingSE(board));

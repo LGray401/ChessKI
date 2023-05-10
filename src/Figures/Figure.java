@@ -4,7 +4,6 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 import Main.Board;
 
@@ -15,6 +14,7 @@ public abstract class Figure {
     private boolean isBlack;
     private int position;
     private int nextPosition;
+    private ArrayList<Integer> illegalMovesList;
     private ArrayList<Integer> moveSummandList;
     private ArrayList<Integer> possibleMoveList;
     private ArrayList<String> allMovesInFenNotation;
@@ -33,6 +33,14 @@ public abstract class Figure {
 
     public void setAllMovesInFenNotation(ArrayList<String> allMovesInFenNotation) {
         this.allMovesInFenNotation = allMovesInFenNotation;
+    }
+
+    public ArrayList<Integer> getIllegalMovesList() {
+        return illegalMovesList;
+    }
+
+    public void setIllegalMovesList(ArrayList<Integer> illegalMovesList) {
+        this.illegalMovesList = illegalMovesList;
     }
 
     public static ArrayList<Integer> getEastBarrier() {
@@ -144,23 +152,32 @@ public abstract class Figure {
 
     public ArrayList<Integer> movingEAST(Board board) {
 
-        int multiplier = (this instanceof King) ? 2 : 7;
+        int multiplier = (this instanceof King) ? 2 : 8;
 
         ArrayList<Integer> list = new ArrayList<>();
+
         for (int i = 1; i < multiplier; i ++){
+
             if (getEastBarrier().contains(this.getPosition())) break;
+
             int newPos = this.getPosition() + i;
-            if (getEastBarrier().contains(newPos) && newPos != this.getPosition()) {
-                list.add(newPos);
-                break;
-            }
-            if (newPos == this.getPosition()) continue;
+
             if (withInPossibleRange(newPos)){
+
+                if (!(board.getBoard()[newPos] instanceof EmptyField) && board.getBoard()[newPos].isBlack() == this.isBlack()) break;
+
+                if (getEastBarrier().contains(newPos)) {
+                    list.add(newPos);
+                    break;
+                }
+
                 if (board.getBoard()[newPos].isEmptyField()) {
                     list.add(newPos);
+
                 } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
                     list.add(newPos);
                     break;
+
                 } else if (board.getBoard()[newPos].isBlack() == this.isBlack()) {
                     break;
                 }
@@ -171,23 +188,30 @@ public abstract class Figure {
 
     public ArrayList<Integer> movingWEST(Board board) {
 
-        int multiplier = (this instanceof King) ? 2 : 7;
+        int multiplier = (this instanceof King) ? 2 : 8;
 
         ArrayList<Integer> list = new ArrayList<>();
+
         for (int i = 1; i < multiplier; i ++){
+
             if (getWestBarrier().contains(this.getPosition())) break;
+
             int newPos = this.getPosition() - i;
-            if (getWestBarrier().contains(newPos) && newPos != this.getPosition()) {
-                list.add(newPos);
-                break;
-            }
+
             if (withInPossibleRange(newPos)){
-                if (board.getBoard()[newPos].isEmptyField()) {
-                    list.add(newPos);
-                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+
+                if (!(board.getBoard()[newPos].isEmptyField()) && board.getBoard()[newPos].isBlack() == this.isBlack()) break;
+
+                if (getWestBarrier().contains(newPos)) {
                     list.add(newPos);
                     break;
-                } else if (board.getBoard()[newPos].isBlack() == this.isBlack()) {
+                }
+
+                if (board.getBoard()[newPos].isEmptyField()) {
+                    list.add(newPos);
+
+                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+                    list.add(newPos);
                     break;
                 }
             }
@@ -195,21 +219,27 @@ public abstract class Figure {
         return list;
     }
 
-    public ArrayList<Integer> movingSN(Board board) {
+    public ArrayList<Integer> movingNorth(Board board) {
 
-        int multiplier = (this instanceof King) ? 2 : 7;
+        int multiplier = (this instanceof King) ? 2 : 8;
 
         ArrayList<Integer> list = new ArrayList<>();
+
         for (int i = 1; i < multiplier; i ++){
+
+            //if (getNorthBarrier().contains(this.getPosition())) break;
+
             int newPos = this.getPosition() + i*8;
-            if (newPos == this.getPosition()) continue;
+
             if (withInPossibleRange(newPos)){
+
+                if (!(board.getBoard()[newPos].isEmptyField()) && board.getBoard()[newPos].isBlack() == this.isBlack()) break;
+
                 if (board.getBoard()[newPos].isEmptyField()) {
                     list.add(newPos);
+
                 } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
                     list.add(newPos);
-                    break;
-                } else if (board.getBoard()[newPos].isBlack() == this.isBlack()) {
                     break;
                 }
             }
@@ -217,20 +247,27 @@ public abstract class Figure {
         return list;
     }
 
-    public List<Integer> movingNS(Board board) {
+    public List<Integer> movingSouth(Board board) {
 
-        int multiplier = (this instanceof King) ? 2 : 7;
+        int multiplier = (this instanceof King) ? 2 : 8;
 
         ArrayList<Integer> list = new ArrayList<>();
+
         for (int i = 1; i < multiplier; i ++){
+
+            //if (getSouthBarrier().contains(this.getPosition())) break;
+
             int newPos = this.getPosition() - i*8;
+
             if (withInPossibleRange(newPos)){
+
+                if (!(board.getBoard()[newPos].isEmptyField()) && board.getBoard()[newPos].isBlack() == this.isBlack()) break;
+
                 if (board.getBoard()[newPos].isEmptyField()) {
                     list.add(newPos);
+
                 } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
                     list.add(newPos);
-                    break;
-                } else if (board.getBoard()[newPos].isBlack() == this.isBlack()) {
                     break;
                 }
             }
@@ -240,23 +277,29 @@ public abstract class Figure {
 
     public ArrayList<Integer> movingNE(Board board) {
 
-        int multiplier = (this instanceof King) ? 2 : 7;
+        int multiplier = (this instanceof King) ? 2 : 8;
 
         ArrayList<Integer> list = new ArrayList<>();
         for (int i = 1; i < multiplier; i ++){
+
             if (getEastBarrier().contains(this.getPosition())) break;
+
             int newPos = this.getPosition() + i*9;
-            if (getEastBarrier().contains(newPos) && newPos != this.getPosition()) {
-                list.add(newPos);
-                break;
-            }
+
             if (withInPossibleRange(newPos)){
-                if (board.getBoard()[newPos].isEmptyField()) {
-                    list.add(newPos);
-                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+
+                if (!(board.getBoard()[newPos] instanceof EmptyField) && board.getBoard()[newPos].isBlack() == this.isBlack()) break;
+
+                if (getEastBarrier().contains(newPos)) {
                     list.add(newPos);
                     break;
-                } else if (board.getBoard()[newPos].isBlack() == this.isBlack()) {
+                }
+
+                if (board.getBoard()[newPos].isEmptyField()) {
+                    list.add(newPos);
+
+                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+                    list.add(newPos);
                     break;
                 }
             }
@@ -266,23 +309,30 @@ public abstract class Figure {
 
     public ArrayList<Integer> movingNW(Board board) {
 
-        int multiplier = (this instanceof King) ? 2 : 7;
+        int multiplier = (this instanceof King) ? 2 : 8;
 
         ArrayList<Integer> list = new ArrayList<>();
+
         for (int i = 1; i < multiplier; i ++){
+
             if (getWestBarrier().contains(this.getPosition())) break;
+
             int newPos = this.getPosition() + i*7;
-            if (getWestBarrier().contains(newPos) && newPos != this.getPosition()) {
-                list.add(newPos);
-                break;
-            }
+
             if (withInPossibleRange(newPos)){
-                if (board.getBoard()[newPos].isEmptyField()) {
-                    list.add(newPos);
-                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+
+                if (!(board.getBoard()[newPos] instanceof EmptyField) && board.getBoard()[newPos].isBlack() == this.isBlack()) break;
+
+                if (getWestBarrier().contains(newPos)) {
                     list.add(newPos);
                     break;
-                } else if (board.getBoard()[newPos].isBlack() == this.isBlack()) {
+                }
+
+                if (board.getBoard()[newPos].isEmptyField()) {
+                    list.add(newPos);
+
+                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+                    list.add(newPos);
                     break;
                 }
             }
@@ -292,23 +342,29 @@ public abstract class Figure {
 
     public ArrayList<Integer> movingSE(Board board) {
 
-        int multiplier = (this instanceof King) ? 2 : 7;
+        int multiplier = (this instanceof King) ? 2 : 8;
 
         ArrayList<Integer> list = new ArrayList<>();
+
         for (int i = 1; i < multiplier; i ++){
+
             if (getEastBarrier().contains(this.getPosition())) break;
+
             int newPos = this.getPosition() - i*7;
-            if (getEastBarrier().contains(newPos) && newPos != this.getPosition()) {
-                list.add(newPos);
-                break;
-            }
+
             if (withInPossibleRange(newPos)){
-                if (board.getBoard()[newPos].isEmptyField()) {
-                    list.add(newPos);
-                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+                if (!(board.getBoard()[newPos] instanceof EmptyField) && board.getBoard()[newPos].isBlack() == this.isBlack()) break;
+
+                if (getEastBarrier().contains(newPos)) {
                     list.add(newPos);
                     break;
-                } else if (board.getBoard()[newPos].isBlack() == this.isBlack()) {
+                }
+
+                if (board.getBoard()[newPos].isEmptyField()) {
+                    list.add(newPos);
+
+                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+                    list.add(newPos);
                     break;
                 }
             }
@@ -318,24 +374,30 @@ public abstract class Figure {
 
     public List<Integer> movingSW(Board board) {
 
-        int multiplier = (this instanceof King) ? 2 : 7;
+        int multiplier = (this instanceof King) ? 2 : 8;
 
         ArrayList<Integer> southWestMoveList = new ArrayList<>();
 
         for (int i = 1; i < multiplier; i ++){
+
             if (getWestBarrier().contains(this.getPosition())) break;
+
             int newPos = this.getPosition() - i*9;
-            if (getWestBarrier().contains(newPos) && newPos != this.getPosition()) {
-                southWestMoveList.add(newPos);
-                break;
-            }
+
             if (withInPossibleRange(newPos)){
-                if (board.getBoard()[newPos].isEmptyField()) {
-                    southWestMoveList.add(newPos);
-                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+
+                if (!(board.getBoard()[newPos] instanceof EmptyField) && board.getBoard()[newPos].isBlack() == this.isBlack()) break;
+
+                if (getWestBarrier().contains(newPos)) {
                     southWestMoveList.add(newPos);
                     break;
-                } else if (board.getBoard()[newPos].isBlack() == this.isBlack()) {
+                }
+
+                if (board.getBoard()[newPos].isEmptyField()) {
+                    southWestMoveList.add(newPos);
+
+                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+                    southWestMoveList.add(newPos);
                     break;
                 }
             }
@@ -456,17 +518,24 @@ public abstract class Figure {
 
     public void removeIllegalMoves(Board board) {
 
-        ArrayList<Integer> legalMoves = new ArrayList<>();
+        ArrayList<Integer> illegalMoves = new ArrayList<>();
         for (Integer move : this.getPossibleMoveList()) {
             Board tempBoard = board.copy();
 
-            tempBoard.simulateMove(this.copy(), move);
+            tempBoard = tempBoard.simulateMove(this.copy(), move);
 
-            if (!tempBoard.isPlayerInCheck(isBlack())) {
-                legalMoves.add(move);
+            if (tempBoard.isPlayerInCheck(this.isBlack())) {
+                illegalMoves.add(move);
             }
         }
+
+        this.setIllegalMovesList(illegalMoves);
+
+        ArrayList<Integer> legalMoves = this.getPossibleMoveList();
+
+        legalMoves.removeAll(this.getIllegalMovesList());
+
         this.setPossibleMoveList(legalMoves);
     }
-    }
+}
 

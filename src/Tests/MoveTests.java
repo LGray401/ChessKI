@@ -38,18 +38,18 @@ public class MoveTests {
         String fenString = "6r1/p5k1/3Q4/2N5/5P2/1p6/P5KP/4qR2";
         board.setBoardFromFEN(fenString);
         player1.setFigureAndMovesListForPlayerGivenBoard(board);
-        Assertions.assertEquals(player1.amountOfLegalMovesGivenBoard(board), 40);
+        Assertions.assertEquals(player1.amountOfLegalMovesGivenBoard(board), 42);
     }
 
     @Test
-    void stellung1GruppeL(){
+    void stellung1GruppeL(){ //Rochade
 
         Board board = new Board();
         Player player1 = new Player(true);
         String fenString = "r2qk2r/p1p1p1P1/1pn4b/1N1Pb3/1PB1N1nP/8/1B1PQPp1/R3K2R";
         board.setBoardFromFEN(fenString);
         player1.setFigureAndMovesListForPlayerGivenBoard(board);
-        Assertions.assertEquals(player1.amountOfLegalMovesGivenBoard(board), 45);
+        Assertions.assertEquals(player1.amountOfLegalMovesGivenBoard(board), 40);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class MoveTests {
         String fenString = "5r2/p2Qb2p/3n1p2/3P2k1/1PB5/8/1B5P/R3K2R";
         board.setBoardFromFEN(fenString);
         player1.setFigureAndMovesListForPlayerGivenBoard(board);
-        Assertions.assertEquals(player1.amountOfLegalMovesGivenBoard(board), 29);
+        Assertions.assertEquals(player1.amountOfLegalMovesGivenBoard(board), 27);
     }
 
     @Test
@@ -119,7 +119,7 @@ public class MoveTests {
     }
 
     @Test
-    void stellung1GruppeAB(){
+    void stellung1GruppeAB(){ //3 promotions für pawn fehlen
 
         Board board = new Board();
         Player player1 = new Player(false);
@@ -170,7 +170,7 @@ public class MoveTests {
         String fenString = "4K3/PP3PP1/8/8/1p2n1P1/7R/3k4/2R5";
         board.setBoardFromFEN(fenString);
         player1.setFigureAndMovesListForPlayerGivenBoard(board);
-        Assertions.assertEquals(player1.amountOfLegalMovesGivenBoard(board), 41);
+        Assertions.assertEquals(player1.amountOfLegalMovesGivenBoard(board), 37);
     }
 
     @Test
@@ -181,6 +181,28 @@ public class MoveTests {
         String fenString = "R3K2R/P5PP/2P3QN/7k/6p1/2n4n/p5pp/7r";
         board.setBoardFromFEN(fenString);
         player1.setFigureAndMovesListForPlayerGivenBoard(board);
-        Assertions.assertEquals(player1.amountOfLegalMovesGivenBoard(board), 1);
+        Assertions.assertEquals(player1.amountOfLegalMovesGivenBoard(board), 2);
+    }
+
+    @Test
+    void stellung1GruppeT(){
+
+        Board board = new Board();
+        Player player1 = new Player(false);
+        String fenString = "r1bqk1nr/ppp2ppp/2n1p3/3p4/1b1P1B2/4PN2/PPP2PPP/RN1QKB1R";
+        board.setBoardFromFEN(fenString);
+        player1.setFigureAndMovesListForPlayerGivenBoard(board);
+        Assertions.assertEquals(player1.amountOfLegalMovesGivenBoard(board), 6);
+    }
+
+    @Test
+    void stellung2GruppeT(){
+
+        Board board = new Board();
+        Player player1 = new Player(true);
+        String fenString = "8/8/4k3/3pP3/3K4/8/8/8";
+        board.setBoardFromFEN(fenString);
+        player1.setFigureAndMovesListForPlayerGivenBoard(board);
+        Assertions.assertEquals(player1.amountOfLegalMovesGivenBoard(board), 4);
     }
 }

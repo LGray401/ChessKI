@@ -109,13 +109,14 @@ public class Board {
         return opponentFigures;
     }
 
-    public void simulateMove(Figure figure, int move) {
-        figure.setNextPosition(move);
-        changeBoard(figure);
+    public Board simulateMove(Figure figure, int move) {
 
+        figure.setNextPosition(move);
+        return this.changeBoard(figure);
     }
 
     public void makeMove(Figure figure) {
+
         if (figure instanceof Pawn || !(board[figure.getNextPosition()] instanceof EmptyField)) {
             resetHalfMoveClock();
         } else {
@@ -127,19 +128,20 @@ public class Board {
         previousBoardStates.add(currentFEN);
     }
 
-    void changeBoard(Figure figure) {
+    Board changeBoard(Figure figure) {
 
-        if(board[figure.getNextPosition()] instanceof King) {
+        if(this.board[figure.getNextPosition()] instanceof King) {
             System.out.println("King is moving from ");
         }
 
-        board[figure.getPosition()] = new EmptyField(figure.getPosition());
+        this.board[figure.getPosition()] = new EmptyField(figure.getPosition());
         if (figure instanceof Pawn && (figure.getNextPosition() < 8 || figure.getNextPosition() > 55)) {
             promotePawn(figure, figure.getNextPosition());
         } else {
-            board[figure.getNextPosition()] = figure;
+            this.board[figure.getNextPosition()] = figure;
             figure.setPosition(figure.getNextPosition());
         }
+        return this;
     }
 
 
