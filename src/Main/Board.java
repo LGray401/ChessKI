@@ -488,18 +488,30 @@ public class Board {
         board.setBoardFromFEN(fenString);
 
         for (int i = 0; i < amountOfMoves; i++) {
-            board.to2DArrayAndDisplay(board.getBoard());
-            player1.printAllMovesAndAmountOfMovesGivenBoard(board);
-            board.isGameOver(player2.isBlack());
-            Figure nextMove = player1.makeMove(board);
-            nextMove.setNextPosition(nextMove.getPossibleMoveList().get((int) (Math.random() * nextMove.getPossibleMoveList().size())));
-            System.out.println("Player1 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
-            board.changeBoard(nextMove);
-            System.out.println("Player1 moved to: " + nextMove.getNextPosition());
+            //long totalTime = 0;
+            //while(totalTime < maxCalcTime) {
+
+                //long startTime = System.nanoTime();
+                board.to2DArrayAndDisplay(board.getBoard());
+                player1.printAllMovesAndAmountOfMovesGivenBoard(board);
+                board.isGameOver(player2.isBlack());
+                player1.evaluate(player1.isBlack(), board);
+                //System.out.println("Win possibility for player1: " + player1.getWinPossibility());
+                Figure nextMove = player1.makeMove(board);
+                nextMove.setNextPosition(nextMove.getPossibleMoveList().get((int) (Math.random() * nextMove.getPossibleMoveList().size())));
+                System.out.println("Player1 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
+                board.changeBoard(nextMove);
+                System.out.println("Player1 moved to: " + nextMove.getNextPosition());
+                //long endTime = System.nanoTime();
+                //totalTime = (endTime - startTime);
+            //}
+
 
             board.to2DArrayAndDisplay(board.getBoard());
             player2.printAllMovesAndAmountOfMovesGivenBoard(board);
             board.isGameOver(player1.isBlack());
+            player2.evaluate(player2.isBlack(), board);
+            //System.out.println("Win possibility for player2: " + player2.getWinPossibility());
             nextMove = player2.makeMove(board);
             nextMove.setNextPosition(nextMove.getPossibleMoveList().get((int) (Math.random() * nextMove.getPossibleMoveList().size())));
             System.out.println("Player2 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
@@ -510,4 +522,6 @@ public class Board {
 
         }
     }
+
+
 }

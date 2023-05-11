@@ -8,6 +8,8 @@ import java.util.List;
 public class Player {
 
     private boolean isBlack;
+
+    private int winPossibility;
     private List<Figure> figureList;
     private boolean playerInCheck;
     private Figure nextFigureMove;
@@ -17,6 +19,8 @@ public class Player {
     public ArrayList<String> getAllMovesInFenNotation() {
         return allMovesInFenNotation;
     }
+
+    private final long MAX_DURATION = 1000; // maximum duration
 
     public void setAllMovesInFenNotation(ArrayList<String> allMovesInFenNotation) {
         this.allMovesInFenNotation = allMovesInFenNotation;
@@ -56,6 +60,30 @@ public class Player {
 
     public void setNextFigureMove(Figure nextFigureMove) {
         this.nextFigureMove = nextFigureMove;
+    }
+
+    public int getWinPossibility() {
+        return winPossibility;
+    }
+
+    public void setWinPossibility(int winPossibility) {
+        this.winPossibility = winPossibility;
+    }
+
+    void evaluate(boolean isBlack, Board board) {
+
+        int eval = 0;
+
+        for(int i = 0; i < board.getBoard().length - 1; i++) {
+            if(isBlack == isBlack) {
+                int ownValue = board.getBoard()[i].getValue();
+                eval += ownValue;
+            } else {
+                int enemyValue = board.getBoard()[i].getValue();
+                eval -= enemyValue;
+            }
+        }
+        this.setWinPossibility(eval);
     }
 
     private void generateAllMoves(Board board){
@@ -128,6 +156,8 @@ public class Player {
 
     public Figure makeMove(Board board) {
 
+        long startTime = System.currentTimeMillis();
+
         this.createFigureListForPlayer(board);
         this.generateAllMoves(board);
         for (Figure figure: this.getFigureList()) {
@@ -145,16 +175,12 @@ public class Player {
                  }
 
              }
-        } while (f.getPossibleMoveList().size() == 0);
+        } while (f.getPossibleMoveList().size() == 0 && !isExceededMaxDuration(startTime));
 
-        /*
-        if (f instanceof King){
-            ((King) f).setAlreadyMoved(true);
-        } else if (f instanceof Rook){
-            ((King) f).setAlreadyMoved(true);
-        }
-         */
         return f;
     }
 
+    private boolean isExceededMaxDuration(long startTime) {
+        return (System.currentTimeMillis() - startTime) > MAX_DURATION;
+    }
 }
