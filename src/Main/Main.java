@@ -3,10 +3,10 @@ package Main;
 public class Main {
 
     public static void main(String[] args) {
-        Player player1 = new Player(true);
-        Player player2 = new Player(false);
-        int amountOfMoves = 1000;
-        String fenString = "r3k2r/pp6/2p3Pb/2N1pP2/Q2p4/4P3/PP1K4/7R";
+        Player player1 = new Player(false);
+        Player player2 = new Player(true);
+        int amountOfMoves = 1;
+        String fenString = "r1bq1rk1/ppp2ppp/2np1n2/3p4/2PP4/2NBPN2/PP3PPP/R1BQK2R";
         //Benchmark benchmark = new Benchmark();
         //System.out.println(benchmark.benchmarkOneMove(fenString, 100000) );
 
