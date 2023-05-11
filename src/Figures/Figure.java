@@ -1,11 +1,11 @@
 package Figures;
 
+import Main.Board;
+
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import Main.Board;
 
 public abstract class Figure {
 
@@ -14,6 +14,7 @@ public abstract class Figure {
     private boolean isBlack;
     private int position;
     private int nextPosition;
+    boolean hasMoved = false;
     private ArrayList<Integer> illegalMovesList;
     private ArrayList<Integer> moveSummandList;
     private ArrayList<Integer> possibleMoveList;
@@ -27,6 +28,13 @@ public abstract class Figure {
     private static final ArrayList<Integer> northNorthBarrier = new ArrayList<>(Arrays.asList(48, 49, 50, 51, 52, 53, 54, 55));
     private static final ArrayList<Integer> southSouthBarrier = new ArrayList<>(Arrays.asList(8, 9, 10, 11, 12, 13, 14, 15));
 
+    public boolean hasMoved() {
+        return hasMoved;
+    }
+
+    public void setHasMoved(boolean hasMoved) {
+        this.hasMoved = hasMoved;
+    }
     public ArrayList<String> getAllMovesInFenNotation() {
         return allMovesInFenNotation;
     }
@@ -504,6 +512,7 @@ public abstract class Figure {
             // Assuming all properties have proper getter and setter methods
             copiedFigure.setValue(this.getValue());
             copiedFigure.setNextPosition(this.getNextPosition());
+            copiedFigure.setHasMoved(this.hasMoved());
             copiedFigure.setMoveSummandList(new ArrayList<>(this.getMoveSummandList()));
             copiedFigure.setPossibleMoveList(new ArrayList<>(this.getPossibleMoveList()));
             copiedFigure.setAllMovesInFenNotation(new ArrayList<>(this.getAllMovesInFenNotation()));

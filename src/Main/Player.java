@@ -1,8 +1,6 @@
 package Main;
 
 import Figures.Figure;
-import Figures.Rook;
-import Figures.King;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,25 +11,6 @@ public class Player {
     private List<Figure> figureList;
     private boolean playerInCheck;
     private Figure nextFigureMove;
-
-    public boolean isLongRochadepossible() {
-        return longRochadepossible;
-    }
-
-    public void setLongRochadepossible(boolean longRochadepossible) {
-        this.longRochadepossible = longRochadepossible;
-    }
-
-    public boolean isShortRochadepossible() {
-        return shortRochadepossible;
-    }
-
-    public void setShortRochadepossible(boolean shortRochadepossible) {
-        this.shortRochadepossible = shortRochadepossible;
-    }
-
-    private  boolean longRochadepossible;
-    private  boolean shortRochadepossible;
 
     private ArrayList<String> allMovesInFenNotation;
 

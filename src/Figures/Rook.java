@@ -7,15 +7,7 @@ import java.util.Arrays;
 
 public class Rook extends Figure {
 
-    boolean alreadyMoved = false;
 
-    public boolean isAlreadyMoved() {
-        return alreadyMoved;
-    }
-
-    public void setAlreadyMoved(boolean alreadyMoved) {
-        this.alreadyMoved = alreadyMoved;
-    }
 
     public Rook (boolean isblack, int position) {
         this.setEmptyField(false);
@@ -23,6 +15,11 @@ public class Rook extends Figure {
         this.setBlack(isblack);
         this.setPosition(position);
         this.setMoveSummandList(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4, -5, -6, -7, -8, -16, -24, -32, -40, -48, -56, 8, 16, 24, 32, 40, 48, 57)));
+        if(isblack ? (position == 56 || position == 63) : (position == 0 || position == 7)) {
+            this.setHasMoved(false);
+        } else {
+            this.setHasMoved(true);
+        }
     }
 
     public void calculatePossibleMoves(Board board) {
@@ -38,7 +35,7 @@ public class Rook extends Figure {
 
 
     }
-    public ArrayList<Integer> movingWestLongRochade(Board board) {
+    /*public ArrayList<Integer> movingWestLongRochade(Board board) {
 
 
 
@@ -64,7 +61,7 @@ public class Rook extends Figure {
             }
         }
         return list;
-    }
+    }*/
 
 
 

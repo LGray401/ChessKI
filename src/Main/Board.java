@@ -130,16 +130,40 @@ public class Board {
 
     Board changeBoard(Figure figure) {
 
-        if(this.board[figure.getNextPosition()] instanceof King) {
-            System.out.println("King is moving from ");
-        }
 
-        this.board[figure.getPosition()] = new EmptyField(figure.getPosition());
-        if (figure instanceof Pawn && (figure.getNextPosition() < 8 || figure.getNextPosition() > 55)) {
-            promotePawn(figure, figure.getNextPosition());
-        } else {
-            this.board[figure.getNextPosition()] = figure;
-            figure.setPosition(figure.getNextPosition());
+        //Rochade
+        if(figure.getNextPosition() == 100) {
+            King king = (King) this.board[figure.isBlack() ? 60 : 4];
+            Rook rook = (Rook) this.board[figure.isBlack() ? 63 : 0];
+            this.board[figure.isBlack() ? 61 : 3] = rook;
+            rook.setPosition(figure.isBlack() ? 61 : 3);
+            rook.setHasMoved(true);
+            this.board[figure.isBlack() ? 62 : 2] = king;
+            king.setPosition(figure.isBlack() ? 62 : 2);
+            king.setHasMoved(true);
+        } else if (figure.getNextPosition() == 101) {
+            King king = (King) this.board[figure.isBlack() ? 60 : 4];
+            Rook rook = (Rook) this.board[figure.isBlack() ? 56 : 7];
+            this.board[figure.isBlack() ? 59 : 5] = rook;
+            rook.setPosition(figure.isBlack() ? 59 : 5);
+            rook.setHasMoved(true);
+            this.board[figure.isBlack() ? 58 : 6] = king;
+            king.setPosition(figure.isBlack() ? 58 : 6);
+            king.setHasMoved(true);
+
+        }else {
+
+            //Pawn Promotion
+            if (figure instanceof Pawn && (figure.getNextPosition() < 8 || figure.getNextPosition() > 55)) {
+                promotePawn(figure, figure.getNextPosition());
+            } else {
+
+                //Normal Move
+                this.board[figure.getPosition()] = new EmptyField(figure.getPosition());
+                this.board[figure.getNextPosition()] = figure;
+                figure.setPosition(figure.getNextPosition());
+                figure.setHasMoved(true);
+            }
         }
         return this;
     }
@@ -472,14 +496,16 @@ public class Board {
             System.out.println("Player1 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
             board.changeBoard(nextMove);
             System.out.println("Player1 moved to: " + nextMove.getNextPosition());
-            board.isGameOver(player1.isBlack());
+
             board.to2DArrayAndDisplay(board.getBoard());
+            player2.printAllMovesAndAmountOfMovesGivenBoard(board);
+            board.isGameOver(player1.isBlack());
             nextMove = player2.makeMove(board);
             nextMove.setNextPosition(nextMove.getPossibleMoveList().get((int) (Math.random() * nextMove.getPossibleMoveList().size())));
             System.out.println("Player2 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
             board.changeBoard(nextMove);
             System.out.println("Player2 moved to: " + nextMove.getNextPosition());
-            player2.printAllMovesAndAmountOfMovesGivenBoard(board);
+
             //System.out.println(board.createFENFromBoard(board.getBoard()));
 
         }
