@@ -2,6 +2,30 @@ package Main;
 
 public class Benchmark {
 
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    public Player getPlayer2() {
+        return player2;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setPlayer1(Player player1) {
+        this.player1 = player1;
+    }
+
+    public void setPlayer2(Player player2) {
+        this.player2 = player2;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
     Player player1 = new Player(true);
     Player player2 = new Player(false);
     Board board = new Board();
@@ -13,7 +37,7 @@ public class Benchmark {
 
         for (int i = 0; i < amountOfRepetitions; i++) {
             long startTime = System.nanoTime();
-            player1.makeMove(board);
+            player1.makeMove(this.getBoard());
             long endTime = System.nanoTime();
             totalTime += (endTime - startTime);
         }
