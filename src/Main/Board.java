@@ -83,6 +83,10 @@ public class Board {
         return new Board(this);
     }
 
+    void undoMove(Board copy) {
+        this.setBoard(copy.getBoard()); 
+    }
+
     private void promotePawn(Figure figure, int move) {
 
             board[figure.getNextPosition()] = new Queen(figure.isBlack(), figure.getNextPosition());

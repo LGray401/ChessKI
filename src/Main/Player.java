@@ -197,10 +197,10 @@ public class Player {
         
         if (isMaximizingPlayer) {
             int maxEval = Integer.MIN_VALUE;
-            List<Figure> legalMoves = generateLegalMoves(board); // To Do: write/ check for method
+            List<Figure> legalMoves = generateLegalMoves(board); 
             
             for (Figure move : legalMoves) {
-                board.makeMove(move);
+                board.makeMove(move); // TODO: modify makeMove
                 Board copy = board.copy();
                 int eval = minimax(board, depth - 1, false);
                 board.undoMove(copy); 
@@ -244,21 +244,32 @@ public class Player {
         return bestMove;
     }
 
-    List<Figure> generateLegalMoves(Board board) {
+    /*List<Figure> generateLegalMoves(Board board) {
 
         List<Figure> allMoves = new ArrayList<>();
         List<Figure> allFigures = this.getFigureList();
 
-        // player hat figure list
         for(Figure figure: allFigures) {
-            List<Figure> validMoves = figure.calculatePossibleMoves(board); // TODO: calculate all moves 
+            List<Figure> validMoves = figure.calculatePossibleMoves(board); 
             allMoves.addAll(validMoves);
         }
 
 
 
         return allMoves;
+    }*/
+
+    private ArrayList<Figure> generateLegalMoves(Board board){
+
+        ArrayList<Figure> list = new ArrayList<>();
+
+        for (Figure figure: this.getFigureList()) {
+            figure.calculatePossibleMoves(board);
+            figure.removeIllegalMoves(board);
+            list.addAll(figure.getPossibleMoveList()); // fix: can't add int in figure list
+            
+        }
+
+        return list;
     }
-
-
 }
