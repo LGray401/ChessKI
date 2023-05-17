@@ -13,6 +13,9 @@ public class Player {
     private List<Figure> figureList;
     private boolean playerInCheck;
     private Figure nextFigureMove;
+    private final long MAX_DURATION = 1000; // maximum duration
+    private static final int MAX_DEPTH = 3;
+
 
     private ArrayList<String> allMovesInFenNotation;
 
@@ -20,7 +23,6 @@ public class Player {
         return allMovesInFenNotation;
     }
 
-    private final long MAX_DURATION = 1000; // maximum duration
 
     public void setAllMovesInFenNotation(ArrayList<String> allMovesInFenNotation) {
         this.allMovesInFenNotation = allMovesInFenNotation;
@@ -70,21 +72,7 @@ public class Player {
         this.winPossibility = winPossibility;
     }
 
-    void evaluate(boolean isBlack, Board board) {
-
-        int eval = 0;
-
-        for(int i = 0; i < board.getBoard().length - 1; i++) {
-            if(isBlack == isBlack) {
-                int ownValue = board.getBoard()[i].getValue();
-                eval += ownValue;
-            } else {
-                int enemyValue = board.getBoard()[i].getValue();
-                eval -= enemyValue;
-            }
-        }
-        this.setWinPossibility(eval);
-    }
+    
 
     private void generateAllMoves(Board board){
 
@@ -183,4 +171,94 @@ public class Player {
     private boolean isExceededMaxDuration(long startTime) {
         return (System.currentTimeMillis() - startTime) > MAX_DURATION;
     }
+
+    int evaluate(boolean isBlack, Board board) {
+
+        int eval = 0;
+
+        for(int i = 0; i < board.getBoard().length - 1; i++) {
+            if(isBlack == isBlack) {
+                int ownValue = board.getBoard()[i].getValue();
+                eval += ownValue;
+            } else {
+                int enemyValue = board.getBoard()[i].getValue();
+                eval -= enemyValue;
+            }
+        }
+
+        this.setWinPossibility(eval);
+        return eval;
+    }
+
+    public int minimax(Board board, int depth, boolean isMaximizingPlayer) {
+        if (depth == 0 || board.isGameOver(this.isBlack())) {
+            return evaluate(this.isBlack(), board);
+        }
+        
+        if (isMaximizingPlayer) {
+            int maxEval = Integer.MIN_VALUE;
+            List<Figure> legalMoves = generateLegalMoves(board); // To Do: write/ check for method
+            
+            for (Figure move : legalMoves) {
+                board.makeMove(move);
+                Board copy = board.copy();
+                int eval = minimax(board, depth - 1, false);
+                board.undoMove(copy); 
+                maxEval = Math.max(maxEval, eval);
+            }
+            
+            return maxEval;
+        } else {
+            int minEval = Integer.MAX_VALUE;
+            List<Figure> legalMoves = generateLegalMoves(board);
+            
+            for (Figure move : legalMoves) {
+                board.makeMove(move);
+                Board copy = board.copy();
+                int eval = minimax(board, depth - 1, true);
+                board.undoMove(copy);
+                minEval = Math.min(minEval, eval);
+            }
+            
+            return minEval;
+        }
+    }
+    
+    public Figure findBestMove(Board board) {
+        int maxEval = Integer.MIN_VALUE;
+        Figure bestMove = null;
+        List<Figure> legalMoves = generateLegalMoves(board);
+        
+        for (Figure move : legalMoves) {
+            board.makeMove(move);
+            Board copy = board.copy();
+            int eval = minimax(board, MAX_DEPTH, false);
+            board.undoMove(copy);
+            
+            if (eval > maxEval) {
+                maxEval = eval;
+                bestMove = move;
+            }
+        }
+        
+        return bestMove;
+    }
+
+    List<Figure> generateLegalMoves(Board board) {
+
+        List<Figure> allMoves = new ArrayList<>();
+        List<Figure> allFigures = this.getFigureList();
+
+        // player hat figure list
+        for(Figure figure: allFigures) {
+            List<Figure> validMoves = figure.calculatePossibleMoves(board); // TODO: calculate all moves 
+            allMoves.addAll(validMoves);
+        }
+
+
+
+        return allMoves;
+    }
+
+
 }
