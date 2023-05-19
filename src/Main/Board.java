@@ -100,13 +100,18 @@ public class Board {
     }
 
     public List<Figure> getOpponentFigures(boolean isBlack) {
-        List<Figure> opponentFigures = new ArrayList<>();
+
+        return getFiguresOfPlayer(!isBlack);
+    }
+
+    public List<Figure> getFiguresOfPlayer(boolean isBlack) {
+        List<Figure> figures = new ArrayList<>();
         for (Figure figure : board) {
-            if (!figure.isEmptyField() && figure.isBlack() != isBlack) {
-                opponentFigures.add(figure);
+            if (!figure.isEmptyField() && figure.isBlack() == isBlack) {
+                figures.add(figure);
             }
         }
-        return opponentFigures;
+        return figures;
     }
 
     public Board simulateMove(Figure figure, int move) {
@@ -144,9 +149,11 @@ public class Board {
         } else if (figure.getNextPosition() == 101) {
             King king = (King) this.board[figure.isBlack() ? 60 : 4];
             Rook rook = (Rook) this.board[figure.isBlack() ? 56 : 7];
+            this.board[rook.getPosition()] = new EmptyField(rook.getPosition());
             this.board[figure.isBlack() ? 59 : 5] = rook;
             rook.setPosition(figure.isBlack() ? 59 : 5);
             rook.setHasMoved(true);
+            this.board[king.getPosition()] = new EmptyField(king.getPosition());
             this.board[figure.isBlack() ? 58 : 6] = king;
             king.setPosition(figure.isBlack() ? 58 : 6);
             king.setHasMoved(true);
@@ -171,9 +178,6 @@ public class Board {
 
     public boolean isPlayerInCheck(boolean isBlack) {
         Figure king = findKing(isBlack);
-        if(king == null) {
-            return true;
-        }
         for (Figure opponentFigure : getOpponentFigures(isBlack)) {
             opponentFigure.calculatePossibleMoves(this);
             if (opponentFigure.canAttack(king)) {
@@ -317,7 +321,7 @@ public class Board {
 
 
 
-    public boolean threefoldRepetition() {
+    public EndOfGame threefoldRepetition(boolean isBlack) {
         String currentFEN = createFENFromBoard(board);
         int occurrences = 0;
 
@@ -325,53 +329,81 @@ public class Board {
             if (currentFEN.equals(previousFEN)) {
                 occurrences++;
                 if (occurrences >= 2) {
-                    return true;
+                    return new EndOfGame(true, 0, "threefold repetition", isBlack);
                 }
             }
         }
 
-        return false;
+        return new EndOfGame(false);
     }
 
     public void resetHalfMoveClock() {
         halfMoveClock = 0;
     }
-    public boolean fiftyMoveRule() {
-        return halfMoveClock >= 100;
+    public EndOfGame fiftyMoveRule(boolean isBlack) {
+        if (halfMoveClock >= 100) {
+            return new EndOfGame(true, 0, "fifty move rule", isBlack);
+        } else {
+            return new EndOfGame(false);
+        }
     }
 
 
-    public boolean isGameOver(boolean isBlack) {
-        if(isKingOfTheHill(isBlack)) return true;
-        if(fiftyMoveRule() || threefoldRepetition()){
-            this.itsADraw(fiftyMoveRule() ? "fifty move rule" : "threefold repetition");
+    public boolean isGameOverAndExit(boolean isBlack) {
+        EndOfGame endOfGame = isGameOver(isBlack);
+        if(endOfGame.isGameFinished()) {
+            exitGame(endOfGame.getReason());
             return true;
-        };
+        }
         return false;
+    }
+
+    public EndOfGame isGameOver(boolean isBlack) {
+        EndOfGame endOfGame = isKingOfTheHill(isBlack);
+        if(endOfGame.isGameFinished()) return endOfGame;
+        endOfGame = playerWon(isBlack);
+        if(endOfGame.isGameFinished()) return endOfGame;
+        endOfGame = fiftyMoveRule(isBlack);
+        if(endOfGame.isGameFinished()) return endOfGame;
+        endOfGame = threefoldRepetition(isBlack);
+        if(endOfGame.isGameFinished()) return endOfGame;
+        return endOfGame;
+    }
+
+    public EndOfGame playerWon(boolean isBlack) {
+
+        ArrayList<Figure> allMoves = new ArrayList<>();
+
+        for(Figure figure : this.getValidMoves(isBlack)) {
+            allMoves.add(figure);
+        }
+        if (allMoves.isEmpty()) {
+            if (this.isPlayerInCheck(isBlack)) {
+                return new EndOfGame(true, 1000, "Checkmate", isBlack);
+            } else {
+                return new EndOfGame(true, 0, "Stalemate", isBlack);
+            }
+         } else {
+            return new EndOfGame(false);
+        }
+
     }
 
     public void itsADraw(String reason) {
         exitGame(reason + " - it's a draw!");
     }
 
-    //method to print out game is over and terminate program
-    public void playerWon (boolean isBlack) {
-        String msg = "Player " + (isBlack ? "Black" : "White") + " wins!";
-        exitGame(msg);
-    }
 
-    public boolean isKingOfTheHill(boolean isBlack) {
+
+    public EndOfGame isKingOfTheHill(boolean isBlack) {
 
         ArrayList<Integer> kingOfTheHill = new ArrayList<>(Arrays.asList(27, 28, 35, 36));
         Figure king = findKing(isBlack);
 
         if (kingOfTheHill.contains(king.getPosition())) {
-            System.out.println("King of the Hill");
-            this.playerWon(isBlack);
-            return true;
+            return new EndOfGame(true, 0, "King of the Hill", isBlack);
         } else {
-            return false;
-
+            return new EndOfGame(false);
         }
     }
 
@@ -494,7 +526,7 @@ public class Board {
                 //long startTime = System.nanoTime();
                 board.to2DArrayAndDisplay(board.getBoard());
                 player1.printAllMovesAndAmountOfMovesGivenBoard(board);
-                board.isGameOver(player2.isBlack());
+                board.isGameOverAndExit(player2.isBlack());
                 player1.evaluate(player1.isBlack(), board);
                 //System.out.println("Win possibility for player1: " + player1.getWinPossibility());
                 Figure nextMove = player1.makeMove(board);
@@ -509,7 +541,7 @@ public class Board {
 
             board.to2DArrayAndDisplay(board.getBoard());
             player2.printAllMovesAndAmountOfMovesGivenBoard(board);
-            board.isGameOver(player1.isBlack());
+            board.isGameOverAndExit(player1.isBlack());
             player2.evaluate(player2.isBlack(), board);
             //System.out.println("Win possibility for player2: " + player2.getWinPossibility());
             nextMove = player2.makeMove(board);
@@ -523,5 +555,33 @@ public class Board {
         }
     }
 
+    public ArrayList<Board> getChildren(boolean isBlack) {
+        ArrayList<Board> children = new ArrayList<>();
 
+        for (Figure figure : this.
+                getValidMoves(isBlack)) {
+
+            for(int nextPosition : figure.getPossibleMoveList()) {
+                    Board child = this.copy();
+                    child.simulateMove(figure.copy(), nextPosition);
+                    children.add(child);
+                }
+
+        }
+        return children;
+    }
+
+    ArrayList<Figure> getValidMoves(boolean isBlack) {
+
+        ArrayList<Figure> validMoves = new ArrayList<>();
+
+        for (Figure figure : this.getFiguresOfPlayer(isBlack)) {
+            figure.calculatePossibleMoves(this);
+            figure.removeIllegalMoves(this);
+            if (figure.getPossibleMoveList().size() > 0) {
+                validMoves.add(figure);
+            }
+        }
+        return validMoves;
+    }
 }
