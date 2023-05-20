@@ -4,6 +4,10 @@ import Figures.Figure;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
 
 public class Player {
 
@@ -69,6 +73,8 @@ public class Player {
     public void setWinPossibility(int winPossibility) {
         this.winPossibility = winPossibility;
     }
+
+
 
     void evaluate(boolean isBlack, Board board) {
 
