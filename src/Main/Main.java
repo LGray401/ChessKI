@@ -31,10 +31,11 @@ public class Main {
         Logger logger = Logger.getLogger("MyLog");
         FileHandler fh;
 
+
         try {
 
             // This block configure the logger with handler and formatter
-            fh = new FileHandler("C:/temp/test/MyLogFile.log");
+            fh = new FileHandler("C:\\Users\\tulin\\OneDrive\\Desktop\\prog 2\\ChessKI\\.idea\\libraries\\test");
             logger.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
