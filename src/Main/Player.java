@@ -3,6 +3,7 @@ package Main;
 import Figures.Figure;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Player {
@@ -197,10 +198,10 @@ public class Player {
         
         if (isMaximizingPlayer) {
             int maxEval = Integer.MIN_VALUE;
-            List<Figure> legalMoves = generateLegalMoves(board); 
+            List<Figure> legalMoves = board.getValidMoves(isBlack());
             
             for (Figure move : legalMoves) {
-                board.makeMove(move); // TODO: modify makeMove
+                board.simulateMove(move, move.getNextPosition());
                 Board copy = board.copy();
                 int eval = minimax(board, depth - 1, false);
                 board.undoMove(copy); 
@@ -210,10 +211,10 @@ public class Player {
             return maxEval;
         } else {
             int minEval = Integer.MAX_VALUE;
-            List<Figure> legalMoves = generateLegalMoves(board);
+            List<Figure> legalMoves = board.getValidMoves(isBlack());
             
             for (Figure move : legalMoves) {
-                board.makeMove(move);
+                board.simulateMove(move, move.getNextPosition());
                 Board copy = board.copy();
                 int eval = minimax(board, depth - 1, true);
                 board.undoMove(copy);
@@ -227,10 +228,11 @@ public class Player {
     public Figure findBestMove(Board board) {
         int maxEval = Integer.MIN_VALUE;
         Figure bestMove = null;
-        List<Figure> legalMoves = generateLegalMoves(board);
+        List<Figure> legalMoves = board.getValidMoves(isBlack());
         
         for (Figure move : legalMoves) {
-            board.makeMove(move);
+
+            board.simulateMove(move, move.getNextPosition());
             Board copy = board.copy();
             int eval = minimax(board, MAX_DEPTH, false);
             board.undoMove(copy);
@@ -240,36 +242,29 @@ public class Player {
                 bestMove = move;
             }
         }
+
+        if(bestMove == null) {
+            if (board.isPlayerInCheck(this.isBlack())) {
+                board.playerWon(!isBlack());
+            } else {
+                board.itsADraw("Stalemate");
+            }
+        }
         
         return bestMove;
     }
 
-    /*List<Figure> generateLegalMoves(Board board) {
+    private void generateAllMovesFEN(Board board){
 
-        List<Figure> allMoves = new ArrayList<>();
-        List<Figure> allFigures = this.getFigureList();
-
-        for(Figure figure: allFigures) {
-            List<Figure> validMoves = figure.calculatePossibleMoves(board); 
-            allMoves.addAll(validMoves);
-        }
-
-
-
-        return allMoves;
-    }*/
-
-    private ArrayList<Figure> generateLegalMoves(Board board){
-
-        ArrayList<Figure> list = new ArrayList<>();
+        ArrayList<String> list = new ArrayList<>();
 
         for (Figure figure: this.getFigureList()) {
             figure.calculatePossibleMoves(board);
             figure.removeIllegalMoves(board);
-            list.addAll(figure.getPossibleMoveList()); // fix: can't add int in figure list
-            
+            figure.convertAllMovesInFENNotation();
+            list.addAll(figure.getAllMovesInFenNotation());
+            //System.out.println(figure.getAllMovesInFenNotation());
         }
-
-        return list;
+        this.setAllMovesInFenNotation(list);
     }
 }

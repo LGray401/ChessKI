@@ -175,9 +175,7 @@ public class Board {
 
     public boolean isPlayerInCheck(boolean isBlack) {
         Figure king = findKing(isBlack);
-        if(king == null) {
-            return true;
-        }
+
         for (Figure opponentFigure : getOpponentFigures(isBlack)) {
             opponentFigure.calculatePossibleMoves(this);
             if (opponentFigure.canAttack(king)) {
@@ -188,12 +186,6 @@ public class Board {
     }
 
     public void setBoardFromFEN(String fen){
-
-        //TODO:
-        // Board board1 = new Board();
-        // board1.setBoardFromFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
-        // -> init board
-
 
         this.setBoard(createBoardFromFEN(fen).getBoard());
     }
@@ -344,7 +336,6 @@ public class Board {
         return halfMoveClock >= 100;
     }
 
-
     public boolean isGameOver(boolean isBlack) {
         if(isKingOfTheHill(isBlack)) return true;
         if(fiftyMoveRule() || threefoldRepetition()){
@@ -353,6 +344,7 @@ public class Board {
         };
         return false;
     }
+
 
     public void itsADraw(String reason) {
         exitGame(reason + " - it's a draw!");
@@ -527,5 +519,27 @@ public class Board {
         }
     }
 
+    ArrayList<Figure> getValidMoves(boolean isBlack) {
 
+        ArrayList<Figure> validMoves = new ArrayList<>();
+
+        for (Figure figure : this.getFiguresOfPlayer(isBlack)) {
+            figure.calculatePossibleMoves(this);
+            figure.removeIllegalMoves(this);
+            if (figure.getPossibleMoveList().size() > 0) {
+                validMoves.add(figure);
+            }
+        }
+        return validMoves;
+    }
+
+    public List<Figure> getFiguresOfPlayer(boolean isBlack) {
+        List<Figure> figures = new ArrayList<>();
+        for (Figure figure : board) {
+            if (!figure.isEmptyField() && figure.isBlack() == isBlack) {
+                figures.add(figure);
+            }
+        }
+        return figures;
+    }
 }
