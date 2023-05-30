@@ -10,9 +10,10 @@ public class Main {
         Player player2 = new Player(false);
         int amountOfMoves = 1000;
         String fenStringStart = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+        String fen = "k7/8/8/8/8/8/7K/8";
 
         Board board = new Board();
-        board.setBoardFromFEN(fenStringStart);
+        board.setBoardFromFEN(fen);
 
         for (int i = 0; i < amountOfMoves; i++) {
             //player1.printAllMovesAndAmountOfMovesGivenBoard(board);
