@@ -226,22 +226,28 @@ public class Player {
     }
 
     public Figure makeAlphaBeta(Board board) {
-        int maxDepth = 3;
+
+        int maxDepth = 1;
         Figure bestMove = null;
         int bestScore = Integer.MIN_VALUE;
-        for (Figure figure : board.getValidMoves(this.isBlack())) {
-            for(int nextMove: figure.getPossibleMoveList()) {
+        final long startTime = System.currentTimeMillis();
+        final long maxTime = 100000;
+        while (maxTime - (System.currentTimeMillis() - startTime) > (maxDepth*maxDepth*maxDepth*maxDepth) *1000) {
+            for (Figure figure : board.getValidMoves(this.isBlack())) {
+                for (int nextMove : figure.getPossibleMoveList()) {
 
-                Board newBoard = new Board(board);
-                newBoard.simulateMove(figure.copy(), nextMove);
-                int score = alphaBeta(newBoard, maxDepth, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
-                if (score > bestScore) {
-                    bestScore = score;
-                    bestMove = figure;
-                    bestMove.setNextPosition(nextMove);
+                    Board newBoard = new Board(board);
+                    newBoard.simulateMove(figure.copy(), nextMove);
+                    int score = alphaBeta(newBoard, maxDepth, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMove = figure;
+                        bestMove.setNextPosition(nextMove);
+                    }
                 }
-            }
 
+            }
+            maxDepth++;
         }
         return bestMove;
     }

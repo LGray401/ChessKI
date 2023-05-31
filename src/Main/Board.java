@@ -140,9 +140,11 @@ public class Board {
         if(figure.getNextPosition() == 100) {
             King king = (King) this.board[figure.isBlack() ? 60 : 4];
             Rook rook = (Rook) this.board[figure.isBlack() ? 63 : 0];
+            this.board[rook.getPosition()] = new EmptyField(rook.getPosition());
             this.board[figure.isBlack() ? 61 : 3] = rook;
             rook.setPosition(figure.isBlack() ? 61 : 3);
             rook.setHasMoved(true);
+            this.board[king.getPosition()] = new EmptyField(king.getPosition());
             this.board[figure.isBlack() ? 62 : 2] = king;
             king.setPosition(figure.isBlack() ? 62 : 2);
             king.setHasMoved(true);

@@ -37,7 +37,7 @@ public class Benchmark {
 
         for (int i = 0; i < amountOfRepetitions; i++) {
             long startTime = System.nanoTime();
-            player1.makeMove(this.getBoard());
+            player1.makeAlphaBeta(this.getBoard());
             long endTime = System.nanoTime();
             totalTime += (endTime - startTime);
         }

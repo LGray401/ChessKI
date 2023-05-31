@@ -8,10 +8,13 @@ public class Main {
         Player player1 = new Player(true);
         Player player2 = new Player(false);
         int amountOfMoves = 1000;
-        String fenString = "r3k2r/pp6/2p3Pb/2N1pP2/Q2p4/4P3/PP1K4/7R";
-        String fenTest = "r1B1kb2/6p1/n4nP1/2P1P1Qr/2PP3P/2Kq4/1P3p2/R1B2qR1";
+        String fenString = "rnbqk3/p6P/2n1p1P1/1r3p2/8/1PN1K3/P4P2/R1BQ1BNR";
+        String fenTest = "rnbqk3/p6P/2n1p1P1/1r3p2/8/1PN1K3/P4P2/R1BQ1BNR";
         String fenStringStart = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
 
+        //benchmark
+        //Benchmark benchmark = new Benchmark();
+        //System.out.println("Average time in milliseconds: " + benchmark.benchmarkOneMove(fenTest, 10));
         Board board = new Board();
         board.setBoardFromFEN(fenStringStart);
         //board.setBoardFromFEN(fenTest);
@@ -22,7 +25,8 @@ public class Main {
         //Figure nextMove = player2.makeMove(board);
         //nextMove.setNextPosition(nextMove.getPossibleMoveList().get((int) (Math.random() * nextMove.getPossibleMoveList().size())));
 
-        for (int i = 0; i < amountOfMoves; i++) {
+
+        while (true) {
             //player1.printAllMovesAndAmountOfMovesGivenBoard(board);
             Figure nextMove = player1.makeAlphaBeta(board);
             System.out.println("Player1 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
