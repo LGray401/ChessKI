@@ -192,6 +192,7 @@ public class Player {
     }
 
     public int minimax(Board board, int depth, boolean isMaximizingPlayer) {
+
         if (depth == 0 || board.isGameOver(this.isBlack()).isGameFinished()) {
             EndOfGame endOfGame = board.isGameOver(this.isBlack());
             if (endOfGame.isGameFinished()) {
@@ -200,59 +201,53 @@ public class Player {
                 return evaluate(this.isBlack, board);
             }
         }
-        
+
         if (isMaximizingPlayer) {
             int maxEval = Integer.MIN_VALUE;
-            List<Figure> legalMoves = board.getValidMoves(this.isBlack());
-            
-            for (Figure figureMove : legalMoves) {
-                for(Board child : board.getChildren(this.isBlack())) {
-                    int eval = minimax(child, depth - 1, false);
-                    maxEval = Math.max(maxEval, eval);
-                }
+
+            for(Board child : board.getChildren(this.isBlack())) {
+                int eval = minimax(child, depth - 1, false);
+                maxEval = Math.max(maxEval, eval);
             }
             return maxEval;
         } else {
             int minEval = Integer.MAX_VALUE;
-            List<Figure> legalMoves = board.getValidMoves(this.isBlack());
-            
-            for (Figure figureMove : legalMoves) {
-                for(Board child : board.getChildren(!this.isBlack)) {
-                    int eval = minimax(child, depth - 1, true);
-                    minEval = Math.min(minEval, eval);
-                }
 
+            for(Board child : board.getChildren(!this.isBlack)) {
+                int eval = minimax(child, depth - 1, true);
+                minEval = Math.min(minEval, eval);
             }
+
             return minEval;
         }
     }
-    
+
     public Figure findBestMove(Board board) {
         int maxEval = Integer.MIN_VALUE;
         Figure bestMove = null;
         List<Figure> legalMoves = board.getValidMoves(this.isBlack());
-        
-        for (Figure figureMove: legalMoves) {
-            for(int move: figureMove.getPossibleMoveList()) {
-                Board newBoard = new Board(board);
-                newBoard.simulateMove(figureMove.copy(), move);
-                int eval = minimax(newBoard, MAX_DEPTH, false);
 
-                if (eval > maxEval) {
-                    maxEval = eval;
-                    bestMove = figureMove;
-                    bestMove.setPosition(move);
+            for (Figure figureMove : legalMoves) {
+                for (int move : figureMove.getPossibleMoveList()) {
+                    Board newBoard = new Board(board);
+                    newBoard.simulateMove(figureMove.copy(), move);
+                    int eval = minimax(newBoard, MAX_DEPTH, false);
+                    if (eval > maxEval) {
+                        maxEval = eval;
+                        bestMove = figureMove;
+                        bestMove.setNextPosition(move);
+                    }
                 }
             }
-        }
 
-        /*if(bestMove == null) {
-            if (board.isPlayerInCheck(this.isBlack())) {
-                board.playerWon(!this.isBlack());
-            } else {
-                board.itsADraw("Stalemate");
+            if (bestMove == null) {
+                if (board.isPlayerInCheck(this.isBlack())) {
+                    board.playerWon(!this.isBlack());
+                } else {
+                    board.itsADraw("Stalemate");
+                }
             }
-        }*/
+
 
         return bestMove;
     }
