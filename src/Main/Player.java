@@ -21,6 +21,10 @@ public class Player {
     }
 
     private final long MAX_DURATION = 1000; // maximum duration
+    private int examinedPositions = 0; // number of examined positions
+    public int getExaminedPositions() {
+        return examinedPositions;
+    }
 
     public void setAllMovesInFenNotation(ArrayList<String> allMovesInFenNotation) {
         this.allMovesInFenNotation = allMovesInFenNotation;
@@ -191,6 +195,7 @@ public class Player {
 
 
     private int alphaBeta(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
+        examinedPositions++;
         if (depth == 0 || board.isGameOver(this.isBlack()).isGameFinished()) {
             EndOfGame endOfGame = board.isGameOver(this.isBlack());
             if (endOfGame.isGameFinished()) {
@@ -226,15 +231,16 @@ public class Player {
     }
 
     public Figure makeAlphaBeta(Board board) {
-
-        int maxDepth = 1;
+        examinedPositions = 0;
+        int maxDepth = 3;
         Figure bestMove = null;
         int bestScore = Integer.MIN_VALUE;
         final long startTime = System.currentTimeMillis();
         final long maxTime = 100000;
-        while (maxTime - (System.currentTimeMillis() - startTime) > (maxDepth*maxDepth*maxDepth*maxDepth) *1000) {
+      //  while (maxTime - (System.currentTimeMillis() - startTime) > (maxDepth*maxDepth*maxDepth*maxDepth) *1000) {
             for (Figure figure : board.getValidMoves(this.isBlack())) {
                 for (int nextMove : figure.getPossibleMoveList()) {
+                    examinedPositions++;
 
                     Board newBoard = new Board(board);
                     newBoard.simulateMove(figure.copy(), nextMove);
@@ -247,8 +253,8 @@ public class Player {
                 }
 
             }
-            maxDepth++;
-        }
+      //      maxDepth++;
+       // }
         return bestMove;
     }
 }
