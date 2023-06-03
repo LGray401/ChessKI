@@ -165,6 +165,7 @@ public class Board {
             //Pawn Promotion
             if (figure instanceof Pawn && (figure.getNextPosition() < 8 || figure.getNextPosition() > 55)) {
                 promotePawn(figure, figure.getNextPosition());
+                this.board[figure.getPosition()] = new EmptyField(figure.getPosition());
             } else {
 
                 //Normal Move

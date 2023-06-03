@@ -32,4 +32,9 @@ public class Queen  extends Figure {
 
         this.setPossibleMoveList(list);
     }
+
+    @Override
+    public int getTypeAsInt() {
+        return 4;
+    }
 }

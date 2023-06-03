@@ -3,6 +3,7 @@ package Main;
 import Figures.Figure;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Player {
@@ -19,6 +20,8 @@ public class Player {
     public ArrayList<String> getAllMovesInFenNotation() {
         return allMovesInFenNotation;
     }
+
+    private HashMap<Long, Integer> transpositionTable = new HashMap<>();
 
     private final long MAX_DURATION = 1000; // maximum duration
 
@@ -191,6 +194,8 @@ public class Player {
 
 
     private int alphaBeta(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
+
+
         if (depth == 0 || board.isGameOver(this.isBlack()).isGameFinished()) {
             EndOfGame endOfGame = board.isGameOver(this.isBlack());
             if (endOfGame.isGameFinished()) {
@@ -210,6 +215,7 @@ public class Player {
                     break;
                 }
             }
+
             return maxEval;
         } else {
             int minEval = Integer.MAX_VALUE;
@@ -226,6 +232,7 @@ public class Player {
     }
 
     public Figure makeAlphaBeta(Board board) {
+
 
         int maxDepth = 1;
         Figure bestMove = null;

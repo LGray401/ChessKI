@@ -91,16 +91,6 @@ public abstract class Figure {
         this.possibleMoveList = possibleMoveList;
     }
 
-
-    public Figure() {
-        this.setPossibleMoveList(new ArrayList<>());
-        this.setAllMovesInFenNotation(new ArrayList<>());
-    }
-
-    public void concatenatePossibleMoveList(ArrayList<Integer> possibleMoveList){
-        getPossibleMoveList().addAll(possibleMoveList);
-    }
-
     public boolean isEmptyField() {
         return isEmptyField;
     }
@@ -149,9 +139,22 @@ public abstract class Figure {
         this.moveSummandList = moveSummandList;
     }
 
+    public Figure() {
+        this.setPossibleMoveList(new ArrayList<>());
+        this.setAllMovesInFenNotation(new ArrayList<>());
+    }
+
+    public void concatenatePossibleMoveList(ArrayList<Integer> possibleMoveList){
+        getPossibleMoveList().addAll(possibleMoveList);
+    }
+
+
+
     public void calculatePossibleMoves(Board board) {
 
     }
+
+    public abstract int getTypeAsInt();
 
     public boolean withInPossibleRange(int i){
         if (i >= 0 && i <= 63) return true;

@@ -4,7 +4,6 @@ import Main.Board;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Pawn extends Figure {
     public Pawn(boolean isblack, int position) {
@@ -50,6 +49,11 @@ public class Pawn extends Figure {
         }
 
 
+    }
+
+    @Override
+    public int getTypeAsInt() {
+        return 0;
     }
 
 }
