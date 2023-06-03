@@ -1,7 +1,5 @@
 package Main;
 
-import Figures.Figure;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -12,10 +10,14 @@ public class Main {
         String fenStringStart = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
         String fen = "k7/8/8/8/8/8/7K/8";
 
+        //benchmark
+        Benchmark benchmark = new Benchmark();
+        benchmark.benchmarkMinmax(fenStringStart, 10);
+
         Board board = new Board();
         board.setBoardFromFEN(fen);
 
-        for (int i = 0; i < amountOfMoves; i++) {
+        /*for (int i = 0; i < amountOfMoves; i++) {
             //player1.printAllMovesAndAmountOfMovesGivenBoard(board);
             Figure nextMove = player1.findBestMove(board);
             System.out.println("Player1 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
@@ -38,6 +40,6 @@ public class Main {
             //Board.simulateGame(fenString, player1, player2, amountOfMoves);
             //System.out.println(board.createFENFromBoard(board.getBoard()));
 
-        }
+        }*/
     }
 }

@@ -3,7 +3,6 @@ package Main;
 import Figures.Figure;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class Player {
@@ -19,6 +18,10 @@ public class Player {
 
 
     private ArrayList<String> allMovesInFenNotation;
+    private int examinedPositions = 0; // number of examined positions
+    public int getExaminedPositions() {
+        return examinedPositions;
+    }
 
     public ArrayList<String> getAllMovesInFenNotation() {
         return allMovesInFenNotation;
@@ -192,6 +195,7 @@ public class Player {
     }
 
     public int minimax(Board board, int depth, boolean isMaximizingPlayer) {
+        examinedPositions++;
         if (depth == 0 || board.isGameOver(this.isBlack()).isGameFinished()) {
             EndOfGame endOfGame = board.isGameOver(this.isBlack());
             if (endOfGame.isGameFinished()) {
@@ -234,6 +238,7 @@ public class Player {
         
         for (Figure figureMove: legalMoves) {
             for(int move: figureMove.getPossibleMoveList()) {
+                examinedPositions++;
                 Board newBoard = new Board(board);
                 newBoard.simulateMove(figureMove.copy(), move);
                 int eval = minimax(newBoard, MAX_DEPTH, false);

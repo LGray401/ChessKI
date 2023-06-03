@@ -1,5 +1,7 @@
 package Main;
 
+import Figures.Figure;
+
 public class Benchmark {
 
     public Player getPlayer1() {
@@ -45,6 +47,26 @@ public class Benchmark {
         double averageTime = totalTime / (double) amountOfRepetitions;
         double averageTimeInMillis = averageTime / 1000000.0;
         return averageTimeInMillis;
+    }
+
+    public String benchmarkMinmax(String fenString, int amountOfRepetitions) {
+
+        board.setBoardFromFEN(fenString);
+        long totalTime = 0;
+        long startTime = System.nanoTime();
+        Figure bestMove = null;
+        for (int i = 0; i < amountOfRepetitions; i++) {
+            bestMove =  player1.findBestMove(this.getBoard());
+        }
+        long endTime = System.nanoTime();
+        totalTime += (endTime - startTime);
+        double averageTime = totalTime / (double) amountOfRepetitions;
+        double averageTimeInMillis = averageTime / 1000000.0;
+        System.out.println("Minmax Benchmark");
+        System.out.println("Average time in milliseconds: " + averageTimeInMillis);
+        System.out.println("Best Move: " + bestMove.getClass().getSimpleName() + " from: " + bestMove.getPosition() + " to: " + bestMove.getNextPosition());
+        System.out.println("Examined Positions: " + player1.getExaminedPositions());
+        return "Average time in milliseconds: " + averageTimeInMillis;
     }
 
 }
