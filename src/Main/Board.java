@@ -532,4 +532,13 @@ public class Board {
         if(endOfGame.isGameFinished()) return endOfGame;
         return endOfGame;
     }
+
+    public boolean isGameOverAndExit(boolean isBlack) {
+        EndOfGame endOfGame = isGameOver(isBlack);
+        if(endOfGame.isGameFinished()) {
+            exitGame(endOfGame.getReason());
+            return true;
+        }
+        return false;
+    }
 }

@@ -3,6 +3,7 @@ package Main;
 import Figures.Figure;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Player {
@@ -204,33 +205,27 @@ public class Player {
                 return evaluate(this.isBlack, board);
             }
         }
-        
+
         if (isMaximizingPlayer) {
             int maxEval = Integer.MIN_VALUE;
-            List<Figure> legalMoves = board.getValidMoves(this.isBlack());
-            
-            for (Figure figureMove : legalMoves) {
-                for(Board child : board.getChildren(this.isBlack())) {
-                    int eval = minimax(child, depth - 1, false);
-                    maxEval = Math.max(maxEval, eval);
-                }
+
+            for(Board child : board.getChildren(this.isBlack())) {
+                int eval = minimax(child, depth - 1, false);
+                maxEval = Math.max(maxEval, eval);
             }
             return maxEval;
         } else {
             int minEval = Integer.MAX_VALUE;
-            List<Figure> legalMoves = board.getValidMoves(this.isBlack());
-            
-            for (Figure figureMove : legalMoves) {
-                for(Board child : board.getChildren(!this.isBlack)) {
-                    int eval = minimax(child, depth - 1, true);
-                    minEval = Math.min(minEval, eval);
-                }
 
+            for(Board child : board.getChildren(!this.isBlack)) {
+                int eval = minimax(child, depth - 1, true);
+                minEval = Math.min(minEval, eval);
             }
+
             return minEval;
         }
     }
-    
+
     public Figure findBestMove(Board board) {
         int maxEval = Integer.MIN_VALUE;
         Figure bestMove = null;
@@ -251,13 +246,14 @@ public class Player {
             }
         }
 
-        /*if(bestMove == null) {
-            if (board.isPlayerInCheck(this.isBlack())) {
-                board.playerWon(!this.isBlack());
-            } else {
-                board.itsADraw("Stalemate");
+            if (bestMove == null) {
+                if (board.isPlayerInCheck(this.isBlack())) {
+                    board.playerWon(!this.isBlack());
+                } else {
+                    board.itsADraw("Stalemate");
+                }
             }
-        }*/
+
 
         return bestMove;
     }

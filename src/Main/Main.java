@@ -9,13 +9,15 @@ public class Main {
         int amountOfMoves = 1000;
         String fenStringStart = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
         String fen = "k7/8/8/8/8/8/7K/8";
+        String fenTest = "6r1/p5k1/3Q4/2N5/5P2/1p6/P5KP/4qR2";
+        String fenTest2 = "8/6k1/8/8/5P2/1p6/6KP/8";
 
         //benchmark
         Benchmark benchmark = new Benchmark();
         benchmark.benchmarkMinmax(fenStringStart, 10);
 
         Board board = new Board();
-        board.setBoardFromFEN(fen);
+        board.setBoardFromFEN(fenTest2);
 
         /*for (int i = 0; i < amountOfMoves; i++) {
             //player1.printAllMovesAndAmountOfMovesGivenBoard(board);
@@ -24,17 +26,17 @@ public class Main {
             board.changeBoard(nextMove);
             System.out.println("Player1 moved to: " + nextMove.getNextPosition());
             board.to2DArrayAndDisplay(board.getBoard());
-            board.isGameOver(player2.isBlack());
+            board.isGameOverAndExit(player2.isBlack());
 
             //player2.printAllMovesAndAmountOfMovesGivenBoard(board);
 
             nextMove = player2.makeMove(board);
-            nextMove.setNextPosition(nextMove.getPossibleMoveList().get((int) (Math.random() * nextMove.getPossibleMoveList().size())));
+            nextMove.setNextPosition(nextMove.getPossibleMoveList().get((int) (Math.random() * nextMove.getPossibleMoveList().size()))); // Nullpointer exception
             System.out.println("Player2 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
             board.changeBoard(nextMove);
             System.out.println("Player2 moved to: " + nextMove.getNextPosition());
             board.to2DArrayAndDisplay(board.getBoard());
-            board.isGameOver(player1.isBlack());
+            board.isGameOverAndExit(player1.isBlack());
 
 
             //Board.simulateGame(fenString, player1, player2, amountOfMoves);
