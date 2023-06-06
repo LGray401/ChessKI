@@ -12,6 +12,7 @@ public class Board {
 
     private Figure[] board = new Figure[64];
 
+
     private List<String> previousBoardStates = new ArrayList<>();
     private int halfMoveClock = 0;
 
@@ -23,6 +24,7 @@ public class Board {
         for (int i = 0; i < 64; i++) {
             this.board[i] = originalBoard.board[i].copy(); // Assuming there's a copy() method in the Figure class
         }
+
     }
 
     public Figure[] getBoard() {
@@ -33,7 +35,12 @@ public class Board {
         this.board = board;
     }
 
-    public Figure[] initialize() {
+
+
+
+
+    public static Figure[] intialize() {
+
 
         Figure[] board = new Figure[64];
 
@@ -104,13 +111,18 @@ public class Board {
     }
 
     public List<Figure> getOpponentFigures(boolean isBlack) {
-        List<Figure> opponentFigures = new ArrayList<>();
+
+        return getFiguresOfPlayer(!isBlack);
+    }
+
+    public List<Figure> getFiguresOfPlayer(boolean isBlack) {
+        List<Figure> figures = new ArrayList<>();
         for (Figure figure : board) {
-            if (!figure.isEmptyField() && figure.isBlack() != isBlack) {
-                opponentFigures.add(figure);
+            if (!figure.isEmptyField() && figure.isBlack() == isBlack) {
+                figures.add(figure);
             }
         }
-        return opponentFigures;
+        return figures;
     }
 
     public Board simulateMove(Figure figure, int move) {
@@ -137,18 +149,22 @@ public class Board {
         if(figure.getNextPosition() == 100) {
             King king = (King) this.board[figure.isBlack() ? 60 : 4];
             Rook rook = (Rook) this.board[figure.isBlack() ? 63 : 0];
+            this.board[rook.getPosition()] = new EmptyField(rook.getPosition());
             this.board[figure.isBlack() ? 61 : 3] = rook;
             rook.setPosition(figure.isBlack() ? 61 : 3);
             rook.setHasMoved(true);
+            this.board[king.getPosition()] = new EmptyField(king.getPosition());
             this.board[figure.isBlack() ? 62 : 2] = king;
             king.setPosition(figure.isBlack() ? 62 : 2);
             king.setHasMoved(true);
         } else if (figure.getNextPosition() == 101) {
             King king = (King) this.board[figure.isBlack() ? 60 : 4];
             Rook rook = (Rook) this.board[figure.isBlack() ? 56 : 7];
+            this.board[rook.getPosition()] = new EmptyField(rook.getPosition());
             this.board[figure.isBlack() ? 59 : 5] = rook;
             rook.setPosition(figure.isBlack() ? 59 : 5);
             rook.setHasMoved(true);
+            this.board[king.getPosition()] = new EmptyField(king.getPosition());
             this.board[figure.isBlack() ? 58 : 6] = king;
             king.setPosition(figure.isBlack() ? 58 : 6);
             king.setHasMoved(true);
@@ -336,13 +352,21 @@ public class Board {
         } else {
             return new EndOfGame(false);
         }
+
     }
 
-    public void itsADraw(String reason) {
-        exitGame(reason + " - it's a draw!");
+    public EndOfGame isGameOver(boolean isBlack) {
+        EndOfGame endOfGame = isKingOfTheHill(isBlack);
+        if(endOfGame.isGameFinished()) return endOfGame;
+        endOfGame = playerWon(isBlack);
+        if(endOfGame.isGameFinished()) return endOfGame;
+        endOfGame = fiftyMoveRule(isBlack);
+        if(endOfGame.isGameFinished()) return endOfGame;
+        endOfGame = threefoldRepetition(isBlack);
+        if(endOfGame.isGameFinished()) return endOfGame;
+        return endOfGame;
     }
 
-    //method to print out game is over and terminate program
     public EndOfGame playerWon(boolean isBlack) {
 
         ArrayList<Figure> allMoves = new ArrayList<>();
@@ -356,11 +380,17 @@ public class Board {
             } else {
                 return new EndOfGame(true, 0, "Stalemate", isBlack);
             }
-        } else {
+         } else {
             return new EndOfGame(false);
         }
 
     }
+
+    public void itsADraw(String reason) {
+        exitGame(reason + " - it's a draw!");
+    }
+
+
     public EndOfGame isKingOfTheHill(boolean isBlack) {
 
         ArrayList<Integer> kingOfTheHill = new ArrayList<>(Arrays.asList(27, 28, 35, 36));
@@ -372,6 +402,7 @@ public class Board {
             return new EndOfGame(false);
         }
     }
+  
     public void exitGame(String message) {
         System.out.println(message);
         System.exit(0);
@@ -481,6 +512,7 @@ public class Board {
     }
 
 
+
     ArrayList<Figure> getValidMoves(boolean isBlack) {
 
         ArrayList<Figure> validMoves = new ArrayList<>();
@@ -508,6 +540,7 @@ public class Board {
     public ArrayList<Board> getChildren(boolean isBlack) {
         ArrayList<Board> children = new ArrayList<>();
 
+
         for (Figure figure : this.
                 getValidMoves(isBlack)) {
 
@@ -520,6 +553,7 @@ public class Board {
         }
         return children;
     }
+
 
     public EndOfGame isGameOver(boolean isBlack) {
         EndOfGame endOfGame = isKingOfTheHill(isBlack);
@@ -540,5 +574,20 @@ public class Board {
             return true;
         }
         return false;
+    }
+
+    ArrayList<Figure> getValidMoves(boolean isBlack) {
+
+        ArrayList<Figure> validMoves = new ArrayList<>();
+
+        for (Figure figure : this.getFiguresOfPlayer(isBlack)) {
+            figure.calculatePossibleMoves(this);
+            figure.removeIllegalMoves(this);
+            if (figure.getPossibleMoveList().size() > 0) {
+                validMoves.add(figure);
+            }
+        }
+        return validMoves;
+
     }
 }

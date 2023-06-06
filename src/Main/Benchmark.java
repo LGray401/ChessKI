@@ -39,7 +39,7 @@ public class Benchmark {
 
         for (int i = 0; i < amountOfRepetitions; i++) {
             long startTime = System.nanoTime();
-            player1.makeMove(this.getBoard());
+            player1.makeAlphaBeta(this.getBoard());
             long endTime = System.nanoTime();
             totalTime += (endTime - startTime);
         }
@@ -49,7 +49,9 @@ public class Benchmark {
         return averageTimeInMillis;
     }
 
+
     public String benchmarkMinmax(String fenString, int amountOfRepetitions) {
+
 
         board.setBoardFromFEN(fenString);
         long totalTime = 0;
@@ -62,7 +64,33 @@ public class Benchmark {
         totalTime += (endTime - startTime);
         double averageTime = totalTime / (double) amountOfRepetitions;
         double averageTimeInMillis = averageTime / 1000000.0;
+
         System.out.println("Minmax Benchmark");
+
+        System.out.println("Average time in milliseconds: " + averageTimeInMillis);
+        System.out.println("Best Move: " + bestMove.getClass().getSimpleName() + " from: " + bestMove.getPosition() + " to: " + bestMove.getNextPosition());
+        System.out.println("Examined Positions: " + player1.getExaminedPositions());
+        return "Average time in milliseconds: " + averageTimeInMillis;
+    }
+
+  
+    public String benchmarkAlphaBeta(String fenString, int amountOfRepetitions) {
+  
+        board.setBoardFromFEN(fenString);
+        long totalTime = 0;
+        long startTime = System.nanoTime();
+        Figure bestMove = null;
+        for (int i = 0; i < amountOfRepetitions; i++) {
+                      bestMove =  player1.makeAlphaBeta(this.getBoard());
+        }
+  
+        long endTime = System.nanoTime();
+        totalTime += (endTime - startTime);
+        double averageTime = totalTime / (double) amountOfRepetitions;
+        double averageTimeInMillis = averageTime / 1000000.0;
+  
+        System.out.println("AlphaBeta Benchmark");
+
         System.out.println("Average time in milliseconds: " + averageTimeInMillis);
         System.out.println("Best Move: " + bestMove.getClass().getSimpleName() + " from: " + bestMove.getPosition() + " to: " + bestMove.getNextPosition());
         System.out.println("Examined Positions: " + player1.getExaminedPositions());
