@@ -115,15 +115,7 @@ public class Board {
         return getFiguresOfPlayer(!isBlack);
     }
 
-    public List<Figure> getFiguresOfPlayer(boolean isBlack) {
-        List<Figure> figures = new ArrayList<>();
-        for (Figure figure : board) {
-            if (!figure.isEmptyField() && figure.isBlack() == isBlack) {
-                figures.add(figure);
-            }
-        }
-        return figures;
-    }
+
 
     public Board simulateMove(Figure figure, int move) {
 
@@ -355,17 +347,7 @@ public class Board {
 
     }
 
-    public EndOfGame isGameOver(boolean isBlack) {
-        EndOfGame endOfGame = isKingOfTheHill(isBlack);
-        if(endOfGame.isGameFinished()) return endOfGame;
-        endOfGame = playerWon(isBlack);
-        if(endOfGame.isGameFinished()) return endOfGame;
-        endOfGame = fiftyMoveRule(isBlack);
-        if(endOfGame.isGameFinished()) return endOfGame;
-        endOfGame = threefoldRepetition(isBlack);
-        if(endOfGame.isGameFinished()) return endOfGame;
-        return endOfGame;
-    }
+
 
     public EndOfGame playerWon(boolean isBlack) {
 
@@ -512,20 +494,6 @@ public class Board {
     }
 
 
-
-    ArrayList<Figure> getValidMoves(boolean isBlack) {
-
-        ArrayList<Figure> validMoves = new ArrayList<>();
-
-        for (Figure figure : this.getFiguresOfPlayer(isBlack)) {
-            figure.calculatePossibleMoves(this);
-            figure.removeIllegalMoves(this);
-            if (figure.getPossibleMoveList().size() > 0) {
-                validMoves.add(figure);
-            }
-        }
-        return validMoves;
-    }
 
     public List<Figure> getFiguresOfPlayer(boolean isBlack) {
         List<Figure> figures = new ArrayList<>();
