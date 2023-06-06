@@ -1,61 +1,68 @@
 package Figures;
 
 import Main.Board;
-import helpers.MovesList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Rook extends Figure {
 
-    ArrayList<Integer> movesRight =  new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7));
-    ArrayList<Integer> movesLeft = new ArrayList<>(Arrays.asList(-1,-2,-3,-4,-5,-6,-7));
-    ArrayList<Integer> movesUp = new ArrayList<>(Arrays.asList(8, 16, 24, 32, 40, 48, 57));
-    ArrayList<Integer> movesDown = new ArrayList<>(Arrays.asList(-8,-16,-24,-32,-40,-48,-56));
 
-    public Rook (boolean isblack, int position, int nextmove) {
-        this.value = 50;
-        this.isBlack = isblack;
-        this.position = position;
-        this.nextPosition = nextmove;
-        this.possibleMoves = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,7,-1,-2,-3,-4,-5,-6,-7,-8,-16,-24,-32,-40,-48,-56, 8, 16, 24, 32, 40, 48, 57));
+
+    public Rook (boolean isblack, int position) {
+        this.setEmptyField(false);
+        this.setValue(50);
+        this.setBlack(isblack);
+        this.setPosition(position);
+        this.setMoveSummandList(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, -1, -2, -3, -4, -5, -6, -7, -8, -16, -24, -32, -40, -48, -56, 8, 16, 24, 32, 40, 48, 57)));
+        if(isblack ? (position == 56 || position == 63) : (position == 0 || position == 7)) {
+            this.setHasMoved(false);
+        } else {
+            this.setHasMoved(true);
+        }
     }
 
-    @Override
-    public List<Figure> calculatePossibleMoves(Board board) {
-        MovesList nextPossibleMoves = new MovesList();
+    public void calculatePossibleMoves(Board board) {
 
-        for (int move: movesRight) {
-            if(board.getBoard()[position + move].getClass().getName() == EmptyField.class.getName()) {
-                nextPossibleMoves.addMove(new Rook(isBlack, position, position + move));
-            }
+        ArrayList<Integer> list = new ArrayList<>();
 
-        }
+        list.addAll(this.movingNorth(board));
+        list.addAll(this.movingSouth(board));
+        list.addAll(this.movingEAST(board));
+        list.addAll(this.movingWEST(board));
 
-        for (int move: movesLeft) {
-            if(board.getBoard()[position + move].getClass().getName() == EmptyField.class.getName()) {
-                nextPossibleMoves.addMove(new Rook(isBlack, position, position + move));
-            }
+        this.setPossibleMoveList(list);
 
-        }
 
-        for (int move: movesUp) {
-            if(board.getBoard()[position + move].getClass().getName() == EmptyField.class.getName()) {
-                nextPossibleMoves.addMove(new Rook(isBlack, position, position + move));
-            }
-
-        }
-
-        for (int move: movesDown) {
-            if(board.getBoard()[position + move].getClass().getName() == EmptyField.class.getName()) {
-                nextPossibleMoves.addMove(new Rook(isBlack, position, position + move));
-            }
-
-        }
-
-        return nextPossibleMoves;
     }
+    /*public ArrayList<Integer> movingWestLongRochade(Board board) {
+
+
+
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 1; i <7; i ++){
+            if (getWestBarrier().contains(this.getPosition())) break;
+            int newPos = this.getPosition() - i;
+            if (getWestBarrier().contains(newPos) && newPos != this.getPosition()) {
+                list.add(newPos);
+                break;
+            }
+            if (withInPossibleRange(newPos)){
+                if (board.getBoard()[newPos].isEmptyField()) {
+                    list.add(newPos);
+                } else if (board.getBoard()[newPos].isBlack() != this.isBlack()){
+                    list.add(newPos);
+                    break;
+                } else if (this.isAlreadyMoved()== false &&board.getBoard()[newPos].isBlack() == this.isBlack()&& board.getBoard()[newPos]instanceof King ) {
+
+
+
+                }
+            }
+        }
+        return list;
+    }*/
+
 
 
 }

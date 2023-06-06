@@ -1,6 +1,5 @@
 package Main;
 
-import Figures.EmptyField;
 import Figures.Figure;
 import Figures.King;
 
@@ -9,9 +8,32 @@ import java.util.List;
 
 public class Player {
 
-    boolean isBlack;
-    List<Figure> legalMoves; //nicht eher figureList?
-    boolean playerInCheck;
+    private boolean isBlack;
+
+    private int winPossibility;
+    private List<Figure> figureList;
+    private boolean playerInCheck;
+    private Figure nextFigureMove;
+
+    private ArrayList<String> allMovesInFenNotation;
+
+    public ArrayList<String> getAllMovesInFenNotation() {
+        return allMovesInFenNotation;
+    }
+
+    private final long MAX_DURATION = 1000; // maximum duration
+    private int examinedPositions = 0; // number of examined positions
+    public int getExaminedPositions() {
+        return examinedPositions;
+    }
+
+    public void setAllMovesInFenNotation(ArrayList<String> allMovesInFenNotation) {
+        this.allMovesInFenNotation = allMovesInFenNotation;
+    }
+
+    public Player(boolean isBlack) {
+        this.isBlack = isBlack;
+    }
 
     public boolean isBlack() {
         return isBlack;
@@ -21,12 +43,12 @@ public class Player {
         isBlack = black;
     }
 
-    public List<Figure> getLegalMoves() {
-        return legalMoves;
+    public List<Figure> getFigureList() {
+        return figureList;
     }
 
-    public void setLegalMoves(List<Figure> legalMoves) {
-        this.legalMoves = legalMoves;
+    public void setFigureList(List<Figure> figureList) {
+        this.figureList = figureList;
     }
 
     public boolean isPlayerInCheck() {
@@ -37,117 +59,214 @@ public class Player {
         this.playerInCheck = playerInCheck;
     }
 
+
+    public Figure getNextFigureMove() {
+        return nextFigureMove;
+    }
+
+    public void setNextFigureMove(Figure nextFigureMove) {
+        this.nextFigureMove = nextFigureMove;
+
+    }
+  
     public Player(boolean isblack) {
         isBlack = isblack;
+
     }
 
-    Figure calculateMove(Board board) {
+    public int getWinPossibility() {
+        return winPossibility;
+    }
 
-        List<Figure> possibleMoves = new ArrayList<>();
+    public void setWinPossibility(int winPossibility) {
+        this.winPossibility = winPossibility;
+    }
 
-        for (Figure figure : board.getBoard())
-            if (figure.isBlack == this.isBlack) {
-                possibleMoves.addAll(figure.calculatePossibleMoves(board));
+
+    int evaluate(boolean isBlack, Board board) {
+
+
+        int eval = 0;
+
+        for(int i = 0; i < board.getBoard().length - 1; i++) {
+            if(isBlack == isBlack) {
+                int ownValue = board.getBoard()[i].getValue();
+                eval += ownValue;
+            } else {
+                int enemyValue = board.getBoard()[i].getValue();
+                eval -= enemyValue;
             }
-        legalMoves = removeIllegalMoves(board, possibleMoves);
-
-        return legalMoves.get(0);
-    }
-
-
-
-
-    List<Figure> removeIllegalMoves(List<Figure> moves) {
-
-        // return all possible moves of the figure
-
-        return null;
-    }
-
-    List<Figure> removeIllegalMoves(Board board, List<Figure> moves) {
-
-        playerInCheck = isCheckTrue(board);
-
-        for(Figure move: moves){
-            Board newBoard = new Board(board);
         }
-
-        // prüft, ob auf dem Weg zum Zielfeld alle Felder frei sind (außer beim Pferd) -> Linh
-        // prüft, ob Zielfeld leer ist oder gegnerischer Spieler drauf ist -> Ely
-        // prüft, ob man im Schach steht -> Rudi
-        // prüft, ob man nach dem Move im Schach steht -> Rudi
-        // prüft, ob man nach dem Move immer noch im Schach steht -> Rudi
-        // König schlägt König filtern -> Rudi
-
-
-        testEly(board, moves); // last method to call
-
-        return moves;
+        this.setWinPossibility(eval);
+        return eval;
     }
 
-    List<Figure> testEly(Board board, List<Figure> moves) {
 
-        List<Figure> newList = new ArrayList<>();
 
-        for (Figure figure: moves) {
-            for(int i = 0; i < figure.getPossibleMoves().size(); i++) {
-                int newPosition = figure.getPosition() + i;
-                Figure player1 = board.board[figure.getPosition()];
-                Figure player2 = board.board[newPosition];
+    private void generateAllMovesFEN(Board board){
 
-                // checks if target field is empty or occupied by enemy
-                if(player2 == EmptyField.getEmptyField()|| player1.isBlack != player2.isBlack) {
-                    newList.add(figure);
+        ArrayList<String> list = new ArrayList<>();
+
+        for (Figure figure: this.getFigureList()) {
+            figure.calculatePossibleMoves(board);
+            figure.removeIllegalMoves(board);
+            figure.convertAllMovesInFENNotation();
+            list.addAll(figure.getAllMovesInFenNotation());
+            //System.out.println(figure.getAllMovesInFenNotation());
+        }
+        this.setAllMovesInFenNotation(list);
+
+
+    }
+
+    private void createFigureListForPlayer(Board board) {
+
+        List<Figure> figureList = new ArrayList<>();
+
+        for (Figure figure : board.getBoard()) {
+            if (figure.isEmptyField()) continue;
+            if (this.isBlack() == figure.isBlack()) {
+                figureList.add(figure);
+            }
+            this.setFigureList(figureList);
+        }
+    }
+
+    public ArrayList<Integer> getAllPossibleMovesPlayer(Board board) {
+
+
+            //this.setFigureAndMovesListForPlayerGivenBoard(board); this breaks the code because the all possible moves are generated again after illegal moves are removed
+
+            ArrayList<Integer> list = new ArrayList<>();
+
+            for (Figure figure: this.getFigureList()) {
+                list.addAll(figure.getPossibleMoveList());
+            }
+            return list;
+    }
+
+    public void setFigureAndMovesListForPlayerGivenBoard(Board board){
+
+        this.createFigureListForPlayer(board);
+        this.generateAllMovesFEN(board);
+    }
+
+    public Integer amountOfLegalMovesGivenBoard(Board board){
+
+        this.createFigureListForPlayer(board);
+        this.generateAllMovesFEN(board);
+        return this.getAllPossibleMovesPlayer(board).size();
+
+    }
+
+    public ArrayList<String> getAllMovesInFENNotationGivenBoard(Board board){
+
+        this.createFigureListForPlayer(board);
+        this.generateAllMovesFEN(board);
+        return this.getAllMovesInFenNotation();
+
+    }
+
+    public void printAllMovesAndAmountOfMovesGivenBoard(Board board){
+        String color = (this.isBlack()) ? "Black" : "White";
+
+        System.out.println(color + " has these moves: " + this.getAllMovesInFENNotationGivenBoard(board));
+        System.out.println(color + " has " + this.amountOfLegalMovesGivenBoard(board) + " legal moves.");
+    }
+
+    public Figure makeMove(Board board) {
+
+        long startTime = System.currentTimeMillis();
+
+        this.createFigureListForPlayer(board);
+        this.generateAllMovesFEN(board);
+        for (Figure figure: this.getFigureList()) {
+            figure.removeIllegalMoves(board);
+        }
+        Figure f;
+        do {
+             f = this.getFigureList().get((int) (Math.random() * this.getFigureList().size()));
+/*             if(this.getAllPossibleMovesPlayer(board).size() == 0) {
+                 if (board.isPlayerInCheck(this.isBlack())) {
+                     board.playerWon(!isBlack());
+                 }
+                 else {
+                     board.itsADraw("Stalemate");
+                 }
+
+             }*/
+        } while (f.getPossibleMoveList().size() == 0 && !isExceededMaxDuration(startTime));
+
+        return f;
+    }
+
+    private boolean isExceededMaxDuration(long startTime) {
+        return (System.currentTimeMillis() - startTime) > MAX_DURATION;
+    }
+
+
+    private int alphaBeta(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
+        examinedPositions++;
+        if (depth == 0 || board.isGameOver(this.isBlack()).isGameFinished()) {
+            EndOfGame endOfGame = board.isGameOver(this.isBlack());
+            if (endOfGame.isGameFinished()) {
+                return endOfGame.getValue();
+            }else {
+                return evaluate(this.isBlack, board);
+            }
+
+        }
+        if (maximizingPlayer) {
+            int maxEval = Integer.MIN_VALUE;
+            for (Board child : board.getChildren(this.isBlack)) {
+                int eval = alphaBeta(child, depth - 1, alpha, beta, false);
+                maxEval = Math.max(maxEval, eval);
+                alpha = Math.max(alpha, eval);
+                if (beta <= alpha) {
+                    break;
+
                 }
             }
-        }
-        return newList;
-        //statt return newList, einfach instanzvariable legalMoves bzw. figureList mit setter Methode verändern? Oder einfach immer das Board returnen?
-    }
-
-    Board filterKingBeatsKing(Board board, Player otherPlayer){
-        Figure kingOfOpponent = (Figure) otherPlayer.legalMoves.stream().filter(Figures.King.class::isInstance);
-        Figure kingOfNotOpponent = (Figure) this.legalMoves.stream().filter(Figures.King.class::isInstance);
-
-        if (kingOfNotOpponent.calculatePossibleMoves().contains(kingOfOpponent.getPosition())){
-            board.board[kingOfNotOpponent.getPosition()].calculatePossibleMoves().remove(kingOfOpponent.getPosition());
-        }
-        return board;
-    }
-
-    boolean isCheckTrue(Board board){
-
-        King myKing = null;
-        List<Figure> opponentsPossibleMoves = new ArrayList<>();
-        List<Figure> opponentslegalMoves = new ArrayList<>();
-        ArrayList<Figure> opponentsFigures = new ArrayList<Figure>();
-        for(Figure figure: board.getBoard()){
-            if (figure.isBlack == this.isBlack) {
-                if (figure.getClass().getName() == King.class.getName()) {
-                    myKing = (King) figure;
+            return maxEval;
+        } else {
+            int minEval = Integer.MAX_VALUE;
+            for (Board child : board.getChildren(!this.isBlack)) {
+                int eval = alphaBeta(child, depth - 1, alpha, beta, true);
+                minEval = Math.min(minEval, eval);
+                beta = Math.min(beta, eval);
+                if (beta <= alpha) {
+                    break;
                 }
             }
+            return minEval;
         }
-
-        for (Figure figure : board.getBoard())
-            if (figure.isBlack == this.isBlack) {
-                opponentsPossibleMoves.addAll(figure.calculatePossibleMoves(board));
-            }
-        opponentslegalMoves = removeIllegalMoves(board, opponentsPossibleMoves);
-
-        for(Figure move: opponentslegalMoves) {
-            if(myKing.nextPosition == move.nextPosition){
-                return true;
-            }
-        }
-        return false;
     }
 
-    Board afterMoveStillCheck(Board board){
-        //TODO:
+    public Figure makeAlphaBeta(Board board) {
+        examinedPositions = 0;
+        int maxDepth = 3;
+        Figure bestMove = null;
+        int bestScore = Integer.MIN_VALUE;
+        final long startTime = System.currentTimeMillis();
+        final long maxTime = 100000;
+      //  while (maxTime - (System.currentTimeMillis() - startTime) > (maxDepth*maxDepth*maxDepth*maxDepth) *1000) {
+            for (Figure figure : board.getValidMoves(this.isBlack())) {
+                for (int nextMove : figure.getPossibleMoveList()) {
+                    examinedPositions++;
 
+                    Board newBoard = new Board(board);
+                    newBoard.simulateMove(figure.copy(), nextMove);
+                    int score = alphaBeta(newBoard, maxDepth, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMove = figure;
+                        bestMove.setNextPosition(nextMove);
+                    }
+                }
 
-        return board;
+            }
+      //      maxDepth++;
+       // }
+        return bestMove;
     }
-
 }
