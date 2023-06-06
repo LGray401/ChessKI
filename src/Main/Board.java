@@ -12,6 +12,7 @@ public class Board {
 
     private Figure[] board = new Figure[64];
 
+
     private List<String> previousBoardStates = new ArrayList<>();
     private int halfMoveClock = 0;
 
@@ -23,6 +24,7 @@ public class Board {
         for (int i = 0; i < 64; i++) {
             this.board[i] = originalBoard.board[i].copy(); // Assuming there's a copy() method in the Figure class
         }
+
     }
 
     public Figure[] getBoard() {
@@ -33,7 +35,12 @@ public class Board {
         this.board = board;
     }
 
-    public Figure[] initialize() {
+
+
+
+
+    public static Figure[] intialize() {
+
 
         Figure[] board = new Figure[64];
 

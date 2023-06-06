@@ -1,6 +1,7 @@
 package Main;
 
 import Figures.Figure;
+import Figures.King;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,12 +59,19 @@ public class Player {
         this.playerInCheck = playerInCheck;
     }
 
+
     public Figure getNextFigureMove() {
         return nextFigureMove;
     }
 
     public void setNextFigureMove(Figure nextFigureMove) {
         this.nextFigureMove = nextFigureMove;
+
+    }
+  
+    public Player(boolean isblack) {
+        isBlack = isblack;
+
     }
 
     public int getWinPossibility() {
@@ -74,7 +82,9 @@ public class Player {
         this.winPossibility = winPossibility;
     }
 
+
     int evaluate(boolean isBlack, Board board) {
+
 
         int eval = 0;
 
@@ -123,6 +133,7 @@ public class Player {
     }
 
     public ArrayList<Integer> getAllPossibleMovesPlayer(Board board) {
+
 
             //this.setFigureAndMovesListForPlayerGivenBoard(board); this breaks the code because the all possible moves are generated again after illegal moves are removed
 
@@ -213,6 +224,7 @@ public class Player {
                 alpha = Math.max(alpha, eval);
                 if (beta <= alpha) {
                     break;
+
                 }
             }
             return maxEval;
