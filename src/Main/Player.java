@@ -1,10 +1,8 @@
 package Main;
 
 import Figures.Figure;
-import Figures.King;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class Player {
@@ -21,17 +19,13 @@ public class Player {
 
     private ArrayList<String> allMovesInFenNotation;
     private int examinedPositions = 0; // number of examined positions
-    public int getExaminedPositions() {
-        return examinedPositions;
-    }
+
 
     public ArrayList<String> getAllMovesInFenNotation() {
         return allMovesInFenNotation;
     }
 
 
-    private final long MAX_DURATION = 1000; // maximum duration
-    private int examinedPositions = 0; // number of examined positions
     public int getExaminedPositions() {
         return examinedPositions;
     }
@@ -41,9 +35,6 @@ public class Player {
         this.allMovesInFenNotation = allMovesInFenNotation;
     }
 
-    public Player(boolean isBlack) {
-        this.isBlack = isBlack;
-    }
 
     public boolean isBlack() {
         return isBlack;
@@ -262,6 +253,7 @@ public class Player {
             }else {
                 return evaluate(this.isBlack, board);
             }
+        }
           
           if (maximizingPlayer) {
             int maxEval = Integer.MIN_VALUE;
