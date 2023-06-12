@@ -1,11 +1,11 @@
 package Main;
 
 import Figures.Figure;
+import Helpers.ZobristHashCreator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 public class Player {
 
     private boolean isBlack;
@@ -195,13 +195,17 @@ public class Player {
 
     private int alphaBeta(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
 
+        long zobristHash = ZobristHashCreator.calculateZobristHash(board.getBoard(), maximizingPlayer);
+        if (transpositionTable.containsKey(zobristHash)) {
+            return transpositionTable.get(zobristHash);
+        }
 
         if (depth == 0 || board.isGameOver(this.isBlack()).isGameFinished()) {
             EndOfGame endOfGame = board.isGameOver(this.isBlack());
             if (endOfGame.isGameFinished()) {
                 return endOfGame.getValue();
             }else {
-                return evaluate(this.isBlack, board);
+                return evaluate(this.isBlack(), board);
             }
 
         }
@@ -215,7 +219,7 @@ public class Player {
                     break;
                 }
             }
-
+            transpositionTable.put(zobristHash, maxEval);
             return maxEval;
         } else {
             int minEval = Integer.MAX_VALUE;
@@ -227,6 +231,7 @@ public class Player {
                     break;
                 }
             }
+            transpositionTable.put(zobristHash, minEval);
             return minEval;
         }
     }
