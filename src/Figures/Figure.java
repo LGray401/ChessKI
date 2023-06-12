@@ -546,5 +546,9 @@ public abstract class Figure {
 
         this.setPossibleMoveList(legalMoves);
     }
+
+    public int mobilitaet(){
+        return this.getPossibleMoveList().size();
+    }
 }
 

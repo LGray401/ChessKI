@@ -90,16 +90,11 @@ public class Player {
 
         int eval = 0;
 
-        for(int i = 0; i < board.getBoard().length - 1; i++) {
-            if(isBlack == isBlack) {
-                int ownValue = board.getBoard()[i].getValue();
-                eval += ownValue;
-            } else {
-                int enemyValue = board.getBoard()[i].getValue();
-                eval -= enemyValue;
-            }
+        for (Figure figure: this.getFigureList()) {
+            eval += figure.mobilitaet();
+            eval += figure.getValue();
+
         }
-        this.setWinPossibility(eval);
         return eval;
     }
 

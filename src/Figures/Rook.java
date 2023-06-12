@@ -63,6 +63,8 @@ public class Rook extends Figure {
         return list;
     }*/
 
-
-
+    //Bewertungsfunktionen:
+    public int mobilitaet(){
+        return this.getPossibleMoveList().size();
+    }
 }
