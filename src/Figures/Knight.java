@@ -29,6 +29,21 @@ public class Knight extends Figure{
         this.setPossibleMoveList(list);
     }
 
+    @Override
+    public int pieceSquareTable() {
+        int result = 0;
+        if ((this.getPosition() == 0) ||this.getPosition() == 7 ||this.getPosition() == 56 ||this.getPosition() == 63){
+            result = -5;
+        } else if (this.getPosition() == 1){
+            result = -4;
+        } else if (this.getPosition() == 2) {
+            result = -3;
+        } else if (this.getPosition() == 3) {
+            result = -3;
+        }
+        return result;
+    }
+
     public Integer moving1Uhr(Board board) {
 
         int newPos = this.getPosition() + 17;

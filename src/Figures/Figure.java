@@ -547,8 +547,12 @@ public abstract class Figure {
         this.setPossibleMoveList(legalMoves);
     }
 
+    //Bewertungsfunktion
+
     public int mobilitaet(){
         return this.getPossibleMoveList().size();
     }
+
+    public abstract int pieceSquareTable();
 }
 
