@@ -68,6 +68,7 @@ public class Pawn extends Figure {
                 amountOfPawnsOnFile++;
             }
             i += 7;
+
         }
 
         for (int i = currentPos; i > 0; i--) {
@@ -78,5 +79,13 @@ public class Pawn extends Figure {
         }
 
         return -(amountOfPawnsOnFile*10);
+    }
+
+    public int pawnChains(){
+       int result = 0;
+
+
+
+       return result;
     }
 }

@@ -555,10 +555,15 @@ public abstract class Figure {
 
     public abstract int pieceSquareTable();
 
-    public int pawnStructureEvaluation(){
+    public int pawnStructureEvaluation(Board board){
 
+        int result = 0;
+        if (this instanceof Pawn){
+            result += ((Pawn) this).doubledPawns(board);
+            result += ((Pawn) this).pawnChains();
+        }
 
-        return 0;
+        return result;
     }
 }
 
