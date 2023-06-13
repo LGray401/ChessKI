@@ -95,6 +95,10 @@ public class Player {
             eval += figure.getValue();
 
         }
+        for (Figure figure: board.getOpponentFigures(!isBlack)){
+            eval -= figure.mobilitaet();
+            eval -= figure.getValue();
+        }
         return eval;
     }
 
