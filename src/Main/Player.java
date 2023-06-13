@@ -87,7 +87,6 @@ public class Player {
 
     int evaluate(boolean isBlack, Board board) {
 
-
         int eval = 0;
 
         for (Figure figure: this.getFigureList()) {

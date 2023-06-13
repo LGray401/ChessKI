@@ -547,7 +547,15 @@ public abstract class Figure {
         this.setPossibleMoveList(legalMoves);
     }
 
-    //Bewertungsfunktion
+    /*
+    TODO: Bewertungsfunktion:
+          - Mobilität
+          - Piece Square Table
+          - Pawn Structure
+          - Gedeckt/Angegriffen/Verteidigen
+          - Materialaustausch (Bauer schlägt Springer ist besser)
+     */
+
 
     public int mobilitaet(){
         return this.getPossibleMoveList().size();
