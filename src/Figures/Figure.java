@@ -554,5 +554,11 @@ public abstract class Figure {
     }
 
     public abstract int pieceSquareTable();
+
+    public int pawnStructureEvaluation(){
+
+
+        return 0;
+    }
 }
 
