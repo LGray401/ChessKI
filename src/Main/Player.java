@@ -94,12 +94,13 @@ public class Player {
             eval += figure.mobilitaet();
             eval += figure.getValue();
             eval += figure.pawnStructureEvaluation(board);
-
+            eval += figure.pieceSquareTable();
         }
         for (Figure figure: board.getOpponentFigures(!isBlack)){
             eval -= figure.mobilitaet();
             eval -= figure.getValue();
             eval -= figure.pawnStructureEvaluation(board);
+            eval -= figure.pieceSquareTable();
         }
         return eval;
     }
