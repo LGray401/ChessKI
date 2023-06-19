@@ -254,6 +254,7 @@ public class Player {
                 return evaluate(this.isBlack, board);
             }
         }
+        
           
           if (maximizingPlayer) {
             int maxEval = Integer.MIN_VALUE;
@@ -280,8 +281,36 @@ public class Player {
             }
               return minEval;
         }
-    }        
-  
+    }
+
+    // Quelle: https://stackoverflow.com/questions/16500739/chess-high-branching-factor
+    public int negamax(int alpha, int beta, int depth, Board board) {
+        if (depth == 0) {
+            return evaluate(this.isBlack(), board);
+        }
+        // Null move pruning
+        if (depth > 2) {
+            makeNullMove();
+            int score = -negamax(-beta, -beta + 1, depth - 1 - R); // R is a constant
+            undoNullMove();
+            if (score >= beta) {
+                return beta;
+            }
+        }
+        // Normal search
+        for (all moves) {
+            makeMove(move);
+            int score = -negamax(-beta, -alpha, depth - 1, board);
+            undoMove(move);
+            if (score >= beta) {
+                return beta;
+            }
+            if (score > alpha) {
+                alpha = score;
+            }
+        }
+        return alpha;
+    }
 
     public Figure findBestMove(Board board) {
         int maxEval = Integer.MIN_VALUE;
