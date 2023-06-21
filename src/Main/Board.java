@@ -2,6 +2,7 @@ package Main;
 
 import Figures.Figure;
 import Figures.*;
+import Helpers.Stopwatch;
 
 
 import java.util.ArrayList;
@@ -558,11 +559,11 @@ public class Board {
         }
     }
 
-    public ArrayList<Board> getChildren(boolean isBlack) {
+    public ArrayList<Board> getChildren(boolean isBlack, Stopwatch stopwatch) {
+        stopwatch.start();
         ArrayList<Board> children = new ArrayList<>();
 
-        for (Figure figure : this.
-                getValidMoves(isBlack)) {
+        for (Figure figure : this.getValidMoves(isBlack)) {
 
             for(int nextPosition : figure.getPossibleMoveList()) {
                     Board child = this.copy();
@@ -571,6 +572,9 @@ public class Board {
                 }
 
         }
+        stopwatch.stop();
+        stopwatch.printElapsedTime("getChildren");
+        stopwatch.cumulativeElapsedTime();
         return children;
     }
 

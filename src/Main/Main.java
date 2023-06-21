@@ -1,7 +1,5 @@
 package Main;
 
-import Figures.Figure;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -13,11 +11,11 @@ public class Main {
         String fenStringStart = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
 
         //benchmark
-        //Benchmark benchmark = new Benchmark();
-        //System.out.println("Average time in milliseconds: " + benchmark.benchmarkOneMove(fenTest, 10));
+        Benchmark benchmark = new Benchmark();
+        System.out.println("Average time in milliseconds: " + benchmark.benchmarkOneMove(fenTest, 1));
         Board board = new Board();
-        board.setBoardFromFEN(fenStringStart);
-        //board.setBoardFromFEN(fenTest);
+        //board.setBoardFromFEN(fenStringStart);
+        board.setBoardFromFEN(fenTest);
 
         //board.to2DArrayAndDisplay(board.getBoard());
         //board.isGameOverAndExit(player2.isBlack());
@@ -26,7 +24,7 @@ public class Main {
         //nextMove.setNextPosition(nextMove.getPossibleMoveList().get((int) (Math.random() * nextMove.getPossibleMoveList().size())));
 
 
-        while (true) {
+        /*while (true) {
             //player1.printAllMovesAndAmountOfMovesGivenBoard(board);
             Figure nextMove = player1.makeAlphaBeta(board);
             System.out.println("Player1 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
@@ -48,6 +46,6 @@ public class Main {
 
             //System.out.println(board.createFENFromBoard(board.getBoard()));
 
-        }
+        }*/
    }
 }

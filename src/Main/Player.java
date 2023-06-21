@@ -1,6 +1,8 @@
 package Main;
 
 import Figures.Figure;
+import Helpers.Stopwatch;
+import Helpers.TranspositionTableEntry;
 import Helpers.ZobristHashCreator;
 
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class Player {
         return allMovesInFenNotation;
     }
 
-    private HashMap<Long, Integer> transpositionTable = new HashMap<>();
+    private HashMap<Long, TranspositionTableEntry> transpositionTable = new HashMap<>();
 
     private final long MAX_DURATION = 1000; // maximum duration
 
@@ -192,38 +194,46 @@ public class Player {
         return (System.currentTimeMillis() - startTime) > MAX_DURATION;
     }
 
-
+    Stopwatch stopwatchGetChildren = new Stopwatch("getChildren");
+    Stopwatch stopwatchGameOver = new Stopwatch("GameOver");
     private int alphaBeta(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
 
         long zobristHash = ZobristHashCreator.calculateZobristHash(board.getBoard(), maximizingPlayer);
-        if (transpositionTable.containsKey(zobristHash)) {
-            return transpositionTable.get(zobristHash);
-        }
 
+        TranspositionTableEntry entry = transpositionTable.get(zobristHash);
+        if (entry != null && entry.getDepth() >= depth) {
+            return entry.getScore();
+        }
+        stopwatchGameOver.start();
         if (depth == 0 || board.isGameOver(this.isBlack()).isGameFinished()) {
             EndOfGame endOfGame = board.isGameOver(this.isBlack());
             if (endOfGame.isGameFinished()) {
+                stopwatchGameOver.stop();
+                stopwatchGameOver.cumulativeElapsedTime();
                 return endOfGame.getValue();
             }else {
+                stopwatchGameOver.stop();
+                stopwatchGameOver.cumulativeElapsedTime();
                 return evaluate(this.isBlack(), board);
             }
 
         }
         if (maximizingPlayer) {
             int maxEval = Integer.MIN_VALUE;
-            for (Board child : board.getChildren(this.isBlack)) {
+            for (Board child : board.getChildren(this.isBlack, stopwatchGetChildren)) {
                 int eval = alphaBeta(child, depth - 1, alpha, beta, false);
                 maxEval = Math.max(maxEval, eval);
                 alpha = Math.max(alpha, eval);
                 if (beta <= alpha) {
                     break;
                 }
+
             }
-            transpositionTable.put(zobristHash, maxEval);
+            transpositionTable.put(zobristHash, new TranspositionTableEntry(maxEval, depth));
             return maxEval;
         } else {
             int minEval = Integer.MAX_VALUE;
-            for (Board child : board.getChildren(!this.isBlack)) {
+            for (Board child : board.getChildren(!this.isBlack, stopwatchGetChildren)) {
                 int eval = alphaBeta(child, depth - 1, alpha, beta, true);
                 minEval = Math.min(minEval, eval);
                 beta = Math.min(beta, eval);
@@ -231,7 +241,7 @@ public class Player {
                     break;
                 }
             }
-            transpositionTable.put(zobristHash, minEval);
+            transpositionTable.put(zobristHash, new TranspositionTableEntry(minEval, depth));
             return minEval;
         }
     }
@@ -261,6 +271,8 @@ public class Player {
             }
             maxDepth++;
         }
+        System.out.println("Depth: " + maxDepth);
+        System.out.println("Size of Transposition Table: " + transpositionTable.size());
         return bestMove;
     }
 }
