@@ -284,9 +284,14 @@ public class Player {
     }
 
     // Quelle: https://stackoverflow.com/questions/16500739/chess-high-branching-factor
-    public int negamax(int alpha, int beta, int depth, Board board) {
-        if (depth == 0) {
-            return evaluate(this.isBlack(), board);
+    public int negamax(int alpha, int beta, int depth, Board board, boolean maximizingPlayer) {
+        if (depth == 0 || board.isGameOver(this.isBlack()).isGameFinished()) {
+            EndOfGame endOfGame = board.isGameOver(this.isBlack());
+            if (endOfGame.isGameFinished()) {
+                return endOfGame.getValue();
+            }else {
+                return evaluate(this.isBlack, board);
+            }
         }
         // Null move pruning
         if (depth > 2) {
@@ -297,19 +302,32 @@ public class Player {
                 return beta;
             }
         }
-        // Normal search
-        for (all moves) {
-            makeMove(move);
-            int score = -negamax(-beta, -alpha, depth - 1, board);
-            undoMove(move);
-            if (score >= beta) {
-                return beta;
+        // Normal search int score = -negamax(-beta, -alpha, depth - 1, board);
+        if (maximizingPlayer) {
+            int maxEval = Integer.MIN_VALUE;
+            for (Board child : board.getChildren(this.isBlack)) {
+                int eval = -negamax(-beta, -alpha, depth - 1, board, false);
+                maxEval = Math.max(maxEval, eval);
+                alpha = Math.max(alpha, eval);
+                if (beta <= alpha) {
+                    break;
+
+                }
+
             }
-            if (score > alpha) {
-                alpha = score;
+            return maxEval;
+        } else {
+            int minEval = Integer.MAX_VALUE;
+            for (Board child : board.getChildren(!this.isBlack)) {
+                int eval = -negamax(-beta, -alpha, depth - 1, board, true);
+                minEval = Math.min(minEval, eval);
+                beta = Math.min(beta, eval);
+                if (beta <= alpha) {
+                    break;
+                }
             }
+            return minEval;
         }
-        return alpha;
     }
 
     public Figure findBestMove(Board board) {
