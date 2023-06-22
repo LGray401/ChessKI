@@ -137,7 +137,8 @@ public class Player {
                 list.addAll(figure.getPossibleMoveList());
                 sortedList.addAll(figure.sortMoves(figure.getPossibleMoveList(), this, board));
             }
-            return list;
+            //return list;
+            return sortedList;
     }
 
     public void setFigureAndMovesListForPlayerGivenBoard(Board board){
