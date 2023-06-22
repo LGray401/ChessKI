@@ -5,6 +5,7 @@ import Main.Player;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class Figure {
 
@@ -549,7 +550,7 @@ public abstract class Figure {
         this.setPossibleMoveList(legalMoves);
     }
 
-    private List<Integer> sortMoves(List<Integer> myMoves, Player player, Board board){
+    public List<Integer> sortMoves(List<Integer> myMoves, Player player, Board board){
 
         Map<Integer, Integer> moveEvalPair = new HashMap<>();
         for (Integer move: myMoves) {
@@ -558,11 +559,14 @@ public abstract class Figure {
             int eval1 = player.evaluate(player.isBlack(), newBoard);
             moveEvalPair.put(move, eval1);
         }
-        moveEvalPair = (Map<Integer, Integer>) moveEvalPair.entrySet().stream()
-                .sorted(Comparator.comparing(Map.Entry::getValue));
+        Comparator<Integer> byName = (Integer value1, Integer value2) -> value1.compareTo(value2);
 
+        LinkedHashMap<Integer, Integer> sortedMap = moveEvalPair.entrySet().stream()
+                .sorted(Map.Entry.<Integer, Integer>comparingByValue(byName))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
 
-        return (List<Integer>) moveEvalPair.keySet();
+        List<Integer> sortedList = new ArrayList<>(sortedMap.keySet());
+        return sortedList;
     }
 }
 

@@ -5,6 +5,7 @@ import Helpers.Stopwatch;
 import Helpers.TranspositionTableEntry;
 import Helpers.ZobristHashCreator;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Player {
@@ -130,9 +131,11 @@ public class Player {
             //this.setFigureAndMovesListForPlayerGivenBoard(board); this breaks the code because the all possible moves are generated again after illegal moves are removed
 
             ArrayList<Integer> list = new ArrayList<>();
+            ArrayList<Integer> sortedList = new ArrayList<>();
 
             for (Figure figure: this.getFigureList()) {
                 list.addAll(figure.getPossibleMoveList());
+                sortedList.addAll(figure.sortMoves(figure.getPossibleMoveList(), this, board));
             }
             return list;
     }
