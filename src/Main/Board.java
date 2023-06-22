@@ -134,7 +134,7 @@ public class Board {
         previousBoardStates.add(currentFEN);
     }
 
-    Board changeBoard(Figure figure) {
+    public Board changeBoard(Figure figure) {
 
 
         //Rochade

@@ -1,11 +1,10 @@
 package Figures;
 
 import Main.Board;
+import Main.Player;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public abstract class Figure {
 
@@ -548,6 +547,22 @@ public abstract class Figure {
         legalMoves.removeAll(this.getIllegalMovesList());
 
         this.setPossibleMoveList(legalMoves);
+    }
+
+    private List<Integer> sortMoves(List<Integer> myMoves, Player player, Board board){
+
+        Map<Integer, Integer> moveEvalPair = new HashMap<>();
+        for (Integer move: myMoves) {
+            this.setNextPosition(move);
+            Board newBoard = board.changeBoard(this);
+            int eval1 = player.evaluate(player.isBlack(), newBoard);
+            moveEvalPair.put(move, eval1);
+        }
+        moveEvalPair = (Map<Integer, Integer>) moveEvalPair.entrySet().stream()
+                .sorted(Comparator.comparing(Map.Entry::getValue));
+
+
+        return (List<Integer>) moveEvalPair.keySet();
     }
 }
 

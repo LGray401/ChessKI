@@ -5,9 +5,8 @@ import Helpers.Stopwatch;
 import Helpers.TranspositionTableEntry;
 import Helpers.ZobristHashCreator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+
 public class Player {
 
     private boolean isBlack;
@@ -16,20 +15,23 @@ public class Player {
     private List<Figure> figureList;
     private boolean playerInCheck;
     private Figure nextFigureMove;
-
     private ArrayList<String> allMovesInFenNotation;
-
     public ArrayList<String> getAllMovesInFenNotation() {
         return allMovesInFenNotation;
     }
-
     private HashMap<Long, TranspositionTableEntry> transpositionTable = new HashMap<>();
-
     private final long MAX_DURATION = 1000; // maximum duration
+    private List<Integer> sortedMovesListPerFigure;
 
-    public void setAllMovesInFenNotation(ArrayList<String> allMovesInFenNotation) {
-        this.allMovesInFenNotation = allMovesInFenNotation;
+    public List<Integer> getSortedMovesListPerFigure() {
+        return sortedMovesListPerFigure;
     }
+
+    public void setSortedMovesListPerFigure(List<Integer> sortedMovesListPerFigure) {
+        this.sortedMovesListPerFigure = sortedMovesListPerFigure;
+    }
+
+    public void setAllMovesInFenNotation(ArrayList<String> allMovesInFenNotation) { this.allMovesInFenNotation = allMovesInFenNotation; }
 
     public Player(boolean isBlack) {
         this.isBlack = isBlack;
@@ -75,7 +77,7 @@ public class Player {
         this.winPossibility = winPossibility;
     }
 
-    int evaluate(boolean isBlack, Board board) {
+    public int evaluate(boolean isBlack, Board board) {
 
         int eval = 0;
 
@@ -275,4 +277,6 @@ public class Player {
         System.out.println("Size of Transposition Table: " + transpositionTable.size());
         return bestMove;
     }
+
+
 }
