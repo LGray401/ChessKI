@@ -187,15 +187,7 @@ public class Player {
         Figure f;
         do {
              f = this.getFigureList().get((int) (Math.random() * this.getFigureList().size()));
-/*             if(this.getAllPossibleMovesPlayer(board).size() == 0) {
-                 if (board.isPlayerInCheck(this.isBlack())) {
-                     board.playerWon(!isBlack());
-                 }
-                 else {
-                     board.itsADraw("Stalemate");
-                 }
 
-             }*/
         } while (f.getPossibleMoveList().size() == 0 && !isExceededMaxDuration(startTime));
 
         return f;
@@ -204,9 +196,6 @@ public class Player {
     private boolean isExceededMaxDuration(long startTime) {
         return (System.currentTimeMillis() - startTime) > MAX_DURATION;
     }
-
-
-
 
     public int minimax(Board board, int depth, boolean isMaximizingPlayer) {
 
@@ -285,6 +274,7 @@ public class Player {
 
     // Quelle: https://stackoverflow.com/questions/16500739/chess-high-branching-factor
     public int negamax(int alpha, int beta, int depth, Board board, boolean maximizingPlayer) {
+
         if (depth == 0 || board.isGameOver(this.isBlack()).isGameFinished()) {
             EndOfGame endOfGame = board.isGameOver(this.isBlack());
             if (endOfGame.isGameFinished()) {
@@ -293,16 +283,24 @@ public class Player {
                 return evaluate(this.isBlack, board);
             }
         }
+
+        // quiescence search
+        if (depth < 0) {
+            return quiescenceSearch(alpha, beta, board);
+        }
+
         // Null move pruning
         if (depth > 2) {
-            makeNullMove();
-            int score = -negamax(-beta, -beta + 1, depth - 1 - R); // R is a constant
-            undoNullMove();
+            int R = 3; // Reduction factor
+            makeNullMove(maximizingPlayer);
+            int score = -negamax(-beta, -beta + 1, depth - 1 - R, board, maximizingPlayer);
+            undoNullMove(maximizingPlayer);
             if (score >= beta) {
                 return beta;
             }
         }
-        // Normal search int score = -negamax(-beta, -alpha, depth - 1, board);
+
+        // normal search alpha beta
         if (maximizingPlayer) {
             int maxEval = Integer.MIN_VALUE;
             for (Board child : board.getChildren(this.isBlack)) {
@@ -329,6 +327,86 @@ public class Player {
             return minEval;
         }
     }
+
+    public int quiescenceSearch(int alpha, int beta, Board board) {
+
+        // Evaluate the position statically
+        int score = evaluate(this.isBlack(), board);
+
+        // If the score is outside the window, return it
+        if (score >= beta) {
+            return score;
+        }
+        if (score > alpha) {
+            alpha = score;
+        }
+
+        // Generate and order capture moves
+        List<Figure> moves = generateCaptures(board);
+        // sortMoves(moves); Rudi
+
+        // Search capture moves
+        for (Figure move : moves) {
+
+            // Prune moves with negative static exchange evaluation -> optional
+            /*if (see(move) < 0) {
+                continue;
+            }*/
+
+            // Make the move and search recursively
+            Board newBoard = board.changeBoard(move);
+            score = -quiescenceSearch(-beta, -alpha, newBoard);
+            // undoMove(move); check: redundant due to newBoard?
+
+            if (score >= beta) {
+                return score;
+            }
+            if (score > alpha) {
+                alpha = score;
+            }
+        }
+        // Return the best score found
+        return alpha;
+    }
+
+    public List<Figure> generateCaptures(Board board) {
+
+        // generates all legal moves
+        List<Figure> legalMoves = board.getValidMoves(this.isBlack());
+
+        // filter only capture moves
+        List<Figure> captureList = new ArrayList<>();
+
+        for (Figure figureMove: legalMoves) {
+            for (int move : figureMove.getPossibleMoveList()) {
+                if(board.getBoard()[move].isBlack() != this.isBlack()) { // ist move = new position?
+                    captureList.add(figureMove); // check: logic?
+                }
+            }
+        }
+
+        return captureList;
+    }
+
+    public boolean makeNullMove(boolean player) {
+        boolean switchSide = !player;
+
+        return switchSide;
+    }
+
+    public boolean undoNullMove(boolean player) {
+        boolean switchSide = !player;
+
+        return switchSide;
+    }
+
+    // Funktion, die den erwarteten Materialgewinn oder -verlust nach einem Schlagzug berechnet
+    /*public int see (Figure move) {
+        int value = 0;
+
+        return value;
+    }*/
+
 
     public Figure findBestMove(Board board) {
         int maxEval = Integer.MIN_VALUE;
@@ -375,7 +453,8 @@ public class Player {
 
                     Board newBoard = new Board(board);
                     newBoard.simulateMove(figure.copy(), nextMove);
-                    int score = alphaBeta(newBoard, maxDepth, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+                    //int score = alphaBeta(newBoard, maxDepth, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
+                    int score = negamax(Integer.MIN_VALUE, Integer.MAX_VALUE, maxDepth, newBoard, this.isBlack());
                     if (score > bestScore) {
                         bestScore = score;
                         bestMove = figure;
