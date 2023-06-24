@@ -555,7 +555,6 @@ public abstract class Figure {
         Map<Integer, Integer> moveEvalPair = new HashMap<>();
         for (Integer move: myMoves) {
             Board newBoard = new Board(board);
-            int oldPosition = this.getPosition();
             this.setNextPosition(move);
             int eval1 = player.evaluate(player.isBlack(), newBoard.simulateMove(this.copy(), this.getNextPosition()));
 

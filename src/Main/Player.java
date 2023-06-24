@@ -347,7 +347,6 @@ public class Player {
 
         List<Integer> sortedList = new ArrayList<>(sortedMap.keySet());
         Collections.reverse(sortedList);
-        System.out.println("Sorted List: " + sortedList);
         return sortedList;
     }
 
