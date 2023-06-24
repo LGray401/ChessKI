@@ -5,9 +5,7 @@ import Helpers.Stopwatch;
 import Helpers.TranspositionTableEntry;
 import Helpers.ZobristHashCreator;
 
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Player {
 
@@ -18,19 +16,21 @@ public class Player {
     private boolean playerInCheck;
     private Figure nextFigureMove;
     private ArrayList<String> allMovesInFenNotation;
-    public ArrayList<String> getAllMovesInFenNotation() {
-        return allMovesInFenNotation;
-    }
     private HashMap<Long, TranspositionTableEntry> transpositionTable = new HashMap<>();
     private final long MAX_DURATION = 1000; // maximum duration
-    private List<Integer> sortedMovesListPerFigure;
 
-    public List<Integer> getSortedMovesListPerFigure() {
-        return sortedMovesListPerFigure;
+    private Map<Figure, List<Integer>> figureMoveEvalMap;
+
+    public Map<Figure, List<Integer>> getFigureMoveEvalMap() {
+        return figureMoveEvalMap;
     }
 
-    public void setSortedMovesListPerFigure(List<Integer> sortedMovesListPerFigure) {
-        this.sortedMovesListPerFigure = sortedMovesListPerFigure;
+    public void setFigureMoveEvalMap(Map<Figure, List<Integer>> figureMoveEvalMap) {
+        this.figureMoveEvalMap = figureMoveEvalMap;
+    }
+
+    public ArrayList<String> getAllMovesInFenNotation() {
+        return allMovesInFenNotation;
     }
 
     public void setAllMovesInFenNotation(ArrayList<String> allMovesInFenNotation) { this.allMovesInFenNotation = allMovesInFenNotation; }
@@ -168,10 +168,9 @@ public class Player {
                 list.addAll(figure.getPossibleMoveList());
             }
 
-            sortedList.addAll(this.sortMovesForEveryFigure(board));
-
             System.out.println("Reale Liste :" + list);
-            System.out.println("Sorted Liste :" + sortedList);
+            this.sortMovesForEveryFigure(board);
+            System.out.println("Sorted Liste :" + this.getFigureMoveEvalMap().entrySet());
 
 
             return list;
@@ -335,12 +334,14 @@ public class Player {
     public List<Integer> sortMovesForEveryFigure(Board board){
 
         List<Integer> sortedList = new ArrayList<>();
+        Map<Figure, List<Integer>> myMap = new HashMap<>();
 
         for (Figure figure: this.getFigureList()) {
-            sortedList.addAll(figure.sortMovesForOneFigure(board, this));
+            //sortedList.addAll(figure.sortMovesForOneFigure(board, this));
+            myMap.put(figure, figure.sortMovesForOneFigure(board, this));
+            this.setFigureMoveEvalMap(myMap);
         }
         return sortedList;
     }
-
-
+    //
 }
