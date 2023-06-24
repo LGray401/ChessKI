@@ -163,11 +163,12 @@ public class Player {
 
             ArrayList<Integer> list = new ArrayList<>();
             List<Integer> sortedList = new ArrayList<>();
-            sortedList = this.sortMovesForReal(board);
 
             for (Figure figure: this.getFigureList()) {
                 list.addAll(figure.getPossibleMoveList());
             }
+
+            sortedList.addAll(this.sortMovesForEveryFigure(board));
 
             System.out.println("Reale Liste :" + list);
             System.out.println("Sorted Liste :" + sortedList);
@@ -331,22 +332,13 @@ public class Player {
         return bestMove;
     }
 
-    public List<Integer> sortMovesForReal(Board board){
+    public List<Integer> sortMovesForEveryFigure(Board board){
 
-        Map<Integer, Integer> resultMap = new HashMap<>();
+        List<Integer> sortedList = new ArrayList<>();
 
         for (Figure figure: this.getFigureList()) {
-            resultMap.putAll(figure.sortMoves(figure.getPossibleMoveList(), this, board));
+            sortedList.addAll(figure.sortMovesForOneFigure(board, this));
         }
-
-        Comparator<Integer> byName = (Integer value1, Integer value2) -> value1.compareTo(value2);
-
-        LinkedHashMap<Integer, Integer> sortedMap = resultMap.entrySet().stream()
-                .sorted(Map.Entry.<Integer, Integer>comparingByValue(byName))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-
-        List<Integer> sortedList = new ArrayList<>(sortedMap.keySet());
-        Collections.reverse(sortedList);
         return sortedList;
     }
 
