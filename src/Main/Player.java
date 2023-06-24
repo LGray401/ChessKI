@@ -344,18 +344,20 @@ public class Player {
         return sortedList;
     }
 
-    /*
-    public List<Map<Figure, Integer>> sortFigureAndMoves(Board board){
+
+    public List<Map<Figure, Map<Integer, Integer>>> sortFigureAndMoves(Board board){
         List<Map<Figure, Map<Integer, Integer>>> myList = new ArrayList<>();
         List<Map<Figure, Map<Integer, Integer>>> myList2 = new ArrayList<>();
+        Map<Integer, Integer> myMap1 = new HashMap<>();
+        Map<Figure, Map<Integer, Integer>> myMap2 = new HashMap<>();
 
         int minValue = Integer.MIN_VALUE;
         this.sortMovesForEveryFigure(board);
         for (Figure figure: this.getFigureList()) {
-            myMap.add(figure, figure.getMoveEvaluationMap());
+            myMap1 = figure.getMoveEvaluationMap();
+            myMap2.put(figure, myMap1);
         }
 
-        return myList;
+        return myList2;
     }
-     */
 }
