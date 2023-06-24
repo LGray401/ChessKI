@@ -7,6 +7,7 @@ import Helpers.ZobristHashCreator;
 
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Player {
 
@@ -82,16 +83,46 @@ public class Player {
 
         int eval = 0;
 
-        for(int i = 0; i < board.getBoard().length - 1; i++) {
-            if(isBlack == isBlack) {
-                int ownValue = board.getBoard()[i].getValue();
-                eval += ownValue;
-            } else {
-                int enemyValue = board.getBoard()[i].getValue();
-                eval -= enemyValue;
+        if (!isBlack){
+            for (Figure figure: this.getFigureList()) {
+                eval += figure.getValue();
+                //System.out.println("Figure: " + figure.getClass().getSimpleName() + ", Position: " + figure.getPosition() + ", Own Value: " + eval);
+            }
+            for (Figure figure: board.getOpponentFigures(isBlack)){
+                //eval -= figure.mobilitaet();
+                eval -= figure.getValue();
+                //System.out.println("Figure: " + figure.getClass().getSimpleName() + ", Position: " + figure.getPosition() + ", Opponent Value: " + eval);
+                //eval -= figure.pawnStructureEvaluation(board);
+                //eval -= figure.pieceSquareTable();
+            }
+
+        } else {
+            for (Figure figure: this.getFigureList()) {
+                eval -= figure.getValue();
+            }
+            for (Figure figure: board.getOpponentFigures(!isBlack)){
+                //eval -= figure.mobilitaet();
+                eval += figure.getValue();
+                //eval -= figure.pawnStructureEvaluation(board);
+                //eval -= figure.pieceSquareTable();
             }
         }
-        this.setWinPossibility(eval);
+
+
+        /*
+        for (Figure figure: this.getFigureList()) {
+            //eval += figure.mobilitaet();
+            eval += figure.getValue();
+            //eval += figure.pawnStructureEvaluation(board);
+            //eval += figure.pieceSquareTable();
+        }
+        for (Figure figure: board.getOpponentFigures(!isBlack)){
+            //eval -= figure.mobilitaet();
+            eval -= figure.getValue();
+            //eval -= figure.pawnStructureEvaluation(board);
+            //eval -= figure.pieceSquareTable();
+        }
+         */
         return eval;
     }
 
@@ -131,20 +162,31 @@ public class Player {
             //this.setFigureAndMovesListForPlayerGivenBoard(board); this breaks the code because the all possible moves are generated again after illegal moves are removed
 
             ArrayList<Integer> list = new ArrayList<>();
+            List<Integer> sortedList = new ArrayList<>();
+            sortedList = this.sortMovesForReal(board);
 
             for (Figure figure: this.getFigureList()) {
                 list.addAll(figure.getPossibleMoveList());
             }
+
+            System.out.println("Reale Liste :" + list);
+            System.out.println("Sorted Liste :" + sortedList);
+
+
             return list;
     }
 
     public ArrayList<Integer> getAllSortedPossibleMovesPlayer(Board board) {
-
+        ArrayList<Integer> list = new ArrayList<>();
         ArrayList<Integer> sortedList = new ArrayList<>();
 
         for (Figure figure: this.getFigureList()) {
-            sortedList.addAll(figure.sortMoves(figure.getPossibleMoveList(), this, board));
+            list.addAll(figure.getPossibleMoveList());
+            //sortedList.addAll(figure.sortMoves(figure.getPossibleMoveList(), this, board));
         }
+        System.out.println("Reale Liste :" + list);
+        System.out.println("Sorted Liste :" + sortedList);
+
         return sortedList;
     }
 
@@ -287,6 +329,26 @@ public class Player {
         System.out.println("Depth: " + maxDepth);
         System.out.println("Size of Transposition Table: " + transpositionTable.size());
         return bestMove;
+    }
+
+    public List<Integer> sortMovesForReal(Board board){
+
+        Map<Integer, Integer> resultMap = new HashMap<>();
+
+        for (Figure figure: this.getFigureList()) {
+            resultMap.putAll(figure.sortMoves(figure.getPossibleMoveList(), this, board));
+        }
+
+        Comparator<Integer> byName = (Integer value1, Integer value2) -> value1.compareTo(value2);
+
+        LinkedHashMap<Integer, Integer> sortedMap = resultMap.entrySet().stream()
+                .sorted(Map.Entry.<Integer, Integer>comparingByValue(byName))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
+        List<Integer> sortedList = new ArrayList<>(sortedMap.keySet());
+        Collections.reverse(sortedList);
+        System.out.println("Sorted List: " + sortedList);
+        return sortedList;
     }
 
 

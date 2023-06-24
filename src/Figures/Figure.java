@@ -550,23 +550,23 @@ public abstract class Figure {
         this.setPossibleMoveList(legalMoves);
     }
 
-    public List<Integer> sortMoves(List<Integer> myMoves, Player player, Board board){
+    public Map<Integer, Integer> sortMoves(List<Integer> myMoves, Player player, Board board){
 
         Map<Integer, Integer> moveEvalPair = new HashMap<>();
         for (Integer move: myMoves) {
+            Board newBoard = new Board(board);
+            int oldPosition = this.getPosition();
             this.setNextPosition(move);
-            Board newBoard = board.changeBoard(this);
-            int eval1 = player.evaluate(player.isBlack(), newBoard);
+            int eval1 = player.evaluate(player.isBlack(), newBoard.simulateMove(this.copy(), this.getNextPosition()));
+
+            System.out.println("In SortMoves Evaluation ist: " + eval1);
+            //System.out.println(newBoard.to2DArrayAndDisplay(newBoard.getBoard()));
+            //System.out.println("Figure: " + this + ", Position: " + oldPosition + ", Next Move: " + this.getNextPosition() + ", Evaluation: " + eval1);
+
             moveEvalPair.put(move, eval1);
         }
-        Comparator<Integer> byName = (Integer value1, Integer value2) -> value1.compareTo(value2);
 
-        LinkedHashMap<Integer, Integer> sortedMap = moveEvalPair.entrySet().stream()
-                .sorted(Map.Entry.<Integer, Integer>comparingByValue(byName))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
-
-        List<Integer> sortedList = new ArrayList<>(sortedMap.keySet());
-        return sortedList;
+        return moveEvalPair;
     }
 }
 

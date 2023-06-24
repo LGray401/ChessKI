@@ -3,8 +3,8 @@ package Main;
 public class Main {
 
     public static void main(String[] args) {
-        Player player1 = new Player(true);
-        Player player2 = new Player(false);
+        Player player1 = new Player(false);
+        Player player2 = new Player(true);
         int amountOfMoves = 1000;
         String fenString = "rnbqk3/p6P/2n1p1P1/1r3p2/8/1PN1K3/P4P2/R1BQ1BNR";
         String fenTest = "rnbqk3/p6P/2n1p1P1/1r3p2/8/1PN1K3/P4P2/R1BQ1BNR";
