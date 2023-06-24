@@ -19,6 +19,7 @@ public abstract class Figure {
     private ArrayList<Integer> moveSummandList;
     private ArrayList<Integer> possibleMoveList;
     private ArrayList<String> allMovesInFenNotation;
+    private Map<Integer, Integer> moveEvaluationMap;
     private static final ArrayList<Integer> eastBarrier = new ArrayList<>(Arrays.asList(7, 15, 23, 31, 39, 47, 55, 63));
     private static final ArrayList<Integer> westBarrier = new ArrayList<>(Arrays.asList(0, 8, 16, 24, 32, 40, 48, 56));
     private static final ArrayList<Integer> northBarrier = new ArrayList<>(Arrays.asList(56, 57, 58, 59, 60, 61, 62, 63));
@@ -27,6 +28,14 @@ public abstract class Figure {
     private static final ArrayList<Integer> eastEastBarrier = new ArrayList<>(Arrays.asList(6, 14, 22, 30, 38, 46, 54, 62));
     private static final ArrayList<Integer> northNorthBarrier = new ArrayList<>(Arrays.asList(48, 49, 50, 51, 52, 53, 54, 55));
     private static final ArrayList<Integer> southSouthBarrier = new ArrayList<>(Arrays.asList(8, 9, 10, 11, 12, 13, 14, 15));
+
+    public Map<Integer, Integer> getMoveEvaluationMap() {
+        return moveEvaluationMap;
+    }
+
+    public void setMoveEvaluationMap(Map<Integer, Integer> moveEvaluationMap) {
+        this.moveEvaluationMap = moveEvaluationMap;
+    }
 
     public boolean hasMoved() {
         return hasMoved;
@@ -559,6 +568,7 @@ public abstract class Figure {
             int eval1 = player.evaluate(player.isBlack(), newBoard.simulateMove(this.copy(), this.getNextPosition()));
             moveEvalPair.put(move, eval1);
         }
+        this.setMoveEvaluationMap(moveEvalPair);
         return moveEvalPair;
     }
 

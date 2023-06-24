@@ -344,5 +344,18 @@ public class Player {
         return sortedList;
     }
 
+    /*
+    public List<Map<Figure, Integer>> sortFigureAndMoves(Board board){
+        List<Map<Figure, Map<Integer, Integer>>> myList = new ArrayList<>();
+        List<Map<Figure, Map<Integer, Integer>>> myList2 = new ArrayList<>();
 
+        int minValue = Integer.MIN_VALUE;
+        this.sortMovesForEveryFigure(board);
+        for (Figure figure: this.getFigureList()) {
+            myMap.add(figure, figure.getMoveEvaluationMap());
+        }
+
+        return myList;
+    }
+     */
 }
