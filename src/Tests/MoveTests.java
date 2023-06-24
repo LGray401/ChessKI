@@ -27,6 +27,7 @@ public class MoveTests {
         String fenString = "r2qk2r/pp1bp1bp/2np1np1/2pP4/2P1P3/2N2N2/PP3PPP/R1BQKB1R";
         board.setBoardFromFEN(fenString);
         player1.setFigureAndMovesListForPlayerGivenBoard(board);
+        System.out.println(player1.getAllMovesInFenNotation());
         Assertions.assertEquals(38, player1.amountOfLegalMovesGivenBoard(board));
     }
 

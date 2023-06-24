@@ -131,14 +131,21 @@ public class Player {
             //this.setFigureAndMovesListForPlayerGivenBoard(board); this breaks the code because the all possible moves are generated again after illegal moves are removed
 
             ArrayList<Integer> list = new ArrayList<>();
-            ArrayList<Integer> sortedList = new ArrayList<>();
 
             for (Figure figure: this.getFigureList()) {
                 list.addAll(figure.getPossibleMoveList());
-                sortedList.addAll(figure.sortMoves(figure.getPossibleMoveList(), this, board));
             }
-            //return list;
-            return sortedList;
+            return list;
+    }
+
+    public ArrayList<Integer> getAllSortedPossibleMovesPlayer(Board board) {
+
+        ArrayList<Integer> sortedList = new ArrayList<>();
+
+        for (Figure figure: this.getFigureList()) {
+            sortedList.addAll(figure.sortMoves(figure.getPossibleMoveList(), this, board));
+        }
+        return sortedList;
     }
 
     public void setFigureAndMovesListForPlayerGivenBoard(Board board){
