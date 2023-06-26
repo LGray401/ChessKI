@@ -561,7 +561,7 @@ public abstract class Figure {
         return this.getPossibleMoveList().size();
     }
 
-    public abstract int pieceSquareTable();
+    //public abstract int pieceSquareTable();
 
     public int pawnStructureEvaluation(Board board){
 

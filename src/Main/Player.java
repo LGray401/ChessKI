@@ -3,6 +3,7 @@ package Main;
 import Figures.Figure;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Player {
@@ -85,22 +86,39 @@ public class Player {
 
 
 
-    int evaluate(boolean isBlack, Board board) {
+    public int evaluate(boolean isBlack, Board board) {
 
         int eval = 0;
 
-        for (Figure figure: this.getFigureList()) {
-            eval += figure.mobilitaet();
-            eval += figure.getValue();
-            eval += figure.pawnStructureEvaluation(board);
-            eval += figure.pieceSquareTable();
+        if (!isBlack){
+            for (Figure figure: this.getFigureList()) {
+                eval += figure.getValue();
+                eval += figure.mobilitaet();
+                //eval += figure.pawnStructureEvaluation(board);
+                //eval += figure.pieceSquareTable();
+            }
+            for (Figure figure: board.getOpponentFigures(isBlack)){
+                eval -= figure.mobilitaet();
+                eval -= figure.getValue();
+                //eval -= figure.pawnStructureEvaluation(board);
+                //eval -= figure.pieceSquareTable();
+            }
+
+        } else {
+            for (Figure figure: this.getFigureList()) {
+                eval -= figure.getValue();
+                eval -= figure.mobilitaet();
+                //eval -= figure.pawnStructureEvaluation(board);
+                //eval -= figure.pieceSquareTable();
+            }
+            for (Figure figure: board.getOpponentFigures(!isBlack)){
+                eval += figure.mobilitaet();
+                eval += figure.getValue();
+                //eval += figure.pawnStructureEvaluation(board);
+                //eval += figure.pieceSquareTable();
+            }
         }
-        for (Figure figure: board.getOpponentFigures(!isBlack)){
-            eval -= figure.mobilitaet();
-            eval -= figure.getValue();
-            eval -= figure.pawnStructureEvaluation(board);
-            eval -= figure.pieceSquareTable();
-        }
+        System.out.println("Board: " + board.to2DArrayAndDisplay(board.getBoard()) + "\n" + "Evaluation: " + eval);
         return eval;
     }
 

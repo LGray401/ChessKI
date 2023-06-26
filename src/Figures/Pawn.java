@@ -9,7 +9,7 @@ import java.util.List;
 public class Pawn extends Figure {
     public Pawn(boolean isblack, int position) {
         this.setEmptyField(false);
-        this.setValue(30);
+        this.setValue(10);
         this.setBlack(isblack);
         this.setPosition(position);
         this.setMoveSummandList(new ArrayList<>(Arrays.asList(7,8,9,16)));
@@ -51,8 +51,6 @@ public class Pawn extends Figure {
 
 
     }
-
-    @Override
     public int pieceSquareTable() {
         return 0;
     }
