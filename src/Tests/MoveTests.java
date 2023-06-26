@@ -232,9 +232,11 @@ public class MoveTests {
 
         Board board = new Board();
         Player player1 = new Player(false);
+        Player player2 = new Player(true);
         String fenString = "3k4/2p4r/8/8/8/n7/1q5Q/3K2nb";
         board.setBoardFromFEN(fenString);
         player1.setFigureAndMovesListForPlayerGivenBoard(board);
+        player2.setFigureAndMovesListForPlayerGivenBoard(board);
         //System.out.println(player1.getAllMovesInFenNotation());
         System.out.println(player1.evaluate(player1.isBlack(), board));
         Assertions.assertEquals(19, player1.amountOfLegalMovesGivenBoard(board));
@@ -245,9 +247,11 @@ public class MoveTests {
 
         Board board = new Board();
         Player player1 = new Player(false);
+        Player player2 = new Player(true);
         String fenString = "3k4/R1p4r/8/8/8/n5R1/1q5Q/3K2nb";
         board.setBoardFromFEN(fenString);
         player1.setFigureAndMovesListForPlayerGivenBoard(board);
+        player2.setFigureAndMovesListForPlayerGivenBoard(board);
         //System.out.println(player1.getAllMovesInFenNotation());
         System.out.println(player1.evaluate(player1.isBlack(), board));
         Assertions.assertEquals(35, player1.amountOfLegalMovesGivenBoard(board));
@@ -257,9 +261,11 @@ public class MoveTests {
 
         Board board = new Board();
         Player player1 = new Player(false);
+        Player player2 = new Player(true);
         String fenString = "4k3/4p3/8/8/2PP4/8/PP2PPPP/RNBQKBNR";
         board.setBoardFromFEN(fenString);
         player1.setFigureAndMovesListForPlayerGivenBoard(board);
+        player2.setFigureAndMovesListForPlayerGivenBoard(board);
         //System.out.println(player1.getAllMovesInFenNotation());
         System.out.println(player1.evaluate(player1.isBlack(), board));
         Assertions.assertEquals(30, player1.amountOfLegalMovesGivenBoard(board));
@@ -270,11 +276,15 @@ public class MoveTests {
 
         Board board = new Board();
         Player player1 = new Player(false);
-        String fenString = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR";
+        Player player2 = new Player(true);
+        String fenString = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
         board.setBoardFromFEN(fenString);
         player1.setFigureAndMovesListForPlayerGivenBoard(board);
+        player2.setFigureAndMovesListForPlayerGivenBoard(board);
         //System.out.println(player1.getAllMovesInFenNotation());
         System.out.println(player1.evaluate(player1.isBlack(), board));
-        Assertions.assertEquals(30, player1.amountOfLegalMovesGivenBoard(board));
+        Assertions.assertEquals(20, player1.amountOfLegalMovesGivenBoard(board));
     }
+
+
 }
