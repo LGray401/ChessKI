@@ -559,6 +559,39 @@ public abstract class Figure {
         this.setPossibleMoveList(legalMoves);
     }
 
+    //BewertungsStuff
+
+    /*
+    TODO: Bewertungsfunktion:
+          - Mobilität
+          - Piece Square Table
+          - Pawn Structure
+          - Gedeckt/Angegriffen/Verteidigen
+          - Materialaustausch (Bauer schlägt Springer ist besser)
+     */
+
+
+    public int mobilitaet(){
+        return this.getPossibleMoveList().size();
+    }
+
+    public int pieceSquareTable(){
+        return 0;
+    };
+
+    public int pawnStructureEvaluation(Board board){
+
+        int result = 0;
+        if (this instanceof Pawn){
+            result += ((Pawn) this).doubledPawns(board);
+            result += ((Pawn) this).pawnChains();
+        }
+
+        return result;
+    }
+
+    //SortierungsStuff
+
     private Map<Integer, Integer> sortMoves(List<Integer> myMoves, Player player, Board board){
 
         Map<Integer, Integer> moveEvalPair = new HashMap<>();

@@ -51,6 +51,45 @@ public class Pawn extends Figure {
 
     }
 
+    //BewertungsStuff
+
+    //TODO: Doubled Pawns + Pawn chains + Piece Square Table
+
+    public int pieceSquareTable() {
+        return 0;
+    }
+
+
+    public int doubledPawns(Board board){
+        int amountOfPawnsOnFile = 0;
+        int currentPos = this.getPosition();
+
+        for (int i = currentPos; i < 63; i++) {
+            if (board.getBoard()[currentPos + 8] instanceof Pawn && board.getBoard()[currentPos].isBlack() == board.getBoard()[currentPos + 8].isBlack()){
+                amountOfPawnsOnFile++;
+            }
+            i += 7;
+
+        }
+
+        for (int i = currentPos; i > 0; i--) {
+            if (board.getBoard()[currentPos - 8] instanceof Pawn && board.getBoard()[currentPos].isBlack() == board.getBoard()[currentPos + 8].isBlack()){
+                amountOfPawnsOnFile++;
+            }
+            currentPos -= 7;
+        }
+
+        return -(amountOfPawnsOnFile*10);
+    }
+
+    public int pawnChains(){
+        int result = 0;
+
+
+
+        return result;
+    }
+
     @Override
     public int getTypeAsInt() {
         return 0;
