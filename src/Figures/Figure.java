@@ -19,6 +19,17 @@ public abstract class Figure {
     private ArrayList<Integer> moveSummandList;
     private ArrayList<Integer> possibleMoveList;
     private ArrayList<String> allMovesInFenNotation;
+
+    private ArrayList<Integer> captureList;
+
+    public ArrayList<Integer> getCaptureList() {
+        return captureList;
+    }
+
+    public void setCaptureList(ArrayList<Integer> captureList) {
+        this.captureList = captureList;
+    }
+
     private static final ArrayList<Integer> eastBarrier = new ArrayList<>(Arrays.asList(7, 15, 23, 31, 39, 47, 55, 63));
     private static final ArrayList<Integer> westBarrier = new ArrayList<>(Arrays.asList(0, 8, 16, 24, 32, 40, 48, 56));
     private static final ArrayList<Integer> northBarrier = new ArrayList<>(Arrays.asList(56, 57, 58, 59, 60, 61, 62, 63));

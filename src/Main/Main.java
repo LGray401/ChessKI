@@ -12,8 +12,8 @@ public class Main {
 
         String fenStringStart = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
         String fen = "k7/8/8/8/8/8/7K/8";
-        String fenTest = "6r1/p5k1/3Q4/2N5/5P2/1p6/P5KP/4qR2";
-        String fenTest2 = "q7/6k1/8/8/5P2/1p6/6KP/8";
+        String fenTest = "8/pr4k1/3Q4/2N5/5P2/1p6/P5KP/4qR2";
+        String fenTest2 = "8/5qk1/8/8/5P2/1p6/6KP/8";
 
         //benchmark
         Benchmark benchmark = new Benchmark();
@@ -21,7 +21,7 @@ public class Main {
         //benchmark.benchmarkMinmax(fenStringStart, 1);
 
         Board board = new Board();
-        board.setBoardFromFEN(fenTest2);
+        board.setBoardFromFEN(fenTest);
 
         while(true) {
 
@@ -40,5 +40,7 @@ public class Main {
             board.to2DArrayAndDisplay(board.getBoard());
             board.isGameOverAndExit(player1.isBlack());
         }
+
+        // benchmark.benchmarkNegaMax(fenTest, 1);
     }
 }

@@ -69,7 +69,7 @@ public class Player {
         this.nextFigureMove = nextFigureMove;
 
     }
-  
+
     public Player(boolean isblack) {
         isBlack = isblack;
 
@@ -84,14 +84,13 @@ public class Player {
     }
 
 
-
     int evaluate(boolean isBlack, Board board) {
 
 
         int eval = 0;
 
-        for(int i = 0; i < board.getBoard().length - 1; i++) {
-            if(isBlack == isBlack) {
+        for (int i = 0; i < board.getBoard().length - 1; i++) {
+            if (this.isBlack() == isBlack) {
                 int ownValue = board.getBoard()[i].getValue();
                 eval += ownValue;
             } else {
@@ -104,11 +103,11 @@ public class Player {
     }
 
 
-    private void generateAllMovesFEN(Board board){
+    private void generateAllMovesFEN(Board board) {
 
         ArrayList<String> list = new ArrayList<>();
 
-        for (Figure figure: this.getFigureList()) {
+        for (Figure figure : this.getFigureList()) {
             figure.calculatePossibleMoves(board);
             figure.removeIllegalMoves(board);
             figure.convertAllMovesInFENNotation();
@@ -116,8 +115,6 @@ public class Player {
             //System.out.println(figure.getAllMovesInFenNotation());
         }
         this.setAllMovesInFenNotation(list);
-
-
     }
 
     private void createFigureListForPlayer(Board board) {
@@ -136,23 +133,23 @@ public class Player {
     public ArrayList<Integer> getAllPossibleMovesPlayer(Board board) {
 
 
-            //this.setFigureAndMovesListForPlayerGivenBoard(board); this breaks the code because the all possible moves are generated again after illegal moves are removed
+        //this.setFigureAndMovesListForPlayerGivenBoard(board); this breaks the code because the all possible moves are generated again after illegal moves are removed
 
-            ArrayList<Integer> list = new ArrayList<>();
+        ArrayList<Integer> list = new ArrayList<>();
 
-            for (Figure figure: this.getFigureList()) {
-                list.addAll(figure.getPossibleMoveList());
-            }
-            return list;
+        for (Figure figure : this.getFigureList()) {
+            list.addAll(figure.getPossibleMoveList());
+        }
+        return list;
     }
 
-    public void setFigureAndMovesListForPlayerGivenBoard(Board board){
+    public void setFigureAndMovesListForPlayerGivenBoard(Board board) {
 
         this.createFigureListForPlayer(board);
         this.generateAllMovesFEN(board);
     }
 
-    public Integer amountOfLegalMovesGivenBoard(Board board){
+    public Integer amountOfLegalMovesGivenBoard(Board board) {
 
         this.createFigureListForPlayer(board);
         this.generateAllMovesFEN(board);
@@ -160,7 +157,7 @@ public class Player {
 
     }
 
-    public ArrayList<String> getAllMovesInFENNotationGivenBoard(Board board){
+    public ArrayList<String> getAllMovesInFENNotationGivenBoard(Board board) {
 
         this.createFigureListForPlayer(board);
         this.generateAllMovesFEN(board);
@@ -168,7 +165,7 @@ public class Player {
 
     }
 
-    public void printAllMovesAndAmountOfMovesGivenBoard(Board board){
+    public void printAllMovesAndAmountOfMovesGivenBoard(Board board) {
         String color = (this.isBlack()) ? "Black" : "White";
 
         System.out.println(color + " has these moves: " + this.getAllMovesInFENNotationGivenBoard(board));
@@ -181,12 +178,12 @@ public class Player {
 
         this.createFigureListForPlayer(board);
         this.generateAllMovesFEN(board);
-        for (Figure figure: this.getFigureList()) {
+        for (Figure figure : this.getFigureList()) {
             figure.removeIllegalMoves(board);
         }
         Figure f;
         do {
-             f = this.getFigureList().get((int) (Math.random() * this.getFigureList().size()));
+            f = this.getFigureList().get((int) (Math.random() * this.getFigureList().size()));
 
         } while (f.getPossibleMoveList().size() == 0 && !isExceededMaxDuration(startTime));
 
@@ -204,7 +201,7 @@ public class Player {
             EndOfGame endOfGame = board.isGameOver(this.isBlack());
             if (endOfGame.isGameFinished()) {
                 return endOfGame.getValue();
-            }else {
+            } else {
                 return evaluate(this.isBlack, board);
             }
 
@@ -213,7 +210,7 @@ public class Player {
         if (isMaximizingPlayer) {
             int maxEval = Integer.MIN_VALUE;
 
-            for(Board child : board.getChildren(this.isBlack())) {
+            for (Board child : board.getChildren(this.isBlack())) {
                 int eval = minimax(child, depth - 1, false);
                 maxEval = Math.max(maxEval, eval);
 
@@ -223,7 +220,7 @@ public class Player {
             int minEval = Integer.MAX_VALUE;
 
 
-            for(Board child : board.getChildren(!this.isBlack)) {
+            for (Board child : board.getChildren(!this.isBlack)) {
                 int eval = minimax(child, depth - 1, true);
                 minEval = Math.min(minEval, eval);
             }
@@ -232,20 +229,20 @@ public class Player {
         }
     }
 
-      private int alphaBeta(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
-        
+    private int alphaBeta(Board board, int depth, int alpha, int beta, boolean maximizingPlayer) {
+
         examinedPositions++;
         if (depth == 0 || board.isGameOver(this.isBlack()).isGameFinished()) {
             EndOfGame endOfGame = board.isGameOver(this.isBlack());
             if (endOfGame.isGameFinished()) {
                 return endOfGame.getValue();
-            }else {
+            } else {
                 return evaluate(this.isBlack, board);
             }
         }
-        
-          
-          if (maximizingPlayer) {
+
+
+        if (maximizingPlayer) {
             int maxEval = Integer.MIN_VALUE;
             for (Board child : board.getChildren(this.isBlack)) {
                 int eval = alphaBeta(child, depth - 1, alpha, beta, false);
@@ -255,12 +252,12 @@ public class Player {
                     break;
 
                 }
-              
-             }
+
+            }
             return maxEval;
         } else {
             int minEval = Integer.MAX_VALUE;
-              for (Board child : board.getChildren(!this.isBlack)) {
+            for (Board child : board.getChildren(!this.isBlack)) {
                 int eval = alphaBeta(child, depth - 1, alpha, beta, true);
                 minEval = Math.min(minEval, eval);
                 beta = Math.min(beta, eval);
@@ -268,7 +265,7 @@ public class Player {
                     break;
                 }
             }
-              return minEval;
+            return minEval;
         }
     }
 
@@ -279,7 +276,7 @@ public class Player {
             EndOfGame endOfGame = board.isGameOver(this.isBlack());
             if (endOfGame.isGameFinished()) {
                 return endOfGame.getValue();
-            }else {
+            } else {
                 return evaluate(this.isBlack, board);
             }
         }
@@ -292,8 +289,8 @@ public class Player {
         // Null move pruning
         if (depth > 2) {
             int R = 3; // Reduction factor
-            makeNullMove(maximizingPlayer);
-            int score = -negamax(-beta, -beta + 1, depth - 1 - R, board, maximizingPlayer);
+            boolean helper = makeNullMove(maximizingPlayer);
+            int score = -negamax(-beta, -beta + 1, depth - 1 - R, board, helper);
             undoNullMove(maximizingPlayer);
             if (score >= beta) {
                 return beta;
@@ -314,6 +311,7 @@ public class Player {
 
             }
             return maxEval;
+
         } else {
             int minEval = Integer.MAX_VALUE;
             for (Board child : board.getChildren(!this.isBlack)) {
@@ -346,23 +344,18 @@ public class Player {
         // sortMoves(moves); Rudi
 
         // Search capture moves
-        for (Figure move : moves) {
+        for (Figure figureMove : moves) {
+            for(int nextMove: figureMove.getCaptureList()) {
 
-            // Prune moves with negative static exchange evaluation -> optional
-            /*if (see(move) < 0) {
-                continue;
-            }*/
+                Board newBoard = board.simulateMove(figureMove.copy(), nextMove);
+                score = -quiescenceSearch(-beta, -alpha, newBoard);
 
-            // Make the move and search recursively
-            Board newBoard = board.changeBoard(move);
-            score = -quiescenceSearch(-beta, -alpha, newBoard);
-            // undoMove(move); check: redundant due to newBoard?
-
-            if (score >= beta) {
-                return score;
-            }
-            if (score > alpha) {
-                alpha = score;
+                if (score >= beta) {
+                    return score;
+                }
+                if (score > alpha) {
+                    alpha = score;
+                }
             }
         }
         // Return the best score found
@@ -373,48 +366,40 @@ public class Player {
 
         // generates all legal moves
         List<Figure> legalMoves = board.getValidMoves(this.isBlack());
+        List<Figure> figureCaptures = new ArrayList<>();
 
         // filter only capture moves
-        List<Figure> captureList = new ArrayList<>();
 
-        for (Figure figureMove: legalMoves) {
-            for (int move : figureMove.getPossibleMoveList()) {
-                if(board.getBoard()[move].isBlack() != this.isBlack()) { // ist move = new position?
-                    captureList.add(figureMove); // check: logic?
+        for (Figure figure : legalMoves) {
+
+            ArrayList<Integer> captureList = new ArrayList<>();
+            for (int move : figure.getPossibleMoveList()) {
+                if (board.getBoard()[move].isBlack() != this.isBlack()) { // ist move = new position?
+                    captureList.add(move);
                 }
             }
+            figure.setCaptureList(captureList);
+            figureCaptures.add(figure);
         }
 
-        return captureList;
+        return figureCaptures; // To Do: legalMoves überschreiben
     }
 
     public boolean makeNullMove(boolean player) {
-        boolean switchSide = !player;
-
-        return switchSide;
+        return !player;
     }
 
-    public boolean undoNullMove(boolean player) {
-        boolean switchSide = !player;
-
-        return switchSide;
+    public void undoNullMove(boolean player) {
+        player = !player;
     }
-
-    // Funktion, die den erwarteten Materialgewinn oder -verlust nach einem Schlagzug berechnet
-    /*public int see (Figure move) {
-        int value = 0;
-
-        return value;
-    }*/
-
 
     public Figure findBestMove(Board board) {
         int maxEval = Integer.MIN_VALUE;
         Figure bestMove = null;
         List<Figure> legalMoves = board.getValidMoves(this.isBlack());
-        
-        for (Figure figureMove: legalMoves) {
-            for(int move: figureMove.getPossibleMoveList()) {
+
+        for (Figure figureMove : legalMoves) {
+            for (int move : figureMove.getPossibleMoveList()) {
                 examinedPositions++;
                 Board newBoard = new Board(board);
                 newBoard.simulateMove(figureMove.copy(), move);
@@ -428,13 +413,13 @@ public class Player {
             }
         }
 
-            if (bestMove == null) {
-                if (board.isPlayerInCheck(this.isBlack())) {
-                    board.playerWon(!this.isBlack());
-                } else {
-                    board.itsADraw("Stalemate");
-                }
+        if (bestMove == null) {
+            if (board.isPlayerInCheck(this.isBlack())) {
+                board.playerWon(!this.isBlack());
+            } else {
+                board.itsADraw("Stalemate");
             }
+        }
         return bestMove;
     }
 
@@ -446,25 +431,23 @@ public class Player {
         int bestScore = Integer.MIN_VALUE;
         final long startTime = System.currentTimeMillis();
         final long maxTime = 100000;
-      //  while (maxTime - (System.currentTimeMillis() - startTime) > (maxDepth*maxDepth*maxDepth*maxDepth) *1000) {
-            for (Figure figure : board.getValidMoves(this.isBlack())) {
-                for (int nextMove : figure.getPossibleMoveList()) {
-                    examinedPositions++;
+        //  while (maxTime - (System.currentTimeMillis() - startTime) > (maxDepth*maxDepth*maxDepth*maxDepth) *1000) {
+        for (Figure figure : board.getValidMoves(this.isBlack())) {
+            for (int nextMove : figure.getPossibleMoveList()) {
+                examinedPositions++;
 
-                    Board newBoard = new Board(board);
-                    newBoard.simulateMove(figure.copy(), nextMove);
-                    //int score = alphaBeta(newBoard, maxDepth, Integer.MIN_VALUE, Integer.MAX_VALUE, false);
-                    int score = negamax(Integer.MIN_VALUE, Integer.MAX_VALUE, maxDepth, newBoard, this.isBlack());
-                    if (score > bestScore) {
-                        bestScore = score;
-                        bestMove = figure;
-                        bestMove.setNextPosition(nextMove);
-                    }
+                Board newBoard = new Board(board);
+                newBoard.simulateMove(figure.copy(), nextMove);
+                int score = negamax(Integer.MIN_VALUE, Integer.MAX_VALUE, maxDepth, newBoard, false);
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMove = figure;
+                    bestMove.setNextPosition(nextMove);
                 }
-
             }
-      //      maxDepth++;
-       // }
+        }
+        //      maxDepth++;
+        // }
 
         return bestMove;
     }

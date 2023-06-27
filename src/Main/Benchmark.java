@@ -97,5 +97,27 @@ public class Benchmark {
         return "Average time in milliseconds: " + averageTimeInMillis;
     }
 
+    public String benchmarkNegaMax(String fenString, int amountOfRepetitions) {
+        board.setBoardFromFEN(fenString);
+        long totalTime = 0;
+        long startTime = System.nanoTime();
+        Figure bestMove = null;
+        for (int i = 0; i < amountOfRepetitions; i++) {
+            bestMove =  player1.makeAlphaBeta(this.getBoard());
+        }
+
+        long endTime = System.nanoTime();
+        totalTime += (endTime - startTime);
+        double averageTime = totalTime / (double) amountOfRepetitions;
+        double averageTimeInMillis = averageTime / 1000000.0;
+
+        System.out.println("Negamax Benchmark");
+
+        System.out.println("Average time in milliseconds: " + averageTimeInMillis);
+        System.out.println("Best Move: " + bestMove.getClass().getSimpleName() + " from: " + bestMove.getPosition() + " to: " + bestMove.getNextPosition());
+        System.out.println("Examined Positions: " + player1.getExaminedPositions());
+        return "Average time in milliseconds: " + averageTimeInMillis;
+    }
+
 }
 
