@@ -72,6 +72,11 @@ public class King extends Figure {
 
     }
 
+    @Override
+    public int getTypeAsInt() {
+        return 5;
+    }
+
 
 
 }

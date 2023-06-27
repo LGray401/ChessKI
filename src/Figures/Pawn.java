@@ -4,12 +4,11 @@ import Main.Board;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Pawn extends Figure {
     public Pawn(boolean isblack, int position) {
         this.setEmptyField(false);
-        this.setValue(30);
+        this.setValue(10);
         this.setBlack(isblack);
         this.setPosition(position);
         this.setMoveSummandList(new ArrayList<>(Arrays.asList(7,8,9,16)));
@@ -50,6 +49,50 @@ public class Pawn extends Figure {
         }
 
 
+    }
+
+    //BewertungsStuff
+
+    //TODO: Doubled Pawns + Pawn chains + Piece Square Table
+
+    public int pieceSquareTable() {
+        return 0;
+    }
+
+
+    public int doubledPawns(Board board){
+        int amountOfPawnsOnFile = 0;
+        int currentPos = this.getPosition();
+
+        for (int i = currentPos; i < 63; i++) {
+            if (board.getBoard()[currentPos + 8] instanceof Pawn && board.getBoard()[currentPos].isBlack() == board.getBoard()[currentPos + 8].isBlack()){
+                amountOfPawnsOnFile++;
+            }
+            i += 7;
+
+        }
+
+        for (int i = currentPos; i > 0; i--) {
+            if (board.getBoard()[currentPos - 8] instanceof Pawn && board.getBoard()[currentPos].isBlack() == board.getBoard()[currentPos + 8].isBlack()){
+                amountOfPawnsOnFile++;
+            }
+            currentPos -= 7;
+        }
+
+        return -(amountOfPawnsOnFile*10);
+    }
+
+    public int pawnChains(){
+        int result = 0;
+
+
+
+        return result;
+    }
+
+    @Override
+    public int getTypeAsInt() {
+        return 0;
     }
 
 }

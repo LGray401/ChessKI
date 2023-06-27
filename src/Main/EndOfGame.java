@@ -51,6 +51,4 @@ public class EndOfGame {
         this.winner = isBlack ? "Black" : "White";
     }
 
-
 }
-

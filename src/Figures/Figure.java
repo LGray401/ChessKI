@@ -1,6 +1,7 @@
 package Figures;
 
 import Main.Board;
+import Main.Player;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public abstract class Figure {
         this.captureList = captureList;
     }
 
+    private Map<Integer, Integer> moveEvaluationMap;
     private static final ArrayList<Integer> eastBarrier = new ArrayList<>(Arrays.asList(7, 15, 23, 31, 39, 47, 55, 63));
     private static final ArrayList<Integer> westBarrier = new ArrayList<>(Arrays.asList(0, 8, 16, 24, 32, 40, 48, 56));
     private static final ArrayList<Integer> northBarrier = new ArrayList<>(Arrays.asList(56, 57, 58, 59, 60, 61, 62, 63));
@@ -38,6 +40,14 @@ public abstract class Figure {
     private static final ArrayList<Integer> eastEastBarrier = new ArrayList<>(Arrays.asList(6, 14, 22, 30, 38, 46, 54, 62));
     private static final ArrayList<Integer> northNorthBarrier = new ArrayList<>(Arrays.asList(48, 49, 50, 51, 52, 53, 54, 55));
     private static final ArrayList<Integer> southSouthBarrier = new ArrayList<>(Arrays.asList(8, 9, 10, 11, 12, 13, 14, 15));
+
+    public Map<Integer, Integer> getMoveEvaluationMap() {
+        return moveEvaluationMap;
+    }
+
+    public void setMoveEvaluationMap(Map<Integer, Integer> moveEvaluationMap) {
+        this.moveEvaluationMap = moveEvaluationMap;
+    }
 
     public boolean hasMoved() {
         return hasMoved;
@@ -160,9 +170,22 @@ public abstract class Figure {
         this.moveSummandList = moveSummandList;
     }
 
+    public Figure() {
+        this.setPossibleMoveList(new ArrayList<>());
+        this.setAllMovesInFenNotation(new ArrayList<>());
+    }
+
+    public void concatenatePossibleMoveList(ArrayList<Integer> possibleMoveList){
+        getPossibleMoveList().addAll(possibleMoveList);
+    }
+
+
+
     public void calculatePossibleMoves(Board board) {
 
     }
+
+    public abstract int getTypeAsInt();
 
     public boolean withInPossibleRange(int i){
         if (i >= 0 && i <= 63) return true;
@@ -557,5 +580,65 @@ public abstract class Figure {
 
         this.setPossibleMoveList(legalMoves);
     }
-}
 
+    //BewertungsStuff
+
+    /*
+    TODO: Bewertungsfunktion:
+          - Mobilität
+          - Piece Square Table
+          - Pawn Structure
+          - Gedeckt/Angegriffen/Verteidigen
+          - Materialaustausch (Bauer schlägt Springer ist besser)
+     */
+
+
+    public int mobilitaet(){
+        return this.getPossibleMoveList().size();
+    }
+
+    public int pieceSquareTable(){
+        return 0;
+    };
+
+    public int pawnStructureEvaluation(Board board){
+
+        int result = 0;
+        if (this instanceof Pawn){
+            result += ((Pawn) this).doubledPawns(board);
+            result += ((Pawn) this).pawnChains();
+        }
+
+        return result;
+    }
+
+    //SortierungsStuff
+
+    private Map<Integer, Integer> sortMoves(List<Integer> myMoves, Player player, Board board){
+
+        Map<Integer, Integer> moveEvalPair = new HashMap<>();
+        for (Integer move: myMoves) {
+            Board newBoard = new Board(board);
+            this.setNextPosition(move);
+            int eval1 = player.evaluate(player.isBlack(), newBoard.simulateMove(this.copy(), this.getNextPosition()));
+            moveEvalPair.put(move, eval1);
+        }
+        this.setMoveEvaluationMap(moveEvalPair);
+        return moveEvalPair;
+    }
+
+    public List<Integer> sortMovesForOneFigure(Board board, Player player){
+
+        Map<Integer, Integer> resultMap = new HashMap<>();
+        resultMap.putAll(this.sortMoves(this.getPossibleMoveList(), player, board));
+        Comparator<Integer> byName = (Integer value1, Integer value2) -> value1.compareTo(value2);
+
+        LinkedHashMap<Integer, Integer> sortedMap = resultMap.entrySet().stream()
+                .sorted(Map.Entry.<Integer, Integer>comparingByValue(byName))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
+        List<Integer> sortedList = new ArrayList<>(sortedMap.keySet());
+        Collections.reverse(sortedList);
+        return sortedList;
+    }
+}

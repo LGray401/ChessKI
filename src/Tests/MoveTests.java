@@ -27,6 +27,7 @@ public class MoveTests {
         String fenString = "r2qk2r/pp1bp1bp/2np1np1/2pP4/2P1P3/2N2N2/PP3PPP/R1BQKB1R";
         board.setBoardFromFEN(fenString);
         player1.setFigureAndMovesListForPlayerGivenBoard(board);
+        System.out.println(player1.getAllMovesInFenNotation());
         Assertions.assertEquals(38, player1.amountOfLegalMovesGivenBoard(board));
     }
 
@@ -71,6 +72,7 @@ public class MoveTests {
         String fenString = "1k6/p1nrp3/n2p4/2p5/3PP3/2P2P2/P7/RN4K1";
         board.setBoardFromFEN(fenString);
         player1.setFigureAndMovesListForPlayerGivenBoard(board);
+        System.out.println(player1.getAllMovesInFenNotation());
         Assertions.assertEquals(14, player1.amountOfLegalMovesGivenBoard(board));
     }
 
@@ -228,10 +230,28 @@ public class MoveTests {
         Assertions.assertEquals(40, player1.amountOfLegalMovesGivenBoard(board));
     }
 
+    //3k4/2p4r/8/8/8/8/PPPPPPPQ/3K4
+    @Test
+    void stellungTestForEvaluate1(){
 
+        Board board = new Board();
+        Player player1 = new Player(false);
+        String fenString = "3k4/2p4r/8/8/8/n7/1q5Q/3K2nb";
+        board.setBoardFromFEN(fenString);
+        player1.setFigureAndMovesListForPlayerGivenBoard(board);
+        System.out.println(player1.getAllMovesInFenNotation());
+        Assertions.assertEquals(19, player1.amountOfLegalMovesGivenBoard(board));
+    }
 
+    @Test
+    void stellungTestForEvaluate2(){
 
-
-
-
+        Board board = new Board();
+        Player player1 = new Player(false);
+        String fenString = "3k4/R1p4r/8/8/8/n5R1/1q5Q/3K2nb";
+        board.setBoardFromFEN(fenString);
+        player1.setFigureAndMovesListForPlayerGivenBoard(board);
+        System.out.println(player1.getAllMovesInFenNotation());
+        Assertions.assertEquals(35, player1.amountOfLegalMovesGivenBoard(board));
+    }
 }
