@@ -559,8 +559,8 @@ public class Board {
         }
     }
 
-    public ArrayList<Board> getChildren(boolean isBlack, Stopwatch stopwatch) {
-        stopwatch.start();
+    public ArrayList<Board> getChildren(boolean isBlack) {
+        //stopwatch.start();
         ArrayList<Board> children = new ArrayList<>();
 
         for (Figure figure : this.getValidMoves(isBlack)) {
@@ -572,9 +572,9 @@ public class Board {
                 }
 
         }
-        stopwatch.stop();
+        /*stopwatch.stop();
         stopwatch.printElapsedTime("getChildren");
-        stopwatch.cumulativeElapsedTime();
+        stopwatch.cumulativeElapsedTime();*/
         return children;
     }
 

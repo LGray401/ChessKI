@@ -22,8 +22,9 @@ public class Main {
 
         Board board = new Board();
         board.setBoardFromFEN(fenTest);
-
-        while(true) {
+        //player1.setFigureAndMovesListForPlayerGivenBoard(board);
+        //player2.setFigureAndMovesListForPlayerGivenBoard(board);
+        /*while(true) {
 
             Figure nextMove = player1.makeAlphaBeta(board); // black (lower case) wins
             System.out.println("Player1 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
@@ -39,8 +40,8 @@ public class Main {
             System.out.println("Player2 moved to: " + nextMove.getNextPosition());
             board.to2DArrayAndDisplay(board.getBoard());
             board.isGameOverAndExit(player1.isBlack());
-        }
+        }*/
 
-        // benchmark.benchmarkNegaMax(fenTest, 1);
+        benchmark.benchmarkNegaMax(fenTest, 1);
     }
 }

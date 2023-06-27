@@ -4,9 +4,8 @@ import Main.Board;
 import Main.Player;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class Figure {
 
@@ -169,22 +168,9 @@ public abstract class Figure {
     public void setMoveSummandList(ArrayList<Integer> moveSummandList) {
         this.moveSummandList = moveSummandList;
     }
-
-    public Figure() {
-        this.setPossibleMoveList(new ArrayList<>());
-        this.setAllMovesInFenNotation(new ArrayList<>());
-    }
-
-    public void concatenatePossibleMoveList(ArrayList<Integer> possibleMoveList){
-        getPossibleMoveList().addAll(possibleMoveList);
-    }
-
-
-
     public void calculatePossibleMoves(Board board) {
 
     }
-
     public abstract int getTypeAsInt();
 
     public boolean withInPossibleRange(int i){

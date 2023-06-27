@@ -3,7 +3,9 @@ package Main;
 import Figures.Figure;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Player {
 
@@ -19,6 +21,16 @@ public class Player {
 
     private ArrayList<String> allMovesInFenNotation;
     private int examinedPositions = 0; // number of examined positions
+
+    private Map<Figure, List<Integer>> figureMoveEvalMap;
+
+    public Map<Figure, List<Integer>> getFigureMoveEvalMap() {
+        return figureMoveEvalMap;
+    }
+
+    public void setFigureMoveEvalMap(Map<Figure, List<Integer>> figureMoveEvalMap) {
+        this.figureMoveEvalMap = figureMoveEvalMap;
+    }
 
 
     public ArrayList<String> getAllMovesInFenNotation() {
@@ -84,21 +96,39 @@ public class Player {
     }
 
 
-    int evaluate(boolean isBlack, Board board) {
-
+    public int evaluate(boolean isBlack, Board board) {
 
         int eval = 0;
 
-        for (int i = 0; i < board.getBoard().length - 1; i++) {
-            if (this.isBlack() == isBlack) {
-                int ownValue = board.getBoard()[i].getValue();
-                eval += ownValue;
-            } else {
-                int enemyValue = board.getBoard()[i].getValue();
-                eval -= enemyValue;
+        if (!isBlack){
+            for (Figure figure: this.getFigureList()) {
+                eval += figure.getValue();
+                eval += figure.mobilitaet();
+                //eval += figure.pawnStructureEvaluation(board);
+                //eval += figure.pieceSquareTable();
+            }
+            for (Figure figure: board.getOpponentFigures(isBlack)){
+                eval -= figure.mobilitaet();
+                eval -= figure.getValue();
+                //eval -= figure.pawnStructureEvaluation(board);
+                //eval -= figure.pieceSquareTable();
+            }
+
+        } else {
+            for (Figure figure: this.getFigureList()) {
+                eval -= figure.getValue();
+                eval -= figure.mobilitaet();
+                //eval -= figure.pawnStructureEvaluation(board);
+                //eval -= figure.pieceSquareTable();
+            }
+            for (Figure figure: board.getOpponentFigures(!isBlack)){
+                eval += figure.mobilitaet();
+                eval += figure.getValue();
+                //eval += figure.pawnStructureEvaluation(board);
+                //eval += figure.pieceSquareTable();
             }
         }
-        this.setWinPossibility(eval);
+        //System.out.println("Board: " + board.to2DArrayAndDisplay(board.getBoard()) + "\n" + "Evaluation: " + eval);
         return eval;
     }
 
@@ -331,7 +361,6 @@ public class Player {
         // Evaluate the position statically
         int score = evaluate(this.isBlack(), board);
 
-        // If the score is outside the window, return it
         if (score >= beta) {
             return score;
         }
@@ -341,7 +370,9 @@ public class Player {
 
         // Generate and order capture moves
         List<Figure> moves = generateCaptures(board);
+
         // sortMoves(moves); Rudi
+
 
         // Search capture moves
         for (Figure figureMove : moves) {
@@ -450,5 +481,35 @@ public class Player {
         // }
 
         return bestMove;
+    }
+
+    public List<Integer> sortMovesForEveryFigure(Board board){
+
+        List<Integer> sortedList = new ArrayList<>();
+        Map<Figure, List<Integer>> myMap = new HashMap<>();
+
+        for (Figure figure: this.getFigureList()) {
+            //sortedList.addAll(figure.sortMovesForOneFigure(board, this));
+            myMap.put(figure, figure.sortMovesForOneFigure(board, this));
+            this.setFigureMoveEvalMap(myMap);
+        }
+        return sortedList;
+    }
+
+
+    public List<Map<Figure, Map<Integer, Integer>>> sortFigureAndMoves(Board board){
+        List<Map<Figure, Map<Integer, Integer>>> myList = new ArrayList<>();
+        List<Map<Figure, Map<Integer, Integer>>> myList2 = new ArrayList<>();
+        Map<Integer, Integer> myMap1 = new HashMap<>();
+        Map<Figure, Map<Integer, Integer>> myMap2 = new HashMap<>();
+
+        int minValue = Integer.MIN_VALUE;
+        this.sortMovesForEveryFigure(board);
+        for (Figure figure: this.getFigureList()) {
+            myMap1 = figure.getMoveEvaluationMap();
+            myMap2.put(figure, myMap1);
+        }
+
+        return myList2;
     }
 }
