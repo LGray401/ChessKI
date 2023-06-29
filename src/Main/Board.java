@@ -573,7 +573,6 @@ public class Board {
 
         }
         stopwatch.stop();
-        stopwatch.printElapsedTime("getChildren");
         stopwatch.cumulativeElapsedTime();
         return children;
     }

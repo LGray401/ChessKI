@@ -21,7 +21,10 @@ public class Stopwatch {
     public void stop() {
         this.stopTime = System.nanoTime();
         this.running = false;
-        cumulativeElapsedTime += (stopTime - startTime);
+        if (0 < startTime) {
+            cumulativeElapsedTime += (stopTime - startTime);
+        }
+
     }
 
     public long getElapsedTime() {
