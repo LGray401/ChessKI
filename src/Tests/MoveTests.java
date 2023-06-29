@@ -254,4 +254,16 @@ public class MoveTests {
         System.out.println(player1.getAllMovesInFenNotation());
         Assertions.assertEquals(35, player1.amountOfLegalMovesGivenBoard(board));
     }
+
+    @Test
+    void stellungTestForEvaluate5(){
+
+        Board board = new Board();
+        Player player1 = new Player(false);
+        String fenString = "8/pr4k1/3Q4/2N5/5P2/1p6/P5KP/4qR2";
+        board.setBoardFromFEN(fenString);
+        player1.setFigureAndMovesListForPlayerGivenBoard(board);
+        System.out.println(player1.getAllMovesInFenNotation());
+        Assertions.assertEquals(42, player1.amountOfLegalMovesGivenBoard(board));
+    }
 }
