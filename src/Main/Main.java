@@ -1,7 +1,5 @@
 package Main;
 
-import Figures.Figure;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -10,18 +8,18 @@ public class Main {
         Player player2 = new Player(false);
         int amountOfMoves = 1000;
 
-        String fenStringStart = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+        String startgame = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+        String midgame = "rnbqk3/p6P/2n1p1P1/1r3p2/8/1PN1K3/P4P2/R1BQ1BNR";
+        String endgame = "6r1/p5k1/3Q4/2N5/5P2/1p6/P5KP/4qR2";
         String fen = "k7/8/8/8/8/8/7K/8";
-        String fenTest = "8/pr4k1/3Q4/2N5/5P2/1p6/P5KP/4qR2";
-        String fenTest2 = "8/5qk1/8/8/5P2/1p6/6KP/8";
-
         //benchmark
         Benchmark benchmark = new Benchmark();
+        benchmark.benchmarkNegaMax(endgame, 1);
         //benchmark.benchmarkAlphaBeta(fenStringStart, 10);
         //benchmark.benchmarkMinmax(fenStringStart, 1);
 
-        Board board = new Board();
-        board.setBoardFromFEN(fenTest);
+        //Board board = new Board();
+        //board.setBoardFromFEN(endgame);
         //player1.setFigureAndMovesListForPlayerGivenBoard(board);
         //player2.setFigureAndMovesListForPlayerGivenBoard(board);
         /*while(true) {
@@ -42,6 +40,6 @@ public class Main {
             board.isGameOverAndExit(player1.isBlack());
         }*/
 
-        benchmark.benchmarkNegaMax(fenTest, 1);
+
     }
 }
