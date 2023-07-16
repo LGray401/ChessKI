@@ -51,4 +51,12 @@ public class EndOfGame {
         this.winner = isBlack ? "Black" : "White";
     }
 
+    public int getScore(boolean isBlack) {
+        if (isBlack == winner.equals("Black")) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
 }

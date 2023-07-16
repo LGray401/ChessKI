@@ -14,31 +14,34 @@ public class Main {
         String fen = "k7/8/8/8/8/8/7K/8";
         //benchmark
         Benchmark benchmark = new Benchmark();
-        benchmark.benchmarkNegaMax(endgame, 1);
+        //benchmark.benchmarkNegaMax(endgame, 1);
         //benchmark.benchmarkAlphaBeta(fenStringStart, 10);
         //benchmark.benchmarkMinmax(fenStringStart, 1);
 
-        //Board board = new Board();
-        //board.setBoardFromFEN(endgame);
+        Board board = new Board();
+        board.setBoardFromFEN(startgame);
         //player1.setFigureAndMovesListForPlayerGivenBoard(board);
         //player2.setFigureAndMovesListForPlayerGivenBoard(board);
-        /*while(true) {
+        while(true) {
 
-            Figure nextMove = player1.makeAlphaBeta(board); // black (lower case) wins
-            System.out.println("Player1 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
-            board.changeBoard(nextMove);
-            System.out.println("Player1 moved to: " + nextMove.getNextPosition());
+            board = player1.makeTurnMCTS(board); // black (lower case) wins
+            //System.out.println("Player1 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
+            //board.changeBoard(nextMove);
+            //System.out.println("Player1 moved to: " + nextMove.getNextPosition());
             board.to2DArrayAndDisplay(board.getBoard());
+            System.out.println("---------------------------------------------------");
             board.isGameOverAndExit(player2.isBlack());
 
-            nextMove = player2.makeMove(board);
-            nextMove.setNextPosition(nextMove.getPossibleMoveList().get((int) (Math.random() * nextMove.getPossibleMoveList().size())));
-            System.out.println("Player2 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
-            board.changeBoard(nextMove);
-            System.out.println("Player2 moved to: " + nextMove.getNextPosition());
+            board = player2.makeTurnMCTS(board);
+            //nextMove.setNextPosition(nextMove.getPossibleMoveList().get((int) (Math.random() * nextMove.getPossibleMoveList().size())));
+            //System.out.println("Player2 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
+            //board.changeBoard(nextMove);
+            //System.out.println("Player2 moved to: " + nextMove.getNextPosition());
             board.to2DArrayAndDisplay(board.getBoard());
+            System.out.println("---------------------------------------------------");
             board.isGameOverAndExit(player1.isBlack());
-        }*/
+
+        }
 
 
     }

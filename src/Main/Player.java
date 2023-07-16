@@ -1,6 +1,7 @@
 package Main;
 
 import Figures.Figure;
+import MonteCarleTree.MonteCarloTreeSearch;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public class Player {
     private final long MAX_DURATION = 1000; // maximum duration
     private static final int MAX_DEPTH = 3;
 
-
+    private MonteCarloTreeSearch monteCarloTreeSearch = new MonteCarloTreeSearch(6);
     private ArrayList<String> allMovesInFenNotation;
     private int examinedPositions = 0; // number of examined positions
 
@@ -511,5 +512,12 @@ public class Player {
         }
 
         return myList2;
+    }
+
+
+    public Board makeTurnMCTS(Board board) {
+
+        return monteCarloTreeSearch.findNextMove(board, this.isBlack());
+
     }
 }

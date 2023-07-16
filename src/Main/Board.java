@@ -1,9 +1,6 @@
 package Main;
 
-import Figures.Figure;
 import Figures.*;
-import Helpers.Stopwatch;
-
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,50 +31,6 @@ public class Board {
         this.board = board;
     }
 
-    public Figure[] initialize() {
-
-        Figure[] board = new Figure[64];
-
-        // add white pawns
-        for (int i = 8; i <= 15; i++) {
-            board[i] = new Pawn(false, i);
-        }
-
-        // add black pawns
-        for (int i = 48; i <= 55; i++) {
-            board[i] = new Pawn(true, i);
-        }
-
-        // add second row for white
-
-        board[0] = new Rook(false, 0);
-        board[1] = new Knight(false, 1);
-        board[2] = new Bishop(false, 2);
-        board[3] = new Queen(false, 3);
-        board[4] = new King(false, 4);
-        board[5] = new Bishop(false, 5);
-        board[6] = new Knight(false, 6);
-        board[7] = new Rook(false, 7);
-
-        // add second row for black
-
-        board[56] = new Rook(true, 56);
-        board[57] = new Knight(true, 57);
-        board[58] = new Bishop(true, 58);
-        board[59] = new Queen(true, 59);
-        board[60] = new King(true, 60);
-        board[61] = new Bishop(true, 61);
-        board[62] = new Knight(true, 62);
-        board[63] = new Rook(true, 63);
-
-        // add empty fields
-
-        for (int i = 16; i <= 47; i++) {
-            board[i] = new EmptyField(i);
-        }
-
-        return board;
-    }
 
 
     public Board copy() {
@@ -516,46 +469,6 @@ public class Board {
                 System.out.print(pieceChar + " ");
             }
             System.out.println();
-        }
-    }
-    public static void simulateGame(String fenString, Player player1, Player player2, int amountOfMoves) {
-
-        Board board = new Board();
-        board.setBoardFromFEN(fenString);
-
-        for (int i = 0; i < amountOfMoves; i++) {
-            //long totalTime = 0;
-            //while(totalTime < maxCalcTime) {
-
-                //long startTime = System.nanoTime();
-                board.to2DArrayAndDisplay(board.getBoard());
-                player1.printAllMovesAndAmountOfMovesGivenBoard(board);
-                board.isGameOverAndExit(player2.isBlack());
-                player1.evaluate(player1.isBlack(), board);
-                //System.out.println("Win possibility for player1: " + player1.getWinPossibility());
-                Figure nextMove = player1.makeMove(board);
-                nextMove.setNextPosition(nextMove.getPossibleMoveList().get((int) (Math.random() * nextMove.getPossibleMoveList().size())));
-                System.out.println("Player1 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
-                board.changeBoard(nextMove);
-                System.out.println("Player1 moved to: " + nextMove.getNextPosition());
-                //long endTime = System.nanoTime();
-                //totalTime = (endTime - startTime);
-            //}
-
-
-            board.to2DArrayAndDisplay(board.getBoard());
-            player2.printAllMovesAndAmountOfMovesGivenBoard(board);
-            board.isGameOverAndExit(player1.isBlack());
-            player2.evaluate(player2.isBlack(), board);
-            //System.out.println("Win possibility for player2: " + player2.getWinPossibility());
-            nextMove = player2.makeMove(board);
-            nextMove.setNextPosition(nextMove.getPossibleMoveList().get((int) (Math.random() * nextMove.getPossibleMoveList().size())));
-            System.out.println("Player2 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
-            board.changeBoard(nextMove);
-            System.out.println("Player2 moved to: " + nextMove.getNextPosition());
-
-            //System.out.println(board.createFENFromBoard(board.getBoard()));
-
         }
     }
 
