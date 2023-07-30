@@ -1,12 +1,12 @@
 package Main;
 
 import Figures.Figure;
+import Helpers.LimitedSizeMap;
 import Helpers.Stopwatch;
 import Helpers.TranspositionTableEntry;
 import Helpers.ZobristHashCreator;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 public class Player {
 
@@ -23,7 +23,7 @@ public class Player {
         return allMovesInFenNotation;
     }
 
-    private HashMap<Long, TranspositionTableEntry> transpositionTable = new HashMap<>();
+    private LimitedSizeMap<Long, TranspositionTableEntry> transpositionTable = new LimitedSizeMap<>();
 
     private final long MAX_DURATION = 1000; // maximum duration
 
