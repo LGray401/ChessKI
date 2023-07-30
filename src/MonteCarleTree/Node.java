@@ -10,13 +10,16 @@ public class Node {
     private List<Node> children;
     private int visitCount;
     private double winScore;
+    private int depth;
 
-    public Node(GameState gameState, Node parent) {
+
+    public Node(GameState gameState, Node parent, int depth) {
         this.gameState = gameState;
         this.parent = parent;
         this.children = new ArrayList<>();
         this.visitCount = 0;
         this.winScore = 0;
+        this.depth = depth;
     }
 
     public GameState getGameState() {
@@ -38,7 +41,9 @@ public class Node {
     public double getWinScore() {
         return winScore;
     }
-
+    public int getDepth() {
+        return depth;
+    }
     public void incrementVisit() {
         visitCount++;
     }
@@ -49,7 +54,7 @@ public class Node {
 
     public void expand() {
         for (GameState childGameState : gameState.getChildren()) {
-            children.add(new Node(childGameState, this));
+            children.add(new Node(childGameState, this, depth + 1));
         }
     }
 

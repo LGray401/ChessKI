@@ -17,12 +17,12 @@ public class Main {
         //benchmark.benchmarkNegaMax(endgame, 1);
         //benchmark.benchmarkAlphaBeta(fenStringStart, 10);
         //benchmark.benchmarkMinmax(fenStringStart, 1);
-
+        benchmark.benchmarkMCTS(endgame, 1);
         Board board = new Board();
-        board.setBoardFromFEN(startgame);
+        board.setBoardFromFEN(endgame);
         //player1.setFigureAndMovesListForPlayerGivenBoard(board);
         //player2.setFigureAndMovesListForPlayerGivenBoard(board);
-        while(true) {
+        /*while(true) {
 
             board = player1.makeTurnMCTS(board); // black (lower case) wins
             //System.out.println("Player1 moved " + nextMove.getClass().getSimpleName() + " from: " + nextMove.getPosition());
@@ -41,7 +41,7 @@ public class Main {
             System.out.println("---------------------------------------------------");
             board.isGameOverAndExit(player1.isBlack());
 
-        }
+        }*/
 
 
     }

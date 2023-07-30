@@ -119,5 +119,24 @@ public class Benchmark {
         return "Average time in milliseconds: " + averageTimeInMillis;
     }
 
+    public void benchmarkMCTS(String fenString, int amountOfRepetitions) {
+        board.setBoardFromFEN(fenString);
+        long totalTime = 0;
+        Board bestMove = null;
+        double averageMaxDepth = 0;
+        for (int i = 0; i < amountOfRepetitions; i++) {
+            bestMove =  player1.makeTurnMCTS(this.getBoard());
+            averageMaxDepth += player1.getMonteCarloTreeSearch().getMaxDepth();
+        }
+
+
+
+        System.out.println("MCTS Benchmark");
+        System.out.println("Max Depth: " + player1.getMonteCarloTreeSearch().getMaxDepth());
+        System.out.println("Average Depth: " + player1.getMonteCarloTreeSearch().getAverageDepth());
+        System.out.println("Average Max Depth: " + averageMaxDepth / amountOfRepetitions);
+        board.to2DArrayAndDisplay(bestMove.getBoard());
+    }
+
 }
 

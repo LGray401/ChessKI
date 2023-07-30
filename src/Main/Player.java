@@ -19,7 +19,7 @@ public class Player {
     private final long MAX_DURATION = 1000; // maximum duration
     private static final int MAX_DEPTH = 3;
 
-    private MonteCarloTreeSearch monteCarloTreeSearch = new MonteCarloTreeSearch(6);
+    private MonteCarloTreeSearch monteCarloTreeSearch = new MonteCarloTreeSearch(20);
     private ArrayList<String> allMovesInFenNotation;
     private int examinedPositions = 0; // number of examined positions
 
@@ -81,6 +81,10 @@ public class Player {
     public void setNextFigureMove(Figure nextFigureMove) {
         this.nextFigureMove = nextFigureMove;
 
+    }
+
+    public MonteCarloTreeSearch getMonteCarloTreeSearch() {
+        return monteCarloTreeSearch;
     }
 
     public Player(boolean isblack) {
