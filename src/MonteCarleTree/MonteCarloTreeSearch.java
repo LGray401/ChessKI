@@ -6,8 +6,8 @@ import Main.Board;
 import java.util.List;
 
 public class MonteCarloTreeSearch {
-    private static final int WIN_SCORE = 1;
-    private int timeLimit;
+
+    private final int timeLimit;
     static int turns = 0;
     static int totalPlayouts = 0;
 
@@ -21,102 +21,81 @@ public class MonteCarloTreeSearch {
         return averageDepth;
     }
     public MonteCarloTreeSearch(int timeLimit) {
+
+    if (timeLimit <= 0) {
+        throw new IllegalArgumentException("Time limit must be positive.");
+    }
+
     this.timeLimit = timeLimit;
     }
 
 
-    //Stopwatch selectionStopwatch = new Stopwatch("Selection");
-    //Stopwatch expansionStopwatch = new Stopwatch("Expansion");
-    //Stopwatch simulationStopwatch = new Stopwatch("Simulation");
-    //Stopwatch updateStopwatch = new Stopwatch("Update");
-    Stopwatch isGameOverStopwatch = new Stopwatch("isGameOver");
-    //Stopwatch randomPlayoutStopwatch = new Stopwatch("Random Playout");
     Stopwatch randomPlaygetChildrenStopwatch = new Stopwatch("randomPlay getChildren");
-
 
     public Board findNextMove(Board board, boolean isBlackTurn) {
         int randomPlayouts = 0;
         long start = System.currentTimeMillis();
-        long end = start + timeLimit * 1000; // 60 seconds * 1000 ms/sec
+        long end = start + (timeLimit * 1000) - 100; // 60 seconds * 1000 ms/sec
 
+        // Initialize root node with the current game state
         Node rootNode = new Node(new GameState(board, isBlackTurn, isBlackTurn), null, 0);
 
+        // Main loop of MCTS algorithm
         while (System.currentTimeMillis() < end) {
             // Phase 1 - Selection
-            //selectionStopwatch.start();
             Node promisingNode = selectPromisingNode(rootNode);
-            //selectionStopwatch.stop();
 
-            //expansionStopwatch.start();
             // Phase 2 - Expansion
-            if (!promisingNode.getGameState().isGameOver(new Stopwatch("soos"))) {
+            if (!promisingNode.getGameState().isGameOver()) {
                 promisingNode.expand();
             }
-            //expansionStopwatch.stop();
-
-            //simulationStopwatch.start();
             // Phase 3 - Simulation
             Node nodeToExplore = promisingNode;
-            if (promisingNode.getChildren().size() > 0) {
+            if (!promisingNode.getChildren().isEmpty()) {
                 nodeToExplore = promisingNode.getRandomChildNode();
             }
-
-            //randomPlayoutStopwatch.start();
             int playoutResult = simulateRandomPlayout(nodeToExplore);
             randomPlayouts++;
-            //randomPlayoutStopwatch.stop();
-            //simulationStopwatch.stop();
 
-            //updateStopwatch.start();
             // Phase 4 - Update
             backpropagation(nodeToExplore, playoutResult);
-           //updateStopwatch.stop();
+
         }
 
+        // Selecting the best move after search is completed
         Node winnerNode = rootNode.getChildWithMaxScore();
         turns++;
         totalPlayouts += randomPlayouts;
-        //System.out.println("Random playouts: " + randomPlayouts);
-        //System.out.println("Number of turns: " + turns);
-        //System.out.println("Average playouts per turn: " + (double) totalPlayouts / turns);
-        //System.out.println("Number of random playouts: " + numberOfRandomPlayouts);
-        //isGameOverStopwatch.cumulativeElapsedTime();
-        //randomPlayoutStopwatch.cumulativeElapsedTime();
-        //randomPlaygetChildrenStopwatch.cumulativeElapsedTime();
-        //selectionStopwatch.cumulativeElapsedTime();
-        //expansionStopwatch.cumulativeElapsedTime();
-        //simulationStopwatch.cumulativeElapsedTime();
-        //updateStopwatch.cumulativeElapsedTime();
         maxDepth = this.getMaxDepth(rootNode);
         averageDepth = this.getAverageDepth(rootNode);
         return winnerNode.getGameState().getBoard();
     }
 
-    private Node selectPromisingNode(Node rootNode) {
+    // Selects the most promising node to explore next based on UCT value
+    public Node selectPromisingNode(Node rootNode) {
         Node node = rootNode;
         List<Node> children = node.getChildren();
 
-        while (children.size() != 0) {
+        // Traverse the tree until a leaf node is reached
+        while (!children.isEmpty()) {
             node = UCT.findBestNodeWithUCT(children, node.getVisitCount());
             children = node.getChildren();
         }
         return node;
     }
 
-    int numberOfRandomPlayouts = 0;
-    private int simulateRandomPlayout(Node node) {
+    public int simulateRandomPlayout(Node node) {
         Node tempNode = new Node(node.getGameState().copy(), node.getParent(), node.getDepth() +1);
 
 
-        while (!tempNode.getGameState().isGameOver(isGameOverStopwatch)) {
+        while (!tempNode.getGameState().isGameOver()) {
             tempNode.getGameState().randomPlay(randomPlaygetChildrenStopwatch);
-            numberOfRandomPlayouts++;
         }
 
         return tempNode.getGameState().getGameResult();
     }
 
-    private void backpropagation(Node nodeToExplore, int score) {
+    public void backpropagation(Node nodeToExplore, int score) {
         Node tempNode = nodeToExplore;
         while (tempNode != null) {
             tempNode.incrementVisit();

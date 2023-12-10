@@ -39,10 +39,10 @@ public class GameState {
         return children;
     }
 
-    public boolean isGameOver(Stopwatch stopwatch) {
-        stopwatch.start();
+    public boolean isGameOver() {
+
         boolean b = board.isGameOver(isBlackTurn).isGameFinished();
-        stopwatch.stop();
+
         return b;
     }
 
