@@ -84,6 +84,7 @@ public class MonteCarloTreeSearch {
         return node;
     }
 
+    //simulates a game by randomly choosing the moves and returns result
     public int simulateRandomPlayout(Node node) {
         Node tempNode = new Node(node.getGameState().copy(), node.getParent(), node.getDepth() +1);
 
