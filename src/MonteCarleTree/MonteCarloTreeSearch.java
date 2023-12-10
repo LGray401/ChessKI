@@ -35,7 +35,7 @@ public class MonteCarloTreeSearch {
     public Board findNextMove(Board board, boolean isBlackTurn) {
         int randomPlayouts = 0;
         long start = System.currentTimeMillis();
-        long end = start + (timeLimit * 1000) - 100; // 60 seconds * 1000 ms/sec
+        long end = start + (timeLimit * 1000) - 100;
 
         // Initialize root node with the current game state
         Node rootNode = new Node(new GameState(board, isBlackTurn, isBlackTurn), null, 0);
@@ -71,7 +71,7 @@ public class MonteCarloTreeSearch {
         return winnerNode.getGameState().getBoard();
     }
 
-    // Selects the most promising node to explore next based on UCT value
+    // Select the most promising node to explore next based on UCT value
     public Node selectPromisingNode(Node rootNode) {
         Node node = rootNode;
         List<Node> children = node.getChildren();

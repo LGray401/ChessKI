@@ -4,7 +4,7 @@ import MonteCarleTree.GameState;
 import MonteCarleTree.Node;
 import org.junit.jupiter.api.Test;
 import MonteCarleTree.MonteCarloTreeSearch;
-import static Tests.NodeTestUtils.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MonteCarloTreeSearchTests {
@@ -34,8 +34,6 @@ public class MonteCarloTreeSearchTests {
         String startgame = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
         Board mockBoard = new Board();
         mockBoard.setBoardFromFEN(startgame);
-
-        // Set up mockBoard as needed
         MonteCarloTreeSearch search = new MonteCarloTreeSearch(1);
         long startTime = System.currentTimeMillis();
         search.findNextMove(mockBoard, true);
@@ -46,12 +44,7 @@ public class MonteCarloTreeSearchTests {
 
     @Test
     void simulateRandomPlayout_ReturnsExpectedResult() {
-        String startgame = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
-        Board mockBoard = new Board();
-        mockBoard.setBoardFromFEN(startgame);
-        GameState testGamestate = new GameState(mockBoard, true, true);
-        Node testNode = new Node(testGamestate, null, 0);
-
+        Node testNode = createTestNode("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
         MonteCarloTreeSearch search = new MonteCarloTreeSearch(10);
         int result = search.simulateRandomPlayout(testNode);
         assertTrue(result == 1 || result == 0 || result == -1);
@@ -59,7 +52,7 @@ public class MonteCarloTreeSearchTests {
 
     @Test
     void backpropagation_VisitCount() {
-        Node testNode = createSampleNodeTreeLast("Start");
+        Node testNode = createTestNode("6r1/p5k1/3Q4/2N5/5P2/1p6/P5KP/4qR2");
         MonteCarloTreeSearch search = new MonteCarloTreeSearch(10);
         search.backpropagation(testNode, 1);
         assertEquals(1, testNode.getVisitCount());
@@ -68,14 +61,20 @@ public class MonteCarloTreeSearchTests {
 
     @Test
     void backpropagation_UpdatesScore() {
-        Node testNode = createSampleNodeTreeLast("Start");
+        Node testNode = createTestNode("6r1/p5k1/3Q4/2N5/5P2/1p6/P5KP/4qR2");
         MonteCarloTreeSearch search = new MonteCarloTreeSearch(10);
         search.backpropagation(testNode, 1);
         assertEquals(1, testNode.getWinScore());
 
     }
 
+    private Node createTestNode(String fen) {
+        Board mockBoard = new Board();
+        mockBoard.setBoardFromFEN(fen);
+        GameState testGamestate = new GameState(mockBoard, true, true);
+        return new Node(testGamestate, null, 0);
 
+    }
 
 
 
